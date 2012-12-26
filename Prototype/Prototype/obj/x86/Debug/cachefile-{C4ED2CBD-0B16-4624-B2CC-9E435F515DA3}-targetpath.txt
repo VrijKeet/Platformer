@@ -1,5 +1,0 @@
-Content\character1.xnb
-Content\platform.xnb
-Content\sky.xnb
-Content\character2.xnb
-Content\StartScherm.xnb

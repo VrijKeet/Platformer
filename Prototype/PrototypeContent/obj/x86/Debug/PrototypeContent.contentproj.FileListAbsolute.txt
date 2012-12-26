@@ -1,6 +1,0 @@
-C:\Users\Tom\Desktop\PWS\Prototype\Prototype\Prototype\PrototypeContent\obj\x86\Debug\ResolveAssemblyReference.cache
-C:\Users\Maarten\Dropbox\M&J\The Game\Prototype Jos\Prototype\PrototypeContent\obj\x86\Debug\PrototypeContent.contentprojResolveAssemblyReference.cache
-C:\Users\Tom\Dropbox\M&J\The Game\Prototype Jos\Prototype\PrototypeContent\obj\x86\Debug\ResolveAssemblyReference.cache
-C:\Users\Maarten\Documents\Visual Studio 2010\Projects\Prototype\Prototype\PrototypeContent\obj\x86\Debug\PrototypeContent.contentprojResolveAssemblyReference.cache
-C:\Users\Tom\Desktop\PWS\Platformer\Prototype\PrototypeContent\obj\x86\Debug\ResolveAssemblyReference.cache
-C:\Users\Public\Documents\Visual Studio 2010\Projects\Prototype\Prototype\PrototypeContent\obj\x86\Debug\PrototypeContent.contentprojResolveAssemblyReference.cache
