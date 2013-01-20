@@ -24,6 +24,7 @@ namespace Prototype
         {
             platformTexture = texture;
         }
+
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(platformTexture, boundingBox, Color.White);

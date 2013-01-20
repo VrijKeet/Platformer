@@ -38,7 +38,7 @@ namespace Prototype
         public static Texture2D character2Texture;
         Texture2D backgroundTexture;
 
-        List<Platform> platforms;
+        public static List<Platform> platforms;
         Texture2D platformTexture;
 
         KeyboardState currentKeyboardState;
@@ -59,18 +59,40 @@ namespace Prototype
             Platform platform2 = new Platform();
             Platform platform3 = new Platform();
             Platform platform4 = new Platform();
+            Platform platform5 = new Platform();
+            Platform platform6 = new Platform();
+            Platform platform7 = new Platform();
+            Platform platform8 = new Platform();
+            Platform platform9 = new Platform();
+            Platform platform10 = new Platform();
             platforms.Add(platform);
             platforms.Add(platform2);
             platforms.Add(platform3);
             platforms.Add(platform4);
+            platforms.Add(platform5);
+            platforms.Add(platform6);
+            platforms.Add(platform7);
+            platforms.Add(platform8);
+            platforms.Add(platform9);
+            platforms.Add(platform10);
             platform.boundingBox = new Rectangle(233, 380, 334, 28);
             platform2.boundingBox = new Rectangle(150, 290, 100, 10);
             platform3.boundingBox = new Rectangle(350, 330, 300, 15);
             platform4.boundingBox = new Rectangle(100, 430, 50, 10);
+            platform5.boundingBox = new Rectangle(-100, 250, 300, 10);
+            platform6.boundingBox = new Rectangle(600, 350, 300, 10);
+            platform7.boundingBox = new Rectangle(200, 200, 100, 10);
+            platform8.boundingBox = new Rectangle(200, 150, 100, 10);
+            platform9.boundingBox = new Rectangle(200, 100, 100, 10);
+            platform10.boundingBox = new Rectangle(200, 50, 100, 10);
             for (int i = 0; i < platforms.Count; i++)
             {
                 platforms[i].boundingBoxTop = new Rectangle(platforms[i].boundingBox.X, platforms[i].boundingBox.Y, platforms[i].boundingBox.Width, 5); //Maak voor iedere platform een rechthoek van de top aan.
             }
+
+            // Game Components opnemen
+            Components.Add(new Scrollen(this));
+
             base.Initialize();
         }
 
@@ -118,6 +140,8 @@ namespace Prototype
 
                 character.Update(gameTime, currentKeyboardState, previousKeyboardState);
             }
+
+            // Status van toetsenbord van vorige doorloop opslaan
             previousKeyboardState = currentKeyboardState;
 
             base.Update(gameTime);
