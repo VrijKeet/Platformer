@@ -40,6 +40,7 @@ namespace Prototype
 
         public static List<Platform> platforms;
         Texture2D platformTexture;
+        public static Vector2[] startPosPlat;
 
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
@@ -75,16 +76,17 @@ namespace Prototype
             platforms.Add(platform8);
             platforms.Add(platform9);
             platforms.Add(platform10);
-            platform.boundingBox = new Rectangle(233, 380, 334, 28);
-            platform2.boundingBox = new Rectangle(150, 290, 100, 10);
-            platform3.boundingBox = new Rectangle(350, 330, 300, 15);
-            platform4.boundingBox = new Rectangle(100, 430, 50, 10);
-            platform5.boundingBox = new Rectangle(-100, 250, 300, 10);
-            platform6.boundingBox = new Rectangle(600, 350, 300, 10);
-            platform7.boundingBox = new Rectangle(200, 200, 100, 10);
-            platform8.boundingBox = new Rectangle(200, 150, 100, 10);
-            platform9.boundingBox = new Rectangle(200, 100, 100, 10);
-            platform10.boundingBox = new Rectangle(200, 50, 100, 10);
+            startPosPlat = new Vector2[10]{new Vector2(233,380), new Vector2(150,290), new Vector2(350,330), new Vector2(100,430), new Vector2(-100, 250), new Vector2(600, 350), new Vector2(200,200), new Vector2(200, 150), new Vector2(200, 100), new Vector2(200, 50)}; // Begin posities voor respawnen
+            platform.boundingBox = new Rectangle((int)startPosPlat[0].X, (int)startPosPlat[0].Y, 334, 28);
+            platform2.boundingBox = new Rectangle((int)startPosPlat[1].X, (int)startPosPlat[1].Y, 100, 10);
+            platform3.boundingBox = new Rectangle((int)startPosPlat[2].X, (int)startPosPlat[2].Y, 300, 15);
+            platform4.boundingBox = new Rectangle((int)startPosPlat[3].X, (int)startPosPlat[3].Y, 50, 10);
+            platform5.boundingBox = new Rectangle((int)startPosPlat[4].X, (int)startPosPlat[4].Y, 300, 10);
+            platform6.boundingBox = new Rectangle((int)startPosPlat[5].X, (int)startPosPlat[5].Y, 300, 10);
+            platform7.boundingBox = new Rectangle((int)startPosPlat[6].X, (int)startPosPlat[6].Y, 100, 10);
+            platform8.boundingBox = new Rectangle((int)startPosPlat[7].X, (int)startPosPlat[7].Y, 100, 10);
+            platform9.boundingBox = new Rectangle((int)startPosPlat[8].X, (int)startPosPlat[8].Y, 100, 10);
+            platform10.boundingBox = new Rectangle((int)startPosPlat[9].X, (int)startPosPlat[9].Y, 100, 10);
             for (int i = 0; i < platforms.Count; i++)
             {
                 platforms[i].boundingBoxTop = new Rectangle(platforms[i].boundingBox.X, platforms[i].boundingBox.Y, platforms[i].boundingBox.Width, 5); //Maak voor iedere platform een rechthoek van de top aan.

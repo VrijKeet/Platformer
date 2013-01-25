@@ -24,7 +24,8 @@ namespace Prototype
         static int boundsHeight = 80; //Hoogte van character in het spel
         const int sourceWidth = 80; //Breedte van charactre in player.png
         const int sourceHeight = 80; //Hoogte van character in player.png      
-        public static Rectangle bounds = new Rectangle(300, 300, boundsWidth, boundsHeight); //Positie en grootte van character
+        static Vector2 startPos = new Vector2(300, 300);
+        public static Rectangle bounds = new Rectangle((int)startPos.X, (int)startPos.Y, boundsWidth, boundsHeight); //Positie en grootte van character
         Rectangle source = new Rectangle(0, 0, sourceWidth, sourceHeight); //Bepaalt welk gedeelte van player.png wordt getoond
         Rectangle feetBounds = new Rectangle(bounds.X, bounds.Y + 50, 80, 30);
 
@@ -71,8 +72,26 @@ namespace Prototype
             feetBounds = new Rectangle(bounds.X + 30, bounds.Y + 70, 20, 10);
             KeyInput(currentKeyboardState, previousKeyboardState);
             Movement();
+
+            if ((bounds.Y - (Game1.platforms[4].boundingBox.Y + Game1.platforms[4].boundingBox.Height)) > 200) // Als character meer dan 200 px onder platform 4 (onderste) komt respawnt hij
+                respawn();
         }
 
+        public void respawn()
+        {
+            for (int i = 0; i < Game1.platforms.Count; i++) // Platformen op begin positie plaatsen
+            {
+                Game1.platforms[i].boundingBox = new Rectangle((int)Game1.startPosPlat[i].X, (int)Game1.startPosPlat[i].Y, Game1.platforms[i].boundingBox.Width, Game1.platforms[i].boundingBox.Height);
+                Game1.platforms[i].boundingBoxTop = new Rectangle(Game1.platforms[i].boundingBox.X, Game1.platforms[i].boundingBox.Y, Game1.platforms[i].boundingBox.Width, 5);
+            }
+
+            bounds.X = (int)startPos.X;
+            bounds.Y = (int)startPos.Y + 1;
+            currentState = state.standing;
+            currentFacing = facing.right;
+            jumpingSpeed = -10;
+            jumpCount = 0;
+        }
 
         private void KeyInput(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
         {
