@@ -87,6 +87,8 @@ namespace Prototype
                 Character.bounds.Y = GraphicsDevice.Viewport.Height - marge - Character.bounds.Height;
             }
 
+            enemies.dimensions = new Rectangle(Game1.platforms[4].boundingBox.X + enemies.distance, Game1.platforms[4].boundingBox.Y - enemies.source.Height, 85, 70);
+
             base.Update(gameTime);
         }
     }

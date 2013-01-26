@@ -94,6 +94,7 @@ namespace Prototype
 
             // Game Components opnemen
             Components.Add(new Scrollen(this));
+            Components.Add(new enemies(this));
 
             base.Initialize();
         }
@@ -103,6 +104,7 @@ namespace Prototype
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            Services.AddService(typeof(SpriteBatch), spriteBatch); // Zodat je de spriteBatch kan gebruiken in GameComponents
 
             //Afbeeldingen die het startscherm vormt laden
             startScreen = Content.Load<Texture2D>("StartScherm");
@@ -191,8 +193,9 @@ namespace Prototype
                 character.Draw(gameTime, spriteBatch);
 
                 spriteBatch.End();
+
+                base.Draw(gameTime);
             }
-            base.Draw(gameTime);
         }
 
         //Het tekenen van het startscherm
