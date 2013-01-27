@@ -13,7 +13,7 @@ using Microsoft.Xna.Framework.Storage;
 
 namespace Prototype
 {
-    class Character
+    public class Character
     {
         Game1 game; //Omdat hij moet kijken of character platform raakt, en die code in game1.cs staat
 
@@ -29,14 +29,14 @@ namespace Prototype
         Rectangle source = new Rectangle(0, 0, sourceWidth, sourceHeight); //Bepaalt welk gedeelte van player.png wordt getoond
         Rectangle feetBounds = new Rectangle(bounds.X, bounds.Y + 50, 80, 30);
 
-        enum facing
+        public enum facing
         {
             left,
             right
         }
-        facing currentFacing = facing.right;
+        public static facing currentFacing = facing.right;
 
-        enum state
+        public enum state
         {
             standing,
             walkingLeft,
@@ -46,17 +46,17 @@ namespace Prototype
             jumping,
             falling
         }
-        state currentState = state.standing;
+        public static state currentState = state.standing;
 
         float speed = 0; //Snelheid waarmee character zich in de horizontale richting voortbeweegt
         float maxWalkingSpeed = 5;
         float maxRunningSpeed = 12;
-        int jumpingSpeed = -10;
+        public static int jumpingSpeed = -10;
         Vector2 maxJumpingHeight = new Vector2(0, 10);
 
         int frameCount = 0; //Telt welke frame op het moment in source is
         const int delay = 4; //Vertraagt de animatie en beweging
-        int jumpCount = 0; //Telt hoelang character aan het springen is
+        public static int jumpCount = 0; //Telt hoelang character aan het springen is
 
         public bool alive = true;
 
@@ -77,7 +77,7 @@ namespace Prototype
                 respawn();
         }
 
-        public void respawn()
+        public static void respawn()
         {
             for (int i = 0; i < Game1.platforms.Count; i++) // Platformen op begin positie plaatsen
             {
@@ -91,6 +91,7 @@ namespace Prototype
             currentFacing = facing.right;
             jumpingSpeed = -10;
             jumpCount = 0;
+            health.lifes = health.startLifes;
         }
 
         private void KeyInput(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)

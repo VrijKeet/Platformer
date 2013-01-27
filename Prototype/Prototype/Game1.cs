@@ -95,6 +95,7 @@ namespace Prototype
             // Game Components opnemen
             Components.Add(new Scrollen(this));
             Components.Add(new enemies(this));
+            Components.Add(new health(this));
 
             base.Initialize();
         }

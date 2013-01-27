@@ -15,22 +15,13 @@ namespace Prototype
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    class enemies : Microsoft.Xna.Framework.DrawableGameComponent
+    public class health : Microsoft.Xna.Framework.DrawableGameComponent
     {
-        Texture2D enemyTexture;
-        public static Rectangle dimensions;
-        public static Rectangle source;
-        public static int distance;
-        int richting;
+        Texture2D texture;
+        public static int lifes;
+        public static int startLifes;
 
-        enum facing
-        {
-            left,
-            right
-        }
-        facing currentFacing = facing.right;
-
-        public enemies(Game game)
+        public health(Game game)
             : base(game)
         {
             // TODO: Construct any child components here
@@ -43,17 +34,15 @@ namespace Prototype
         public override void Initialize()
         {
             // TODO: Add your initialization code here
-            source = new Rectangle(0, 70, 85, 70);
-            dimensions = new Rectangle(Game1.platforms[4].boundingBox.X, Game1.platforms[4].boundingBox.Y - source.Height, 85, 70);
-
-            richting = 1;
+            startLifes = 3;
+            lifes = startLifes;
 
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            enemyTexture = Game.Content.Load<Texture2D>("Slime");
+            texture = Game.Content.Load<Texture2D>("health");
 
             base.LoadContent();
         }
@@ -65,18 +54,17 @@ namespace Prototype
         public override void Update(GameTime gameTime)
         {
             // TODO: Add your update code here
-            if (distance > 200)
+            if (Character.bounds.X < enemies.dimensions.X + enemies.dimensions.Width && Character.bounds.Y + Character.bounds.Height > enemies.dimensions.Y && Character.bounds.X + Character.bounds.Width > enemies.dimensions.X && Character.bounds.Y < enemies.dimensions.Y + enemies.dimensions.Height)
             {
-                richting = -1;
-                currentFacing = facing.left;
+                lifes -= 1;
+                if ((Character.bounds.X + Character.bounds.Width) - (enemies.dimensions.X + enemies.dimensions.Width) > 0)
+                    Character.bounds.X += 50;
+                else
+                    Character.bounds.X -= 50;
             }
-            else if (distance <= 0)
-            {
-                richting = 1;
-                currentFacing = facing.right;
-            }
-            distance += richting;
-            dimensions = new Rectangle(Game1.platforms[4].boundingBox.X + distance, Game1.platforms[4].boundingBox.Y - source.Height, 85, 70);
+
+            if (lifes <= 0)
+                Character.respawn();
 
             base.Update(gameTime);
         }
@@ -86,14 +74,10 @@ namespace Prototype
             SpriteBatch spriteBatch = Game.Services.GetService(typeof(SpriteBatch)) as SpriteBatch;
 
             spriteBatch.Begin();
-
-            if(currentFacing == facing.left)
-                spriteBatch.Draw(enemyTexture, dimensions, source, Color.White);
-            else
-                spriteBatch.Draw(enemyTexture, dimensions, source, Color.White, 0f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
-
+            for (int i = 0; i < lifes; i++)
+                spriteBatch.Draw(texture, new Rectangle(20 * i, 0, 20, 20), Color.White);
             spriteBatch.End();
-            
+
             base.Draw(gameTime);
         }
     }
