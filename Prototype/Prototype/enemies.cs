@@ -22,6 +22,7 @@ namespace Prototype
         public static Rectangle source;
         public static int distance;
         int richting;
+        public static bool alive;
 
         enum facing
         {
@@ -48,6 +49,8 @@ namespace Prototype
 
             richting = 1;
 
+            alive = true;
+
             base.Initialize();
         }
 
@@ -65,18 +68,27 @@ namespace Prototype
         public override void Update(GameTime gameTime)
         {
             // TODO: Add your update code here
-            if (distance > 200)
+            if (alive)
             {
-                richting = -1;
-                currentFacing = facing.left;
+                if (distance > 200)
+                {
+                    richting = -1;
+                    currentFacing = facing.left;
+                }
+                else if (distance <= 0)
+                {
+                    richting = 1;
+                    currentFacing = facing.right;
+                }
+                distance += richting;
+                dimensions = new Rectangle(Game1.platforms[4].boundingBox.X + distance, Game1.platforms[4].boundingBox.Y - source.Height, 85, 70);
             }
-            else if (distance <= 0)
+
+            if (alive && Character.bounds.X < dimensions.X + dimensions.Width && Character.bounds.Y + Character.bounds.Height > dimensions.Y && Character.bounds.X + Character.bounds.Width > dimensions.X && Character.bounds.Y < (dimensions.Y + dimensions.Height) - 60)
             {
-                richting = 1;
-                currentFacing = facing.right;
+                score.currentScore += 1;
+                alive = false;
             }
-            distance += richting;
-            dimensions = new Rectangle(Game1.platforms[4].boundingBox.X + distance, Game1.platforms[4].boundingBox.Y - source.Height, 85, 70);
 
             base.Update(gameTime);
         }
@@ -86,11 +98,13 @@ namespace Prototype
             SpriteBatch spriteBatch = Game.Services.GetService(typeof(SpriteBatch)) as SpriteBatch;
 
             spriteBatch.Begin();
-
-            if(currentFacing == facing.left)
-                spriteBatch.Draw(enemyTexture, dimensions, source, Color.White);
-            else
-                spriteBatch.Draw(enemyTexture, dimensions, source, Color.White, 0f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+            if (alive)
+            {
+                if (currentFacing == facing.left)
+                    spriteBatch.Draw(enemyTexture, dimensions, source, Color.White);
+                else
+                    spriteBatch.Draw(enemyTexture, dimensions, source, Color.White, 0f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+            }
 
             spriteBatch.End();
             

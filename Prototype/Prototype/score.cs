@@ -15,14 +15,12 @@ namespace Prototype
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    public class health : Microsoft.Xna.Framework.DrawableGameComponent
+    public class score : Microsoft.Xna.Framework.DrawableGameComponent
     {
-        Texture2D texture;
-        public static int lifes;
-        public static int startLifes;
-        public static int width; // Nodig om score juist te positioneren
+        SpriteFont font;
+        public static int currentScore; // Ik wilde score gebruiken, maar je mag niet dezelfde naam gebruiken als de class
 
-        public health(Game game)
+        public score(Game game)
             : base(game)
         {
             // TODO: Construct any child components here
@@ -35,17 +33,15 @@ namespace Prototype
         public override void Initialize()
         {
             // TODO: Add your initialization code here
-            startLifes = 3;
-            lifes = startLifes;
-            width = 20;
+            currentScore = 0;
 
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            texture = Game.Content.Load<Texture2D>("health");
-
+            font = Game.Content.Load<SpriteFont>("score");
+            
             base.LoadContent();
         }
 
@@ -56,17 +52,6 @@ namespace Prototype
         public override void Update(GameTime gameTime)
         {
             // TODO: Add your update code here
-            if (enemies.alive && Character.bounds.X < enemies.dimensions.X + enemies.dimensions.Width && Character.bounds.Y + Character.bounds.Height > enemies.dimensions.Y + 10 && Character.bounds.X + Character.bounds.Width > enemies.dimensions.X && Character.bounds.Y < enemies.dimensions.Y + enemies.dimensions.Height)
-            {
-                lifes -= 1;
-                if ((Character.bounds.X + Character.bounds.Width) - (enemies.dimensions.X + enemies.dimensions.Width) > 0)
-                    Character.bounds.X += 50;
-                else
-                    Character.bounds.X -= 50;
-            }
-
-            if (lifes <= 0)
-                Character.respawn();
 
             base.Update(gameTime);
         }
@@ -76,10 +61,9 @@ namespace Prototype
             SpriteBatch spriteBatch = Game.Services.GetService(typeof(SpriteBatch)) as SpriteBatch;
 
             spriteBatch.Begin();
-            for (int i = 0; i < lifes; i++)
-                spriteBatch.Draw(texture, new Rectangle(width * i, 0, width, 20), Color.White);
+            spriteBatch.DrawString(font, "Score: " + currentScore, new Vector2(health.startLifes * health.width, 0), Color.White);
             spriteBatch.End();
-
+            
             base.Draw(gameTime);
         }
     }

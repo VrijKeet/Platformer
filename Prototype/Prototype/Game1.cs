@@ -33,7 +33,6 @@ namespace Prototype
 
         Character character;
 
-
         public static Texture2D character1Texture;
         public static Texture2D character2Texture;
         Texture2D backgroundTexture;
@@ -94,8 +93,9 @@ namespace Prototype
 
             // Game Components opnemen
             Components.Add(new Scrollen(this));
-            Components.Add(new enemies(this));
             Components.Add(new health(this));
+            Components.Add(new enemies(this));
+            Components.Add(new score(this));
 
             base.Initialize();
         }
