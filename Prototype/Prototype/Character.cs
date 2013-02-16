@@ -60,6 +60,9 @@ namespace Prototype
 
         public bool alive = true;
 
+        // Ladder
+        bool onLadder = false;
+
         public Character(Game1 game1) //Constructor
         {
             this.game = game1;
@@ -71,7 +74,13 @@ namespace Prototype
 
             feetBounds = new Rectangle(bounds.X + 30, bounds.Y + 70, 20, 10);
             KeyInput(currentKeyboardState, previousKeyboardState);
-            Movement();
+            if(!onLadder)
+                Movement();
+
+            if (Character.bounds.X + Character.bounds.Width > ladder.position.X && Character.bounds.X < ladder.position.X + ladder.ladderTexture.Width && Character.bounds.Y < ladder.position.Y + ladder.ladderTexture.Height && Character.bounds.Y + Character.bounds.Height > ladder.position.Y - (ladder.rails - 1) * ladder.ladderTexture.Height)
+                onLadder = true;
+            else
+                onLadder = false;
 
             if ((bounds.Y - (Game1.platforms[4].boundingBox.Y + Game1.platforms[4].boundingBox.Height)) > 200) // Als character meer dan 200 px onder platform 4 (onderste) komt respawnt hij
                 respawn();
@@ -203,7 +212,20 @@ namespace Prototype
                     playerTexture = Game1.character2Texture;
                 else if (playerTexture == Game1.character2Texture)
                     playerTexture = Game1.character1Texture;
-            }            
+            }
+
+            // Ladder beklimmen
+            if (onLadder)
+            {
+                if (currentKeyboardState.IsKeyDown(Keys.W))
+                    bounds.Y -= 1;
+                if (currentKeyboardState.IsKeyDown(Keys.S))
+                    bounds.Y += 1;
+                if (currentKeyboardState.IsKeyDown(Keys.A))
+                    bounds.X -= 1;
+                if (currentKeyboardState.IsKeyDown(Keys.D))
+                    bounds.X += 1;
+            }
         }
 
 
