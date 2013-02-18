@@ -41,7 +41,7 @@ namespace Prototype
         public override void Update(GameTime gameTime)
         {
             // TODO: Add your update code here
-            int marge = 20;
+            int marge = 250;
 
             if (Character.bounds.X < marge) // Naar links
             {

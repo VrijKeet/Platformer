@@ -198,7 +198,7 @@ namespace Prototype
                 }
             }
 
-
+            
             if (currentKeyboardState.IsKeyDown(Keys.E) && !previousKeyboardState.IsKeyDown(Keys.E)) //Character veranderen met E
             {
                 if (playerTexture == Game1.character1Texture)

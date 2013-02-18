@@ -15,32 +15,37 @@ namespace Prototype
 {
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        //Game status
-        public enum GameState
-        {
-            StartScreen,
-            Running
-        }
-
-        //Textures startscherm en eindscherm
-        Texture2D startScreen;
-
-        //Game status in het begin
-        GameState gameState = GameState.StartScreen;
-
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        Character character;
+        MainMenu mainMenu;
+        OptionsMenu optionsMenu;        
+        public enum GameState //Game status
+        {
+            mainmenu,
+            options,
+            running
+        }
+        public GameState gameState = GameState.mainmenu;
 
+      public  enum Difficulty
+        {
+            easy,
+            medium,
+            hard
+        }
+       public Difficulty difficulty = Difficulty.easy;
+
+       public static Character character;
         public static Texture2D character1Texture;
         public static Texture2D character2Texture;
+
         Texture2D backgroundTexture;
 
         public static List<Platform> platforms;
         Texture2D platformTexture;
         public static Vector2[] startPosPlat;
-
+        
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
 
@@ -53,6 +58,9 @@ namespace Prototype
 
         protected override void Initialize()
         {
+            mainMenu = new MainMenu(this.Content, this);
+            optionsMenu = new OptionsMenu(this.Content, this);
+
             // Maak hard-coded 4 platformen aan:
             platforms = new List<Platform>();
             Platform platform = new Platform();
@@ -75,7 +83,7 @@ namespace Prototype
             platforms.Add(platform8);
             platforms.Add(platform9);
             platforms.Add(platform10);
-            startPosPlat = new Vector2[10]{new Vector2(233,380), new Vector2(150,290), new Vector2(350,330), new Vector2(100,430), new Vector2(-100, 250), new Vector2(600, 350), new Vector2(200,200), new Vector2(200, 150), new Vector2(200, 100), new Vector2(200, 50)}; // Begin posities voor respawnen
+            startPosPlat = new Vector2[10] { new Vector2(233, 380), new Vector2(150, 290), new Vector2(350, 330), new Vector2(100, 430), new Vector2(-100, 250), new Vector2(600, 350), new Vector2(200, 200), new Vector2(200, 150), new Vector2(200, 100), new Vector2(200, 50) }; // Begin posities voor respawnen
             platform.boundingBox = new Rectangle((int)startPosPlat[0].X, (int)startPosPlat[0].Y, 334, 28);
             platform2.boundingBox = new Rectangle((int)startPosPlat[1].X, (int)startPosPlat[1].Y, 100, 10);
             platform3.boundingBox = new Rectangle((int)startPosPlat[2].X, (int)startPosPlat[2].Y, 300, 15);
@@ -108,9 +116,6 @@ namespace Prototype
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Services.AddService(typeof(SpriteBatch), spriteBatch); // Zodat je de spriteBatch kan gebruiken in GameComponents
 
-            //Afbeeldingen die het startscherm vormt laden
-            startScreen = Content.Load<Texture2D>("StartScherm");
-
             character = new Character(this); //"this" omdat character een constructor heeft
             character1Texture = this.Content.Load<Texture2D>("character1");
             character2Texture = this.Content.Load<Texture2D>("character2");
@@ -136,13 +141,17 @@ namespace Prototype
         {
             currentKeyboardState = Keyboard.GetState();
 
-            //Kijken of in startscherm
-            if (gameState == GameState.StartScreen)
-                UpdateSplashScreen();
-            else
+            //Als gebruiker in het hoofdmenu zit
+            if (gameState == GameState.mainmenu)
+                mainMenu.Update(gameTime, currentKeyboardState, previousKeyboardState);
+            else if (gameState == GameState.options)
+            {
+                optionsMenu.Update(gameTime, currentKeyboardState, previousKeyboardState);
+            }
+            else if (gameState == GameState.running)
             {
                 if (currentKeyboardState.IsKeyDown(Keys.Escape)) //Ga naar het startscherm als de "escape"-toets wordt ingedrukt
-                    gameState = GameState.StartScreen;
+                    gameState = GameState.mainmenu;
 
                 character.Update(gameTime, currentKeyboardState, previousKeyboardState);
             }
@@ -150,17 +159,16 @@ namespace Prototype
             // Status van toetsenbord van vorige doorloop opslaan
             previousKeyboardState = currentKeyboardState;
 
+
+            
+
             base.Update(gameTime);
         }
 
-        //Kijken of er iets moet worden gedaan bij startscherm
-        private void UpdateSplashScreen()
-        {
-            if (currentKeyboardState.IsKeyDown(Keys.Space))
-                gameState = GameState.Running; //Game spelen wanneer Spatie ingedrukt is geweest
-            else if (currentKeyboardState.IsKeyDown(Keys.Escape) && !previousKeyboardState.IsKeyDown(Keys.Escape))
-                this.Exit(); //Game sluiten als Esc ingedrukt is geweest
-        }
+
+
+
+
 
         public Platform GetIntersectingPlatform(Rectangle feetBounds) //Kijken of een platform in de lijst in contact komt met character
         {
@@ -175,16 +183,26 @@ namespace Prototype
 
 
 
+
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             //Kijken welke status om te bepalen welk 'scherm' te tonen
-            if (gameState == GameState.StartScreen)
+            if (gameState == GameState.mainmenu)
             {
-                DrawStartScreen();
+                spriteBatch.Begin();
+                //DrawMainMenu(gameTime, spriteBatch);
+                mainMenu.Draw(gameTime, spriteBatch);
+                spriteBatch.End();
             }
-            else if (gameState == GameState.Running)
+            else if (gameState == GameState.options)
+            {
+                spriteBatch.Begin();
+                optionsMenu.Draw(gameTime, spriteBatch);
+                spriteBatch.End();
+            }
+            else if (gameState == GameState.running)
             {
                 spriteBatch.Begin();
                 spriteBatch.Draw(backgroundTexture, new Rectangle(0, 0, backgroundTexture.Width, backgroundTexture.Height), Color.White);
@@ -199,17 +217,5 @@ namespace Prototype
                 base.Draw(gameTime);
             }
         }
-
-        //Het tekenen van het startscherm
-        private void DrawStartScreen()
-        {
-            spriteBatch.Begin();
-
-            spriteBatch.Draw(startScreen, Vector2.Zero, null, Color.White);
-
-            spriteBatch.End();
-        }
-
-
     }
 }
