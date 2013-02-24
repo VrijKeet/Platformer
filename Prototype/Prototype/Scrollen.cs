@@ -50,7 +50,8 @@ namespace Prototype
                     Game1.platforms[i].boundingBox = new Rectangle(Game1.platforms[i].boundingBox.X + (marge - Character.bounds.X), Game1.platforms[i].boundingBox.Y, Game1.platforms[i].boundingBox.Width, Game1.platforms[i].boundingBox.Height);
                     Game1.platforms[i].boundingBoxTop = new Rectangle(Game1.platforms[i].boundingBox.X, Game1.platforms[i].boundingBox.Y, Game1.platforms[i].boundingBox.Width, 5);
                 }
-
+                Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X + (marge - Character.bounds.X), Game1.gun.boundingBox.Y, Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
+                //Game1.projectiles.Position = new Rectangle(Game1.projectiles.Position.X + (marge - Character.bounds.X), Game1.gun.boundingBox.Y, Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
                 Character.bounds.X = marge;
             }
 
@@ -58,10 +59,11 @@ namespace Prototype
             {
                 for (int i = 0; i < Game1.platforms.Count; i++)
                 {
-                    Game1.platforms[i].boundingBox = new Rectangle(Game1.platforms[i].boundingBox.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), Game1.platforms[i].boundingBox.Y,Game1.platforms[i].boundingBox.Width,Game1.platforms[i].boundingBox.Height);
+                    Game1.platforms[i].boundingBox = new Rectangle(Game1.platforms[i].boundingBox.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), Game1.platforms[i].boundingBox.Y, Game1.platforms[i].boundingBox.Width, Game1.platforms[i].boundingBox.Height);
                     Game1.platforms[i].boundingBoxTop = new Rectangle(Game1.platforms[i].boundingBox.X, Game1.platforms[i].boundingBox.Y, Game1.platforms[i].boundingBox.Width, 5);
                 }
-
+                Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), Game1.gun.boundingBox.Y, Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
+                //Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), Game1.gun.boundingBox.Y, Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height); 
                 Character.bounds.X = GraphicsDevice.Viewport.Width - marge - Character.bounds.Width;
             }
 
@@ -72,7 +74,8 @@ namespace Prototype
                     Game1.platforms[i].boundingBox = new Rectangle(Game1.platforms[i].boundingBox.X, Game1.platforms[i].boundingBox.Y + (marge - Character.bounds.Y), Game1.platforms[i].boundingBox.Width, Game1.platforms[i].boundingBox.Height);
                     Game1.platforms[i].boundingBoxTop = new Rectangle(Game1.platforms[i].boundingBox.X, Game1.platforms[i].boundingBox.Y, Game1.platforms[i].boundingBox.Width, 5);
                 }
-
+                Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X, Game1.gun.boundingBox.Y + (marge - Character.bounds.Y), Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
+                //Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X, Game1.gun.boundingBox.Y + (marge - Character.bounds.Y), Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
                 Character.bounds.Y = marge;
             }
 
@@ -83,7 +86,8 @@ namespace Prototype
                     Game1.platforms[i].boundingBox = new Rectangle(Game1.platforms[i].boundingBox.X, Game1.platforms[i].boundingBox.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)), Game1.platforms[i].boundingBox.Width, Game1.platforms[i].boundingBox.Height);
                     Game1.platforms[i].boundingBoxTop = new Rectangle(Game1.platforms[i].boundingBox.X, Game1.platforms[i].boundingBox.Y, Game1.platforms[i].boundingBox.Width, 5);
                 }
-
+                Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X, Game1.gun.boundingBox.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)), Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
+                //Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X, Game1.gun.boundingBox.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)), Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height); 
                 Character.bounds.Y = GraphicsDevice.Viewport.Height - marge - Character.bounds.Height;
             }
 

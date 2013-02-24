@@ -18,6 +18,8 @@ namespace Prototype
         Game1 game; //Omdat hij moet kijken of character platform raakt, en die code in game1.cs staat
 
         double elapsedTime;
+        float shootingDurance;
+        float shootingTimer;
 
         public Texture2D playerTexture;
         static int boundsWidth = 80; //Breedte van character in het spel
@@ -27,7 +29,7 @@ namespace Prototype
         static Vector2 startPos = new Vector2(300, 300);
         public static Rectangle bounds = new Rectangle((int)startPos.X, (int)startPos.Y, boundsWidth, boundsHeight); //Positie en grootte van character
         Rectangle source = new Rectangle(0, 0, sourceWidth, sourceHeight); //Bepaalt welk gedeelte van player.png wordt getoond
-        Rectangle feetBounds = new Rectangle(bounds.X, bounds.Y + 50, 80, 30);
+        public static Rectangle feetBounds = new Rectangle(bounds.X, bounds.Y + 50, 80, 30);
 
         public enum facing
         {
@@ -44,9 +46,14 @@ namespace Prototype
             runningLeft,
             runningRight,
             jumping,
-            falling
+            falling,
+            picking,
+            shooting
         }
         public static state currentState = state.standing;
+
+        bool carryingGun = false;
+        bool isShooting = false;
 
         float speed = 0; //Snelheid waarmee character zich in de horizontale richting voortbeweegt
         float maxWalkingSpeed = 5;
@@ -74,7 +81,7 @@ namespace Prototype
 
             feetBounds = new Rectangle(bounds.X + 30, bounds.Y + 70, 20, 10);
             KeyInput(currentKeyboardState, previousKeyboardState);
-            if(!onLadder)
+            if (!onLadder)
                 Movement();
 
             if (Character.bounds.X + Character.bounds.Width > ladder.position.X && Character.bounds.X < ladder.position.X + ladder.ladderTexture.Width && Character.bounds.Y < ladder.position.Y + ladder.ladderTexture.Height && Character.bounds.Y + Character.bounds.Height > ladder.position.Y - (ladder.rails - 1) * ladder.ladderTexture.Height)
@@ -92,6 +99,7 @@ namespace Prototype
             {
                 Game1.platforms[i].boundingBox = new Rectangle((int)Game1.startPosPlat[i].X, (int)Game1.startPosPlat[i].Y, Game1.platforms[i].boundingBox.Width, Game1.platforms[i].boundingBox.Height);
                 Game1.platforms[i].boundingBoxTop = new Rectangle(Game1.platforms[i].boundingBox.X, Game1.platforms[i].boundingBox.Y, Game1.platforms[i].boundingBox.Width, 5);
+                //Game1.gun.boundingBox = new Rectangle((int)Game1.gun.startPosition.X, (int)Game1.startPosPlat[i].Y, Game1.platforms[i].boundingBox.Width, Game1.platforms[i].boundingBox.Height);
             }
 
             bounds.X = (int)startPos.X;
@@ -104,7 +112,7 @@ namespace Prototype
         }
 
         private void KeyInput(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
-        {
+        {          
             if (currentState != state.jumping && currentState != state.falling) //Als de speler niet in de lucht is
             {
                 if (!currentKeyboardState.IsKeyDown(Keys.LeftShift)) //Als shift niet is ingedrukt
@@ -132,6 +140,29 @@ namespace Prototype
                     if (currentKeyboardState.IsKeyDown(Keys.W)) //Laat character springen als W wordt ingedrukt
                     {
                         currentState = state.jumping;
+                    }
+                    if (currentKeyboardState.IsKeyDown(Keys.S)) //Laat character iets oppakken als Spatie wordt ingedrukt
+                    {
+                        currentState = state.picking;
+                    }
+                    if (currentState == state.picking && !currentKeyboardState.IsKeyDown(Keys.S))
+                    {
+                        currentState = state.standing;
+                    }
+                    //Later misschien ook toevoegen dat je ook in de lucht kan schieten, maar daar ik vond de oplossing op de bug niet
+                    if (carryingGun == true)
+                    {
+                        if (shootingTimer > 50)
+                        {
+                            if (currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space))
+                            {
+                                Game1.AddProjectile(new Vector2(bounds.X, bounds.Y + sourceHeight / 2));
+
+                                //currentState = state.shooting;
+                                shootingTimer = 0;
+                                isShooting = true;
+                            }
+                        }
                     }
                 }
                 else if (currentKeyboardState.IsKeyDown(Keys.LeftShift))
@@ -161,6 +192,10 @@ namespace Prototype
                     if (currentKeyboardState.IsKeyDown(Keys.W)) //Jump when W is pressed once
                     {
                         currentState = state.jumping;
+                    }
+                    if (currentKeyboardState.IsKeyDown(Keys.S)) //Laat character iets oppakken als Spatie wordt ingedrukt
+                    {
+                        currentState = state.picking;
                     }
                 }
             }
@@ -198,21 +233,7 @@ namespace Prototype
                 }
             }
 
-            
-            if (currentKeyboardState.IsKeyDown(Keys.E) && !previousKeyboardState.IsKeyDown(Keys.E)) //Character veranderen met E
-            {
-                if (playerTexture == Game1.character1Texture)
-                    playerTexture = Game1.character2Texture;
-                else if (playerTexture == Game1.character2Texture)
-                    playerTexture = Game1.character1Texture;
-            }
-            else if (currentKeyboardState.IsKeyDown(Keys.Q) && !previousKeyboardState.IsKeyDown(Keys.Q)) //Character veranderen met Q
-            {
-                if (playerTexture == Game1.character1Texture)
-                    playerTexture = Game1.character2Texture;
-                else if (playerTexture == Game1.character2Texture)
-                    playerTexture = Game1.character1Texture;
-            }
+
 
             // Ladder beklimmen
             if (onLadder)
@@ -226,7 +247,47 @@ namespace Prototype
                 if (currentKeyboardState.IsKeyDown(Keys.D))
                     bounds.X += 1;
             }
+
+            if (isShooting == true)
+            {
+                shoot();
+            }
+            shootingTimer++;
         }
+
+
+
+
+
+
+
+
+
+
+
+        private void shoot()
+        {
+            
+                if (frameCount % delay == 0) //Eens in de <delay-waarde> frames
+                {
+                    frameCount = 1 * delay;
+                    source = new Rectangle(frameCount / delay * 80, 4 * 80, sourceWidth, sourceHeight);
+
+                    frameCount++;
+                    shootingDurance++;
+
+
+                    if (shootingDurance > 5)
+                    {
+                        shootingDurance = 0;
+                        isShooting = false;
+                    }
+                }                           
+            
+        }
+
+
+
 
 
         private void Movement()
@@ -250,10 +311,12 @@ namespace Prototype
                         bounds.X += 0;
                         speed = 0;
 
-                        if (frameCount / delay >= 4)
-                            frameCount = 0;
-                        source = new Rectangle(frameCount / delay * 80, 0, sourceWidth, sourceHeight);
-
+                        if (isShooting == false)
+                        {
+                            if (frameCount / delay >= 4)
+                                frameCount = 0;
+                            source = new Rectangle(frameCount / delay * 80, 0, sourceWidth, sourceHeight);
+                        }
                         break;
 
                     case state.walkingLeft:
@@ -272,9 +335,14 @@ namespace Prototype
 
                             bounds.X += (int)speed;
 
+
                             if (frameCount / delay >= 6)
                                 frameCount = 0;
-                            source = new Rectangle(frameCount / delay * 80, 80, sourceWidth, sourceHeight);
+
+                            if (isShooting == false)
+                            {
+                                source = new Rectangle(frameCount / delay * 80, 80, sourceWidth, sourceHeight);
+                            }
                         }
                         break;
 
@@ -294,9 +362,14 @@ namespace Prototype
 
                             bounds.X += (int)speed;
 
+
                             if (frameCount / delay >= 6)
                                 frameCount = 0;
-                            source = new Rectangle(frameCount / delay * 80, 80, sourceWidth, sourceHeight);
+
+                            if (isShooting == false)
+                            {
+                                source = new Rectangle(frameCount / delay * 80, 80, sourceWidth, sourceHeight);
+                            }
                         }
                         break;
 
@@ -312,9 +385,14 @@ namespace Prototype
                                 speed -= 3;
                             bounds.X += (int)speed;
 
+
                             if (frameCount / delay >= 3)
                                 frameCount = 0;
-                            source = new Rectangle(frameCount / delay * 80, 160, sourceWidth, sourceHeight);
+
+                            if (isShooting == false)
+                            {
+                                source = new Rectangle(frameCount / delay * 80, 160, sourceWidth, sourceHeight);
+                            }
                         }
                         break;
 
@@ -330,9 +408,14 @@ namespace Prototype
                                 speed += 3;
                             bounds.X += (int)speed;
 
+
                             if (frameCount / delay >= 3)
                                 frameCount = 0;
-                            source = new Rectangle(frameCount / delay * 80, 160, sourceWidth, sourceHeight);
+
+                            if (isShooting == false)
+                            {
+                                source = new Rectangle(frameCount / delay * 80, 160, sourceWidth, sourceHeight);
+                            }
                         }
                         break;
 
@@ -370,7 +453,10 @@ namespace Prototype
                         bounds.Y += jumpingSpeed;
                         jumpCount++;
 
-                        source = new Rectangle(frameCount / delay * sourceWidth, 3 * sourceHeight, sourceWidth, sourceHeight);
+                        if (isShooting == false)
+                        {
+                            source = new Rectangle(frameCount / delay * sourceWidth, 3 * sourceHeight, sourceWidth, sourceHeight);
+                        }
                         break;
 
                     case state.falling:
@@ -401,13 +487,74 @@ namespace Prototype
                         {
                             frameCount = 3 * delay;
                         }
-                        source = new Rectangle(frameCount / delay * sourceWidth, 3 * sourceHeight, sourceWidth, sourceHeight);
+
+                        if (isShooting == false)
+                        {
+                            source = new Rectangle(frameCount / delay * sourceWidth, 3 * sourceHeight, sourceWidth, sourceHeight);
+                        }
                         jumpCount++;
                         break;
+
+                    case state.picking:
+                        Gun gun = game.GetIntersectingGun(feetBounds);
+
+                        speed = 0;
+                        frameCount = 6 * delay;
+
+                        if (isShooting == false)
+                        {
+                            source = new Rectangle(frameCount / delay * 80, 6 * 80, sourceWidth, sourceHeight);
+                        }
+
+                        if (gun != null) //als character bij een gun staat
+                        {
+                            carryingGun = true;
+                        }
+
+                        break;
+
+                    //case state.shooting:
+                    //    shootingDurance += 1;
+
+                    //    platform = game.GetIntersectingPlatform(feetBounds);
+                    //    if (platform != null) //Als character niet geen, dus wél een platform raakt.
+                    //    {
+                    //        bounds.Y = platform.boundingBox.Top - bounds.Height + 1; //Blijf op platform staan
+                    //        jumpCount = 0;
+                    //        jumpingSpeed = -10;
+                    //        if (shootingDurance > 10)
+                    //        {
+                    //            shootingDurance = 0;
+                    //            currentState = state.standing;
+                    //        }
+                    //    }
+                    //    else
+                    //    {
+                    //        if (shootingDurance > 10)
+                    //        {
+                    //            shootingDurance = 0;
+                    //            currentState = state.falling;
+                    //        }
+
+                    //        bounds.Y += jumpingSpeed;
+
+                    //        jumpingSpeed += 2;
+                    //        jumpCount++;
+                    //        if (jumpingSpeed >= 18) //Zorgt dat hij character niet sneller dan 18 pixels/frame naar beneden valt. Sneller dan 18 p/f zorgt ervoor dat character door een platform heen valt.
+                    //            jumpingSpeed = 18;
+                    //    }
+                    //    bounds.X += (int)speed;
+
+                    //    frameCount = 1 * delay;
+                    //    source = new Rectangle(frameCount / delay * 80, 4 * 80, sourceWidth, sourceHeight);
+                    //    break;
+
                 }
             }
             frameCount++;
         }
+
+
 
 
 

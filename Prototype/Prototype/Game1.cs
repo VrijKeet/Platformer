@@ -19,7 +19,7 @@ namespace Prototype
         SpriteBatch spriteBatch;
 
         MainMenu mainMenu;
-        OptionsMenu optionsMenu;        
+        OptionsMenu optionsMenu;
         public enum GameState //Game status
         {
             mainmenu,
@@ -28,24 +28,32 @@ namespace Prototype
         }
         public GameState gameState = GameState.mainmenu;
 
-      public  enum Difficulty
+        public enum Difficulty
         {
             easy,
             medium,
             hard
         }
-       public Difficulty difficulty = Difficulty.easy;
+        public Difficulty difficulty = Difficulty.easy;
 
-       public static Character character;
+        public static Character character;
         public static Texture2D character1Texture;
         public static Texture2D character2Texture;
+        public static Texture2D character3Texture;
 
         Texture2D backgroundTexture;
 
         public static List<Platform> platforms;
-        Texture2D platformTexture;
+        Texture2D standardTexture;
+        Texture2D grassTexture1;
         public static Vector2[] startPosPlat;
-        
+
+        public static Gun gun;
+        Texture2D gunTexture1;
+
+        public static List<Projectile> projectiles;
+        static Texture2D projectileTexture;
+
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
 
@@ -83,8 +91,10 @@ namespace Prototype
             platforms.Add(platform8);
             platforms.Add(platform9);
             platforms.Add(platform10);
-            startPosPlat = new Vector2[10] { new Vector2(233, 380), new Vector2(150, 290), new Vector2(350, 330), new Vector2(100, 430), new Vector2(-100, 250), new Vector2(600, 350), new Vector2(200, 200), new Vector2(200, 150), new Vector2(200, 100), new Vector2(200, 50) }; // Begin posities voor respawnen
-            platform.boundingBox = new Rectangle((int)startPosPlat[0].X, (int)startPosPlat[0].Y, 334, 28);
+            startPosPlat = new Vector2[10] { new Vector2(233, 380), new Vector2(150, 290), new Vector2(350, 330), 
+                new Vector2(100, 430), new Vector2(-100, 250), new Vector2(600, 350), new Vector2(200, 200), 
+                new Vector2(200, 150), new Vector2(200, 100), new Vector2(200, 50) }; // Begin posities voor respawnen
+            platform.boundingBox = new Rectangle((int)startPosPlat[0].X, (int)startPosPlat[0].Y, 334, 100);
             platform2.boundingBox = new Rectangle((int)startPosPlat[1].X, (int)startPosPlat[1].Y, 100, 10);
             platform3.boundingBox = new Rectangle((int)startPosPlat[2].X, (int)startPosPlat[2].Y, 300, 15);
             platform4.boundingBox = new Rectangle((int)startPosPlat[3].X, (int)startPosPlat[3].Y, 50, 10);
@@ -96,8 +106,15 @@ namespace Prototype
             platform10.boundingBox = new Rectangle((int)startPosPlat[9].X, (int)startPosPlat[9].Y, 100, 10);
             for (int i = 0; i < platforms.Count; i++)
             {
-                platforms[i].boundingBoxTop = new Rectangle(platforms[i].boundingBox.X, platforms[i].boundingBox.Y, platforms[i].boundingBox.Width, 5); //Maak voor iedere platform een rechthoek van de top aan.
+                platforms[i].boundingBoxTop = new Rectangle(platforms[i].boundingBox.X, platforms[i].boundingBox.Y,
+                    platforms[i].boundingBox.Width, 5);
+                //Maak voor iedere platform een rechthoek van de top aan.
             }
+
+            gun = new Gun();
+            gun.boundingBox = new Rectangle(500, 320, 10, 10);
+
+            projectiles = new List<Projectile>();
 
             // Game Components opnemen
             Components.Add(new Scrollen(this));
@@ -119,15 +136,32 @@ namespace Prototype
             character = new Character(this); //"this" omdat character een constructor heeft
             character1Texture = this.Content.Load<Texture2D>("character1");
             character2Texture = this.Content.Load<Texture2D>("character2");
+            character3Texture = this.Content.Load<Texture2D>("character3");
             character.playerTexture = character1Texture; //Laat de character met character1Texture beginnen
 
-            platformTexture = Content.Load<Texture2D>("platform");
+            standardTexture = Content.Load<Texture2D>("platform");
+            grassTexture1 = Content.Load<Texture2D>("grassTexture1");
             backgroundTexture = Content.Load<Texture2D>("sky");
 
-            for (int i = 0; i < platforms.Count; i++)
-            {
-                platforms[i].Initialize(platformTexture); //Geef iedere platform dezelfde texture
-            }
+            gunTexture1 = Content.Load<Texture2D>("gunTexture");
+            gun.Initialize(gunTexture1);
+
+            projectileTexture = Content.Load<Texture2D>("laser");
+            
+            //for (int i = 0; i < platforms.Count; i++)
+            //{
+            //    platforms[i].Initialize(standardTexture); //Geef iedere platform dezelfde texture
+            //}
+            platforms[0].Initialize(grassTexture1);
+            platforms[1].Initialize(grassTexture1);
+            platforms[2].Initialize(grassTexture1);
+            platforms[3].Initialize(grassTexture1);
+            platforms[4].Initialize(grassTexture1);
+            platforms[5].Initialize(grassTexture1);
+            platforms[6].Initialize(grassTexture1);
+            platforms[7].Initialize(grassTexture1);
+            platforms[8].Initialize(grassTexture1);
+            platforms[9].Initialize(grassTexture1);
         }
 
 
@@ -144,29 +178,66 @@ namespace Prototype
             //Als gebruiker in het hoofdmenu zit
             if (gameState == GameState.mainmenu)
                 mainMenu.Update(gameTime, currentKeyboardState, previousKeyboardState);
-            else if (gameState == GameState.options)
+            else if (gameState == GameState.options) //Als gebruiker in optiemenu zit
             {
                 optionsMenu.Update(gameTime, currentKeyboardState, previousKeyboardState);
             }
-            else if (gameState == GameState.running)
+            else if (gameState == GameState.running) //Als gebruiker het spel speelt
             {
                 if (currentKeyboardState.IsKeyDown(Keys.Escape)) //Ga naar het startscherm als de "escape"-toets wordt ingedrukt
                     gameState = GameState.mainmenu;
 
                 character.Update(gameTime, currentKeyboardState, previousKeyboardState);
+                UpdateProjectiles();
+            }
+
+            
+
+            if (currentKeyboardState.IsKeyDown(Keys.R))
+            {
+                //NIEUWE LEVEL 1
             }
 
             // Status van toetsenbord van vorige doorloop opslaan
             previousKeyboardState = currentKeyboardState;
 
-
-            
-
             base.Update(gameTime);
         }
+               
+        
+
+
+        public static void AddProjectile(Vector2 position)
+        {
+            Projectile projectile = new Projectile();
+            projectile.Initialize(projectileTexture, position);
+
+            if (Character.currentFacing == Character.facing.right)
+                projectile.projectileMoveSpeed = 3;
+            else
+                projectile.projectileMoveSpeed = -3;
+
+            projectiles.Add(projectile);
+        }
+       
 
 
 
+        public static void UpdateProjectiles()
+        {
+            // Update the Projectiles
+            for (int i = projectiles.Count - 1; i >= 0; i--)
+            {
+                projectiles[i].Update();
+
+                if (projectiles[i].Active == false)
+                {
+                    projectiles.RemoveAt(i);
+                }
+            }
+        }
+
+        
 
 
 
@@ -184,6 +255,14 @@ namespace Prototype
 
 
 
+        public Gun GetIntersectingGun(Rectangle feetBounds) //Kijken of een platform in de lijst in contact komt met character
+        {
+            if (gun.boundingBox.Intersects(feetBounds)) //Als een platform in contact is met character
+                return gun; //Onthoud die informatie dan
+
+            return null; //Als géén platform in de lijst in contact komt met character, onthoud die informatie
+        }
+
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
@@ -192,7 +271,6 @@ namespace Prototype
             if (gameState == GameState.mainmenu)
             {
                 spriteBatch.Begin();
-                //DrawMainMenu(gameTime, spriteBatch);
                 mainMenu.Draw(gameTime, spriteBatch);
                 spriteBatch.End();
             }
@@ -211,6 +289,13 @@ namespace Prototype
                     platforms[i].Draw(gameTime, spriteBatch); //Teken iedere platform in de lijst
                 }
                 character.Draw(gameTime, spriteBatch);
+                gun.Draw(gameTime, spriteBatch);
+
+                // Draw the Projectiles
+                for (int i = 0; i < projectiles.Count; i++)
+                {
+                    projectiles[i].Draw(spriteBatch);
+                }
 
                 spriteBatch.End();
 

@@ -64,7 +64,7 @@ namespace Prototype
 
             spriteBatch.Begin();
             for(int i = 0; i < rails; i++)
-                spriteBatch.Draw(ladderTexture, new Vector2(position.X, position.Y - ladderTexture.Height * i), Color.White);
+                spriteBatch.Draw(ladderTexture, new Vector2(position.X, (position.Y +20) - ladderTexture.Height* i), Color.White);
             spriteBatch.End();
 
             base.Draw(gameTime);

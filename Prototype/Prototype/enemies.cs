@@ -84,7 +84,7 @@ namespace Prototype
                 dimensions = new Rectangle(Game1.platforms[4].boundingBox.X + distance, Game1.platforms[4].boundingBox.Y - source.Height, 85, 70);
             }
 
-            if (alive && Character.bounds.X < dimensions.X + dimensions.Width && Character.bounds.Y + Character.bounds.Height > dimensions.Y && Character.bounds.X + Character.bounds.Width > dimensions.X && Character.bounds.Y < (dimensions.Y + dimensions.Height) - 60)
+            if (alive && Character.bounds.X < dimensions.X + dimensions.Width && Character.feetBounds.Y + Character.feetBounds.Height > dimensions.Y && Character.feetBounds.X + Character.feetBounds.Width > dimensions.X && Character.feetBounds.Y < (dimensions.Y + dimensions.Height) - 60)
             {
                 score.currentScore += 1;
                 alive = false;
