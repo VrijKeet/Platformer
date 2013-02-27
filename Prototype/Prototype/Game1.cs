@@ -15,45 +15,39 @@ namespace Prototype
 {
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager graphics;
+        public static GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
         MainMenu mainMenu;
         OptionsMenu optionsMenu;
+        DeathScreen deathScreen;
+        public static Character character;
+        public static Gun gun;
+            
+        public static Texture2D character1Texture;
+        public static Texture2D character2Texture;
+        public static Texture2D character3Texture;
+        Texture2D backgroundTexture;
+        Texture2D standardTexture;
+        Texture2D grassTexture1;
+        Texture2D gunTexture1;
+        Texture2D gunPickedTexture1;
+        public static Texture2D projectileTexture;
+
+        public static List<Platform> platforms;
+        public static Vector2[] startPosPlat;
+        public static List<Projectile> projectiles = new List<Projectile>();
+
         public enum GameState //Game status
         {
             mainmenu,
             options,
-            running
+            running,
+            dead
         }
         public GameState gameState = GameState.mainmenu;
 
-        public enum Difficulty
-        {
-            easy,
-            medium,
-            hard
-        }
-        public Difficulty difficulty = Difficulty.easy;
-
-        public static Character character;
-        public static Texture2D character1Texture;
-        public static Texture2D character2Texture;
-        public static Texture2D character3Texture;
-
-        Texture2D backgroundTexture;
-
-        public static List<Platform> platforms;
-        Texture2D standardTexture;
-        Texture2D grassTexture1;
-        public static Vector2[] startPosPlat;
-
-        public static Gun gun;
-        Texture2D gunTexture1;
-
-        public static List<Projectile> projectiles;
-        static Texture2D projectileTexture;
-
+        public double deathTimer = 0;
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
 
@@ -68,6 +62,7 @@ namespace Prototype
         {
             mainMenu = new MainMenu(this.Content, this);
             optionsMenu = new OptionsMenu(this.Content, this);
+            deathScreen = new DeathScreen(this.Content, this);
 
             // Maak hard-coded 4 platformen aan:
             platforms = new List<Platform>();
@@ -119,7 +114,7 @@ namespace Prototype
             // Game Components opnemen
             Components.Add(new Scrollen(this));
             Components.Add(new health(this));
-            Components.Add(new enemies(this));
+            Components.Add(new Enemy(this));
             Components.Add(new score(this));
             Components.Add(new ladder(this));
 
@@ -144,10 +139,12 @@ namespace Prototype
             backgroundTexture = Content.Load<Texture2D>("sky");
 
             gunTexture1 = Content.Load<Texture2D>("gunTexture");
+            gunPickedTexture1 = Content.Load<Texture2D>("gloves1");
+
             gun.Initialize(gunTexture1);
 
             projectileTexture = Content.Load<Texture2D>("laser");
-            
+
             //for (int i = 0; i < platforms.Count; i++)
             //{
             //    platforms[i].Initialize(standardTexture); //Geef iedere platform dezelfde texture
@@ -162,6 +159,7 @@ namespace Prototype
             platforms[7].Initialize(grassTexture1);
             platforms[8].Initialize(grassTexture1);
             platforms[9].Initialize(grassTexture1);
+
         }
 
 
@@ -189,9 +187,22 @@ namespace Prototype
 
                 character.Update(gameTime, currentKeyboardState, previousKeyboardState);
                 UpdateProjectiles();
-            }
 
-            
+                if (gun.picked)
+                    gun.gunTexture = gunPickedTexture1;
+
+                if (health.lifes <= 0)
+                {
+                    deathTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                    Character.currentState = Character.state.dead;
+                }
+                if (deathTimer > 3000)
+                gameState = GameState.dead;
+            }
+            else if (gameState == GameState.dead)
+                deathScreen.Update(gameTime, currentKeyboardState, previousKeyboardState);
+
+
 
             if (currentKeyboardState.IsKeyDown(Keys.R))
             {
@@ -203,8 +214,8 @@ namespace Prototype
 
             base.Update(gameTime);
         }
-               
-        
+
+
 
 
         public static void AddProjectile(Vector2 position)
@@ -219,7 +230,7 @@ namespace Prototype
 
             projectiles.Add(projectile);
         }
-       
+
 
 
 
@@ -230,6 +241,8 @@ namespace Prototype
             {
                 projectiles[i].Update();
 
+                //CheckCollisionProjectile(projectiles[i]);
+
                 if (projectiles[i].Active == false)
                 {
                     projectiles.RemoveAt(i);
@@ -237,7 +250,18 @@ namespace Prototype
             }
         }
 
-        
+        //public static List<Enemy> enemies;
+
+        //public static void CheckCollisionProjectile(Projectile p)
+        //{
+        //    for(int i = enemies.Count; i>0; i--){
+        //        if (enemies[i].boundingBox.Intersects(p.boundingBox))
+        //        {
+        //            enemies.RemoveAt(i);
+        //            projectiles.Remove(p);
+        //        }
+        //    }
+        //}
 
 
 
@@ -252,16 +276,16 @@ namespace Prototype
         }
 
 
-
-
-
-        public Gun GetIntersectingGun(Rectangle feetBounds) //Kijken of een platform in de lijst in contact komt met character
+        public Gun GetIntersectingGun(Rectangle feetBounds)
         {
-            if (gun.boundingBox.Intersects(feetBounds)) //Als een platform in contact is met character
-                return gun; //Onthoud die informatie dan
+            if (gun.boundingBox.Intersects(feetBounds))
+                return gun;
 
-            return null; //Als géén platform in de lijst in contact komt met character, onthoud die informatie
+            return null;
         }
+
+
+
 
         protected override void Draw(GameTime gameTime)
         {
@@ -300,6 +324,12 @@ namespace Prototype
                 spriteBatch.End();
 
                 base.Draw(gameTime);
+            }
+            else if (gameState == GameState.dead)
+            {
+                spriteBatch.Begin();
+                deathScreen.Draw(gameTime, spriteBatch);
+                spriteBatch.End();
             }
         }
     }

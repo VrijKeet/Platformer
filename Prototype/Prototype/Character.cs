@@ -28,7 +28,7 @@ namespace Prototype
         const int sourceHeight = 80; //Hoogte van character in player.png      
         static Vector2 startPos = new Vector2(300, 300);
         public static Rectangle bounds = new Rectangle((int)startPos.X, (int)startPos.Y, boundsWidth, boundsHeight); //Positie en grootte van character
-        Rectangle source = new Rectangle(0, 0, sourceWidth, sourceHeight); //Bepaalt welk gedeelte van player.png wordt getoond
+        public static Rectangle source = new Rectangle(0, 0, sourceWidth, sourceHeight); //Bepaalt welk gedeelte van player.png wordt getoond
         public static Rectangle feetBounds = new Rectangle(bounds.X, bounds.Y + 50, 80, 30);
 
         public enum facing
@@ -48,7 +48,8 @@ namespace Prototype
             jumping,
             falling,
             picking,
-            shooting
+            shooting,
+            dead
         }
         public static state currentState = state.standing;
 
@@ -156,7 +157,10 @@ namespace Prototype
                         {
                             if (currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space))
                             {
-                                Game1.AddProjectile(new Vector2(bounds.X, bounds.Y + sourceHeight / 2));
+                                if (currentFacing == facing.left)
+                                    Game1.AddProjectile(new Vector2(bounds.X, bounds.Y + sourceHeight / 2));
+                                else
+                                    Game1.AddProjectile(new Vector2(bounds.X + source.Width, bounds.Y + sourceHeight / 2));
 
                                 //currentState = state.shooting;
                                 shootingTimer = 0;
@@ -266,8 +270,7 @@ namespace Prototype
 
 
         private void shoot()
-        {
-            
+        {            
                 if (frameCount % delay == 0) //Eens in de <delay-waarde> frames
                 {
                     frameCount = 1 * delay;
@@ -275,7 +278,6 @@ namespace Prototype
 
                     frameCount++;
                     shootingDurance++;
-
 
                     if (shootingDurance > 5)
                     {
@@ -509,9 +511,21 @@ namespace Prototype
                         if (gun != null) //als character bij een gun staat
                         {
                             carryingGun = true;
+                            gun.picked = true;
                         }
 
                         break;
+
+                    case state.dead:
+                        platform = game.GetIntersectingPlatform(feetBounds);
+
+                        speed = 0;
+
+                        if (frameCount / delay >= 5)
+                            frameCount = 5 * delay;
+
+                        source = new Rectangle(frameCount / delay * 80, 6 * 80, sourceWidth, sourceHeight);
+                                break;
 
                     //case state.shooting:
                     //    shootingDurance += 1;

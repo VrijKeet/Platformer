@@ -61,7 +61,8 @@ namespace Prototype
             SpriteBatch spriteBatch = Game.Services.GetService(typeof(SpriteBatch)) as SpriteBatch;
 
             spriteBatch.Begin();
-            spriteBatch.DrawString(font, "Score: " + currentScore, new Vector2(health.startLifes * health.width, 0), Color.White);
+            spriteBatch.DrawString(font, "Score: " + currentScore, new Vector2(0, 20), Color.White);
+            //Eerst: "health.startLifes * health.width als" X
             spriteBatch.End();
             
             base.Draw(gameTime);

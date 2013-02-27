@@ -56,17 +56,14 @@ namespace Prototype
         public override void Update(GameTime gameTime)
         {
             // TODO: Add your update code here
-            if (enemies.alive && Character.bounds.X < enemies.dimensions.X + enemies.dimensions.Width && Character.bounds.Y + Character.bounds.Height > enemies.dimensions.Y + 10 && Character.bounds.X + Character.bounds.Width > enemies.dimensions.X && Character.bounds.Y < enemies.dimensions.Y + enemies.dimensions.Height)
+            if (Enemy.alive && Character.bounds.X < Enemy.boundingBox.X + Enemy.boundingBox.Width && Character.bounds.Y + Character.bounds.Height > Enemy.boundingBox.Y + 10 && Character.bounds.X + Character.bounds.Width > Enemy.boundingBox.X && Character.bounds.Y < Enemy.boundingBox.Y + Enemy.boundingBox.Height)
             {
                 lifes -= 1;
-                if ((Character.bounds.X + Character.bounds.Width) - (enemies.dimensions.X + enemies.dimensions.Width) > 0)
+                if ((Character.bounds.X + Character.bounds.Width) - (Enemy.boundingBox.X + Enemy.boundingBox.Width) > 0)
                     Character.bounds.X += 50;
                 else
                     Character.bounds.X -= 50;
             }
-
-            if (lifes <= 0)
-                Character.respawn();
 
             base.Update(gameTime);
         }

@@ -108,10 +108,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Character.cs" />
+    <Compile Include="DeathScreen.cs" />
     <Compile Include="Gun.cs" />
     <Compile Include="Level1.cs" />
     <Compile Include="MainMenu.cs" />
-    <Compile Include="enemies.cs" />
+    <Compile Include="Enemy.cs" />
     <Compile Include="health.cs" />
     <Compile Include="ladder.cs" />
     <Compile Include="OptionsMenu.cs" />
