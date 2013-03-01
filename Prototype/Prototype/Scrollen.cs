@@ -23,6 +23,8 @@ namespace Prototype
             // TODO: Construct any child components here
         }
 
+        List<Platform> platformList;
+
         /// <summary>
         /// Allows the game component to perform any initialization it needs to before starting
         /// to run.  This is where it can query for any required services and load content.
@@ -43,55 +45,60 @@ namespace Prototype
             // TODO: Add your update code here
             int marge = 250;
 
+            platformList = Level1.platforms;
+
             if (Character.bounds.X < marge) // Naar links
             {
-                for (int i = 0; i < Game1.platforms.Count; i++)
+                foreach (Platform platform in platformList)
                 {
-                    Game1.platforms[i].boundingBox = new Rectangle(Game1.platforms[i].boundingBox.X + (marge - Character.bounds.X), Game1.platforms[i].boundingBox.Y, Game1.platforms[i].boundingBox.Width, Game1.platforms[i].boundingBox.Height);
-                    Game1.platforms[i].boundingBoxTop = new Rectangle(Game1.platforms[i].boundingBox.X, Game1.platforms[i].boundingBox.Y, Game1.platforms[i].boundingBox.Width, 5);
+                    platform.boundingBox = new Rectangle(platform.boundingBox.X + (marge - Character.bounds.X), platform.boundingBox.Y, platform.boundingBox.Width, platform.boundingBox.Height);
+                    platform.boundingBoxTop = new Rectangle(platform.boundingBox.X, platform.boundingBox.Y, platform.boundingBox.Width, 5);
+
                 }
-                Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X + (marge - Character.bounds.X), Game1.gun.boundingBox.Y, Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
+                //for (int i = 0; i < Game1.platforms.Count; i++)
+                //{
+
+                //}
+                //Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X + (marge - Character.bounds.X), Game1.gun.boundingBox.Y, Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
                 //Game1.projectiles.Position = new Rectangle(Game1.projectiles.Position.X + (marge - Character.bounds.X), Game1.gun.boundingBox.Y, Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
                 Character.bounds.X = marge;
             }
 
             if ((Character.bounds.X + Character.bounds.Width) > (GraphicsDevice.Viewport.Width - marge)) // Naar rechts
             {
-                for (int i = 0; i < Game1.platforms.Count; i++)
+                foreach (Platform platform in platformList)
                 {
-                    Game1.platforms[i].boundingBox = new Rectangle(Game1.platforms[i].boundingBox.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), Game1.platforms[i].boundingBox.Y, Game1.platforms[i].boundingBox.Width, Game1.platforms[i].boundingBox.Height);
-                    Game1.platforms[i].boundingBoxTop = new Rectangle(Game1.platforms[i].boundingBox.X, Game1.platforms[i].boundingBox.Y, Game1.platforms[i].boundingBox.Width, 5);
+                    platform.boundingBox = new Rectangle(platform.boundingBox.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), platform.boundingBox.Y, platform.boundingBox.Width, platform.boundingBox.Height);
+                    platform.boundingBoxTop = new Rectangle(platform.boundingBox.X, platform.boundingBox.Y, platform.boundingBox.Width, 5);
                 }
-                Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), Game1.gun.boundingBox.Y, Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
+                //Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), Game1.gun.boundingBox.Y, Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
                 //Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), Game1.gun.boundingBox.Y, Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height); 
                 Character.bounds.X = GraphicsDevice.Viewport.Width - marge - Character.bounds.Width;
             }
 
             if (Character.bounds.Y < marge) // Naar boven
             {
-                for (int i = 0; i < Game1.platforms.Count; i++)
+                foreach (Platform platform in platformList)
                 {
-                    Game1.platforms[i].boundingBox = new Rectangle(Game1.platforms[i].boundingBox.X, Game1.platforms[i].boundingBox.Y + (marge - Character.bounds.Y), Game1.platforms[i].boundingBox.Width, Game1.platforms[i].boundingBox.Height);
-                    Game1.platforms[i].boundingBoxTop = new Rectangle(Game1.platforms[i].boundingBox.X, Game1.platforms[i].boundingBox.Y, Game1.platforms[i].boundingBox.Width, 5);
+                    platform.boundingBox = new Rectangle(platform.boundingBox.X, platform.boundingBox.Y + (marge - Character.bounds.Y), platform.boundingBox.Width, platform.boundingBox.Height);
+                    platform.boundingBoxTop = new Rectangle(platform.boundingBox.X, platform.boundingBox.Y, platform.boundingBox.Width, 5);
                 }
-                Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X, Game1.gun.boundingBox.Y + (marge - Character.bounds.Y), Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
                 //Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X, Game1.gun.boundingBox.Y + (marge - Character.bounds.Y), Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
                 Character.bounds.Y = marge;
             }
 
             if ((Character.bounds.Y + Character.bounds.Height) > (GraphicsDevice.Viewport.Height - marge)) // Naar beneden
             {
-                for (int i = 0; i < Game1.platforms.Count; i++)
+                foreach (Platform platform in platformList)
                 {
-                    Game1.platforms[i].boundingBox = new Rectangle(Game1.platforms[i].boundingBox.X, Game1.platforms[i].boundingBox.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)), Game1.platforms[i].boundingBox.Width, Game1.platforms[i].boundingBox.Height);
-                    Game1.platforms[i].boundingBoxTop = new Rectangle(Game1.platforms[i].boundingBox.X, Game1.platforms[i].boundingBox.Y, Game1.platforms[i].boundingBox.Width, 5);
+                    platform.boundingBox = new Rectangle(platform.boundingBox.X, platform.boundingBox.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)), platform.boundingBox.Width, platform.boundingBox.Height);
+                    platform.boundingBoxTop = new Rectangle(platform.boundingBox.X, platform.boundingBox.Y, platform.boundingBox.Width, 5);
                 }
-                Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X, Game1.gun.boundingBox.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)), Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
-                //Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X, Game1.gun.boundingBox.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)), Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height); 
+                //Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X, Game1.gun.boundingBox.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)), Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
                 Character.bounds.Y = GraphicsDevice.Viewport.Height - marge - Character.bounds.Height;
             }
 
-            Enemy.boundingBox = new Rectangle(Game1.platforms[4].boundingBox.X + Enemy.distance, Game1.platforms[4].boundingBox.Y - Enemy.source.Height, 85, 70);
+            //Enemy.boundingBox = new Rectangle(Game1.platforms[4].boundingBox.X + Enemy.distance, Game1.platforms[4].boundingBox.Y - Enemy.source.Height, 85, 70);
 
             base.Update(gameTime);
         }

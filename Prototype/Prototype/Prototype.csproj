@@ -110,7 +110,10 @@
     <Compile Include="Character.cs" />
     <Compile Include="DeathScreen.cs" />
     <Compile Include="Gun.cs" />
+    <Compile Include="ILevel.cs" />
     <Compile Include="Level1.cs" />
+    <Compile Include="Level2.cs" />
+    <Compile Include="LevelMenu.cs" />
     <Compile Include="MainMenu.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="health.cs" />

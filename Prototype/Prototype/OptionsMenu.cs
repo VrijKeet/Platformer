@@ -91,19 +91,19 @@ namespace Prototype
             {
                 nextSelectedCharacter = SelectedCharacter.Jos;
                 previousSelectedCharacter = SelectedCharacter.Maarten;
-                Game1.character.playerTexture = Game1.character1Texture;
+                //Game1.character.playerTexture = Game1.character1Texture;
             }
             else if (selectedCharacter == SelectedCharacter.Jos)
             {
                 nextSelectedCharacter = SelectedCharacter.Maarten;
                 previousSelectedCharacter = SelectedCharacter.Bandit;
-                Game1.character.playerTexture = Game1.character2Texture;
+                //Game1.character.playerTexture = Game1.character2Texture;
             }
             else if (selectedCharacter == SelectedCharacter.Maarten)
             {
                 nextSelectedCharacter = SelectedCharacter.Bandit;
                 previousSelectedCharacter = SelectedCharacter.Jos;
-                Game1.character.playerTexture = Game1.character3Texture;
+                //Game1.character.playerTexture = Game1.character3Texture;
             }
         }
 
@@ -114,19 +114,19 @@ namespace Prototype
             {
                 nextSelectedDifficulty = SelectedDifficulty.Medium;
                 previousSelectedDifficulty = SelectedDifficulty.Hard;
-                health.lifes = 5;
+                //health.lifes = 5;
             }
             else if (selectedDifficulty == SelectedDifficulty.Medium)
             {
                 nextSelectedDifficulty = SelectedDifficulty.Hard;
                 previousSelectedDifficulty = SelectedDifficulty.Easy;
-                health.lifes = 3;
+                //health.lifes = 3;
             }
             else if (selectedDifficulty == SelectedDifficulty.Hard)
             {
                 nextSelectedDifficulty = SelectedDifficulty.Easy;
                 previousSelectedDifficulty = SelectedDifficulty.Medium;
-                health.lifes = 1;
+                //health.lifes = 1;
             }
         }
 
@@ -254,7 +254,7 @@ namespace Prototype
             spriteBatch.DrawString(menuFont, "Music", new Vector2(50, 190), MusicColor);
             spriteBatch.DrawString(menuFont, "Back", new Vector2(50, 330), BackColor);
 
-            spriteBatch.Draw(Game1.character.playerTexture, new Rectangle(500, 100, 320, 320), source, Color.White, 0f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+            //spriteBatch.Draw(Game1.character.playerTexture, new Rectangle(500, 100, 320, 320), source, Color.White, 0f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
         }
     }
 }

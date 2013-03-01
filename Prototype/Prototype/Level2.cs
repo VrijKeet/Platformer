@@ -13,7 +13,7 @@ using Microsoft.Xna.Framework.Storage;
 
 namespace Prototype
 {
-    class Level1 : ILevel
+    class Level2 : ILevel
     {
         public Game1 game;
         public Texture2D backgroundTexture;
@@ -29,7 +29,7 @@ namespace Prototype
 
 
 
-        public Level1(ContentManager content, Game1 game1)
+        public Level2(ContentManager content, Game1 game1)
         {
             this.game = game1;
             this.backgroundTexture = content.Load<Texture2D>("sky");
@@ -43,6 +43,8 @@ namespace Prototype
             //testPlatform = new Platform();
             //testPlatform.Initialize(grassTexture1);
             //testPlatform.boundingBox = new Rectangle(100, 100, 300, 100);
+
+            // Maak hard-coded platformen aan:
 
             Platform platform = new Platform();
             Platform platform2 = new Platform();
@@ -77,7 +79,7 @@ namespace Prototype
             platforms[9].Initialize(grassTexture1);
 
 
-            startPosPlat = new Vector2[10] { new Vector2(233, 380), new Vector2(150, 290), new Vector2(350, 330), 
+            startPosPlat = new Vector2[10] { new Vector2(233, 580), new Vector2(150, 290), new Vector2(350, 330), 
                 new Vector2(100, 430), new Vector2(-100, 250), new Vector2(600, 350), new Vector2(200, 200), 
                 new Vector2(200, 150), new Vector2(200, 100), new Vector2(200, 50) }; // Begin posities voor respawnen
             platform.boundingBox = new Rectangle((int)startPosPlat[0].X, (int)startPosPlat[0].Y, 334, 100);
@@ -102,10 +104,6 @@ namespace Prototype
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(backgroundTexture, new Rectangle(0, 0, backgroundTexture.Width, backgroundTexture.Height), Color.White);
-
-            // Maak hard-coded 4 platformen aan:
-
-          
 
             for (int i = 0; i < platforms.Count; i++)
             {

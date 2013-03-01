@@ -22,12 +22,16 @@ namespace Prototype
         float shootingTimer;
 
         public Texture2D playerTexture;
-        static int boundsWidth = 80; //Breedte van character in het spel
-        static int boundsHeight = 80; //Hoogte van character in het spel
+        public static int boundsWidth = 80; //Breedte van character in het spel
+        public static int boundsHeight = 80; //Hoogte van character in het spel
         const int sourceWidth = 80; //Breedte van charactre in player.png
-        const int sourceHeight = 80; //Hoogte van character in player.png      
-        static Vector2 startPos = new Vector2(300, 300);
-        public static Rectangle bounds = new Rectangle((int)startPos.X, (int)startPos.Y, boundsWidth, boundsHeight); //Positie en grootte van character
+        const int sourceHeight = 80; //Hoogte van character in player.png
+
+        ////////public static Vector2 startPos = new Vector2(300, 300);
+        ////////public static Rectangle characterBounds = new Rectangle((int)startPos.X, (int)startPos.Y, Character.boundsWidth, Character.boundsHeight); //Positie en grootte van character
+        
+        //public static Rectangle bounds = Level1.characterBounds; //Positie en grootte van character
+        public static Rectangle bounds = new Rectangle(300, 280, boundsHeight, boundsWidth);
         public static Rectangle source = new Rectangle(0, 0, sourceWidth, sourceHeight); //Bepaalt welk gedeelte van player.png wordt getoond
         public static Rectangle feetBounds = new Rectangle(bounds.X, bounds.Y + 50, 80, 30);
 
@@ -85,35 +89,35 @@ namespace Prototype
             if (!onLadder)
                 Movement();
 
-            if (Character.bounds.X + Character.bounds.Width > ladder.position.X && Character.bounds.X < ladder.position.X + ladder.ladderTexture.Width && Character.bounds.Y < ladder.position.Y + ladder.ladderTexture.Height && Character.bounds.Y + Character.bounds.Height > ladder.position.Y - (ladder.rails - 1) * ladder.ladderTexture.Height)
-                onLadder = true;
-            else
-                onLadder = false;
+            ////////////if (Character.bounds.X + Character.bounds.Width > ladder.position.X && Character.bounds.X < ladder.position.X + ladder.ladderTexture.Width && Character.bounds.Y < ladder.position.Y + ladder.ladderTexture.Height && Character.bounds.Y + Character.bounds.Height > ladder.position.Y - (ladder.rails - 1) * ladder.ladderTexture.Height)
+            ////////////    onLadder = true;
+            ////////////else
+            ////////////    onLadder = false;
 
-            if ((bounds.Y - (Game1.platforms[4].boundingBox.Y + Game1.platforms[4].boundingBox.Height)) > 200) // Als character meer dan 200 px onder platform 4 (onderste) komt respawnt hij
-                respawn();
+            ////////////if ((bounds.Y - (Level1.platforms[4].boundingBox.Y + Level1.platforms[4].boundingBox.Height)) > 200) // Als character meer dan 200 px onder platform 4 (onderste) komt respawnt hij
+            ////////////    respawn();
         }
 
-        public static void respawn()
-        {
-            for (int i = 0; i < Game1.platforms.Count; i++) // Platformen op begin positie plaatsen
-            {
-                Game1.platforms[i].boundingBox = new Rectangle((int)Game1.startPosPlat[i].X, (int)Game1.startPosPlat[i].Y, Game1.platforms[i].boundingBox.Width, Game1.platforms[i].boundingBox.Height);
-                Game1.platforms[i].boundingBoxTop = new Rectangle(Game1.platforms[i].boundingBox.X, Game1.platforms[i].boundingBox.Y, Game1.platforms[i].boundingBox.Width, 5);
-                //Game1.gun.boundingBox = new Rectangle((int)Game1.gun.startPosition.X, (int)Game1.startPosPlat[i].Y, Game1.platforms[i].boundingBox.Width, Game1.platforms[i].boundingBox.Height);
-            }
+        //public static void respawn()
+        //{
+        //    for (int i = 0; i < Game1.platforms.Count; i++) // Platformen op begin positie plaatsen
+        //    {
+        //        Game1.platforms[i].boundingBox = new Rectangle((int)Game1.startPosPlat[i].X, (int)Game1.startPosPlat[i].Y, Game1.platforms[i].boundingBox.Width, Game1.platforms[i].boundingBox.Height);
+        //        Game1.platforms[i].boundingBoxTop = new Rectangle(Game1.platforms[i].boundingBox.X, Game1.platforms[i].boundingBox.Y, Game1.platforms[i].boundingBox.Width, 5);
+        //        //Game1.gun.boundingBox = new Rectangle((int)Game1.gun.startPosition.X, (int)Game1.startPosPlat[i].Y, Game1.platforms[i].boundingBox.Width, Game1.platforms[i].boundingBox.Height);
+        //    }
 
-            bounds.X = (int)startPos.X;
-            bounds.Y = (int)startPos.Y + 1;
-            currentState = state.standing;
-            currentFacing = facing.right;
-            jumpingSpeed = -10;
-            jumpCount = 0;
-            health.lifes = health.startLifes;
-        }
+        //    bounds.X = (int)startPos.X;
+        //    bounds.Y = (int)startPos.Y + 1;
+        //    currentState = state.standing;
+        //    currentFacing = facing.right;
+        //    jumpingSpeed = -10;
+        //    jumpCount = 0;
+        //    health.lifes = health.startLifes;
+        //}
 
         private void KeyInput(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
-        {          
+        {
             if (currentState != state.jumping && currentState != state.falling) //Als de speler niet in de lucht is
             {
                 if (!currentKeyboardState.IsKeyDown(Keys.LeftShift)) //Als shift niet is ingedrukt
@@ -157,10 +161,10 @@ namespace Prototype
                         {
                             if (currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space))
                             {
-                                if (currentFacing == facing.left)
-                                    Game1.AddProjectile(new Vector2(bounds.X, bounds.Y + sourceHeight / 2));
-                                else
-                                    Game1.AddProjectile(new Vector2(bounds.X + source.Width, bounds.Y + sourceHeight / 2));
+                                //if (currentFacing == facing.left)
+                                //    Game1.AddProjectile(new Vector2(bounds.X, bounds.Y + sourceHeight / 2));
+                                //else
+                                //    Game1.AddProjectile(new Vector2(bounds.X + source.Width, bounds.Y + sourceHeight / 2));
 
                                 //currentState = state.shooting;
                                 shootingTimer = 0;
@@ -270,22 +274,22 @@ namespace Prototype
 
 
         private void shoot()
-        {            
-                if (frameCount % delay == 0) //Eens in de <delay-waarde> frames
+        {
+            if (frameCount % delay == 0) //Eens in de <delay-waarde> frames
+            {
+                frameCount = 1 * delay;
+                source = new Rectangle(frameCount / delay * 80, 4 * 80, sourceWidth, sourceHeight);
+
+                frameCount++;
+                shootingDurance++;
+
+                if (shootingDurance > 5)
                 {
-                    frameCount = 1 * delay;
-                    source = new Rectangle(frameCount / delay * 80, 4 * 80, sourceWidth, sourceHeight);
+                    shootingDurance = 0;
+                    isShooting = false;
+                }
+            }
 
-                    frameCount++;
-                    shootingDurance++;
-
-                    if (shootingDurance > 5)
-                    {
-                        shootingDurance = 0;
-                        isShooting = false;
-                    }
-                }                           
-            
         }
 
 
@@ -300,7 +304,7 @@ namespace Prototype
                 {
                     case state.standing:
 
-                        Platform platform = game.GetIntersectingPlatform(feetBounds); //Kijk in game1.cs of de character in contact is met een platform is de lijst
+                        Platform platform = GetIntersectingPlatform(feetBounds); //Kijk in game1.cs of de character in contact is met een platform is de lijst
                         if (platform == null) //Als character geen platform raakt.
                         {
                             currentState = state.falling;
@@ -322,7 +326,7 @@ namespace Prototype
                         break;
 
                     case state.walkingLeft:
-                        platform = game.GetIntersectingPlatform(feetBounds); //Kijk in game1.cs of de character in contact is met een platform is de lijst
+                        platform = GetIntersectingPlatform(feetBounds); //Kijk in game1.cs of de character in contact is met een platform is de lijst
                         if (platform == null) //Als character geen platform raakt.
                         {
                             currentState = state.falling;
@@ -349,7 +353,7 @@ namespace Prototype
                         break;
 
                     case state.walkingRight:
-                        platform = game.GetIntersectingPlatform(feetBounds); //Kijk in game1.cs of de character in contact is met een platform is de lijst
+                        platform = GetIntersectingPlatform(feetBounds); //Kijk in game1.cs of de character in contact is met een platform is de lijst
                         if (platform == null) //Als character geen platform raakt.
                         {
                             currentState = state.falling;
@@ -376,7 +380,7 @@ namespace Prototype
                         break;
 
                     case state.runningLeft:
-                        platform = game.GetIntersectingPlatform(feetBounds); //Kijk in game1.cs of de character in contact is met een platform is de lijst
+                        platform = GetIntersectingPlatform(feetBounds); //Kijk in game1.cs of de character in contact is met een platform is de lijst
                         if (platform == null) //Als character geen platform raakt.
                         {
                             currentState = state.falling;
@@ -399,7 +403,7 @@ namespace Prototype
                         break;
 
                     case state.runningRight:
-                        platform = game.GetIntersectingPlatform(feetBounds); //Kijk in game1.cs of de character in contact is met een platform is de lijst
+                        platform = GetIntersectingPlatform(feetBounds); //Kijk in game1.cs of de character in contact is met een platform is de lijst
                         if (platform == null) //Als character geen platform raakt.
                         {
                             currentState = state.falling;
@@ -472,7 +476,7 @@ namespace Prototype
                         if (jumpingSpeed >= 18) //Zorgt dat hij character niet sneller dan 18 pixels/frame naar beneden valt. Sneller dan 18 p/f zorgt ervoor dat character door een platform heen valt.
                             jumpingSpeed = 18;
 
-                        platform = game.GetIntersectingPlatform(feetBounds); //Kijk in game1.cs of de character in contact is met een platform is de lijst
+                        platform = GetIntersectingPlatform(feetBounds); //Kijk in game1.cs of de character in contact is met een platform is de lijst
                         if (platform != null) //Als character niet geen, dus wél een platform raakt.
                         {
                             bounds.Y = platform.boundingBox.Top - bounds.Height + 1; //Blijf op platform staan
@@ -498,7 +502,7 @@ namespace Prototype
                         break;
 
                     case state.picking:
-                        Gun gun = game.GetIntersectingGun(feetBounds);
+                        //Gun gun = game.GetIntersectingGun(feetBounds);
 
                         speed = 0;
                         frameCount = 6 * delay;
@@ -508,16 +512,16 @@ namespace Prototype
                             source = new Rectangle(frameCount / delay * 80, 6 * 80, sourceWidth, sourceHeight);
                         }
 
-                        if (gun != null) //als character bij een gun staat
-                        {
-                            carryingGun = true;
-                            gun.picked = true;
-                        }
+                        //if (gun != null) //als character bij een gun staat
+                        //{
+                        //    carryingGun = true;
+                        //    gun.picked = true;
+                        //}
 
                         break;
 
                     case state.dead:
-                        platform = game.GetIntersectingPlatform(feetBounds);
+                        //platform = game.GetIntersectingPlatform(feetBounds);
 
                         speed = 0;
 
@@ -525,7 +529,7 @@ namespace Prototype
                             frameCount = 5 * delay;
 
                         source = new Rectangle(frameCount / delay * 80, 6 * 80, sourceWidth, sourceHeight);
-                                break;
+                        break;
 
                     //case state.shooting:
                     //    shootingDurance += 1;
@@ -570,7 +574,15 @@ namespace Prototype
 
 
 
-
+        public Platform GetIntersectingPlatform(Rectangle feetBounds) //Kijken of een platform in de lijst in contact komt met character
+        {
+            for (int i = 0; i < Level1.platforms.Count; i++) //Kijk voor iedere platform
+            {
+                if (Level1.platforms[i].boundingBox.Intersects(feetBounds)) //Als een platform in contact is met character
+                    return Level1.platforms[i]; //Onthoud die informatie dan
+            }
+            return null; //Als géén platform in de lijst in contact komt met character, onthoud die informatie
+        }
 
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

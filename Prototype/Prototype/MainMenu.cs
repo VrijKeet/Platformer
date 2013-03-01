@@ -24,6 +24,7 @@ namespace Prototype
         enum Selected
         {
             start,
+            levelSelect,
             options,
             exit
         }
@@ -32,6 +33,7 @@ namespace Prototype
         Color SelectedColor = new Color(255, 255, 255, 255);
         Color UnselectedColor = new Color(0, 0, 0, 255);
         Color StartColor = new Color(255, 255, 255, 255);
+        Color LevelSelectColor = new Color(255, 255, 255);
         Color OptionsColor = new Color(100, 100, 100, 200);
         Color ExitColor = new Color(100, 100, 100, 200);
 
@@ -57,17 +59,24 @@ namespace Prototype
             {
                 {
                     if ((currentKeyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down)) | (currentKeyboardState.IsKeyDown(Keys.S) && !previousKeyboardState.IsKeyDown(Keys.S)))
-                        selected = Selected.options;
+                        selected = Selected.levelSelect;
                     if ((currentKeyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up)) | (currentKeyboardState.IsKeyDown(Keys.W) && !previousKeyboardState.IsKeyDown(Keys.W)))
                         selected = Selected.exit;
                 }
+            }
+            else if (selected == Selected.levelSelect)
+            {
+                if ((currentKeyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down)) | (currentKeyboardState.IsKeyDown(Keys.S) && !previousKeyboardState.IsKeyDown(Keys.S)))
+                    selected = Selected.options;
+                if ((currentKeyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up)) | (currentKeyboardState.IsKeyDown(Keys.W) && !previousKeyboardState.IsKeyDown(Keys.W)))
+                    selected = Selected.start;
             }
             else if (selected == Selected.options)
             {
                 if ((currentKeyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down)) | (currentKeyboardState.IsKeyDown(Keys.S) && !previousKeyboardState.IsKeyDown(Keys.S)))
                     selected = Selected.exit;
                 if ((currentKeyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up)) | (currentKeyboardState.IsKeyDown(Keys.W) && !previousKeyboardState.IsKeyDown(Keys.W)))
-                    selected = Selected.start;
+                    selected = Selected.levelSelect;
             }
             else if (selected == Selected.exit)
             {
@@ -93,6 +102,19 @@ namespace Prototype
                         game.gameState = Prototype.Game1.GameState.running; //Game spelen wanneer Spatie ingedrukt is geweest            
                     }
                     StartColor = SelectedColor;
+                    LevelSelectColor = UnselectedColor;
+                    OptionsColor = UnselectedColor;
+                    ExitColor = UnselectedColor;
+                    break;
+
+                case Selected.levelSelect:
+                    if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | currentKeyboardState.IsKeyDown(Keys.Enter))
+                    {
+                        game.gameState = Prototype.Game1.GameState.levelMenu;
+
+                    }
+                    StartColor = UnselectedColor;
+                    LevelSelectColor = SelectedColor;
                     OptionsColor = UnselectedColor;
                     ExitColor = UnselectedColor;
                     break;
@@ -104,9 +126,11 @@ namespace Prototype
                         
                     }
                     StartColor = UnselectedColor;
+                    LevelSelectColor = UnselectedColor;
                     OptionsColor = SelectedColor;
                     ExitColor = UnselectedColor;                    
                     break;
+                                    
 
                 case Selected.exit:
                     if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | currentKeyboardState.IsKeyDown(Keys.Enter))
@@ -114,6 +138,7 @@ namespace Prototype
                         game.Exit();
                     }
                     StartColor = UnselectedColor;
+                    LevelSelectColor = UnselectedColor;
                     OptionsColor = UnselectedColor;
                     ExitColor = SelectedColor;
                     break;
@@ -127,8 +152,9 @@ namespace Prototype
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {            
             spriteBatch.DrawString(menuFont, "Start", new Vector2(50, 50), StartColor);
-            spriteBatch.DrawString(menuFont, "Options", new Vector2(50, 120), OptionsColor);
-            spriteBatch.DrawString(menuFont, "Exit", new Vector2(50, 190), ExitColor);
+            spriteBatch.DrawString(menuFont, "Level Select", new Vector2(50, 120), LevelSelectColor);
+            spriteBatch.DrawString(menuFont, "Options", new Vector2(50, 190), OptionsColor);
+            spriteBatch.DrawString(menuFont, "Exit", new Vector2(50, 330), ExitColor);
         }
 
 
