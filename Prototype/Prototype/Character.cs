@@ -21,7 +21,7 @@ namespace Prototype
         float shootingDurance;
         float shootingTimer;
 
-        public Texture2D playerTexture;
+        public static Texture2D playerTexture;
         public static int boundsWidth = 80; //Breedte van character in het spel
         public static int boundsHeight = 80; //Hoogte van character in het spel
         const int sourceWidth = 80; //Breedte van charactre in player.png
@@ -78,6 +78,7 @@ namespace Prototype
         public Character(Game1 game1) //Constructor
         {
             this.game = game1;
+            playerTexture = Game1.character1Texture; //Laat de character met character1Texture beginnen
         }
 
         public void Update(GameTime gameTime, KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
@@ -86,7 +87,7 @@ namespace Prototype
 
             feetBounds = new Rectangle(bounds.X + 30, bounds.Y + 70, 20, 10);
             KeyInput(currentKeyboardState, previousKeyboardState);
-            if (!onLadder)
+            //if (!onLadder)
                 Movement();
 
             ////////////if (Character.bounds.X + Character.bounds.Width > ladder.position.X && Character.bounds.X < ladder.position.X + ladder.ladderTexture.Width && Character.bounds.Y < ladder.position.Y + ladder.ladderTexture.Height && Character.bounds.Y + Character.bounds.Height > ladder.position.Y - (ladder.rails - 1) * ladder.ladderTexture.Height)
@@ -587,12 +588,15 @@ namespace Prototype
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (alive == true)
+            if (playerTexture != null)
             {
-                if (currentFacing == facing.right)
-                    spriteBatch.Draw(playerTexture, bounds, source, Color.White);
-                else
-                    spriteBatch.Draw(playerTexture, bounds, source, Color.White, 0f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+                if (alive == true)
+                {
+                    if (currentFacing == facing.right)
+                        spriteBatch.Draw(playerTexture, bounds, source, Color.White);
+                    else
+                        spriteBatch.Draw(playerTexture, bounds, source, Color.White, 0f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+                }
             }
         }
 

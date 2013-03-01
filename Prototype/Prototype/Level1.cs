@@ -32,8 +32,8 @@ namespace Prototype
         public Level1(ContentManager content, Game1 game1)
         {
             this.game = game1;
-            this.backgroundTexture = content.Load<Texture2D>("sky");
-            this.grassTexture1 = content.Load<Texture2D>("grassTexture1");
+            backgroundTexture = content.Load<Texture2D>("sky");
+            grassTexture1 = content.Load<Texture2D>("grassTexture1");
             platforms = new List<Platform>();
             character = new Character(game1); //"game1" omdat character een constructor heeft
         }
@@ -111,8 +111,6 @@ namespace Prototype
             {
                 platforms[i].Draw(gameTime, spriteBatch); //Teken iedere platform in de lijst
             }
-
-            character.playerTexture = Game1.character1Texture; //Laat de character met character1Texture beginnen
             character.Draw(gameTime, spriteBatch);
         }
     }

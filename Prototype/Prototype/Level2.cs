@@ -103,15 +103,15 @@ namespace Prototype
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            
             spriteBatch.Draw(backgroundTexture, new Rectangle(0, 0, backgroundTexture.Width, backgroundTexture.Height), Color.White);
 
             for (int i = 0; i < platforms.Count; i++)
             {
                 platforms[i].Draw(gameTime, spriteBatch); //Teken iedere platform in de lijst
             }
-
-            character.playerTexture = Game1.character1Texture; //Laat de character met character1Texture beginnen
             character.Draw(gameTime, spriteBatch);
+            
         }
     }
 }

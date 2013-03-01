@@ -94,7 +94,6 @@ namespace Prototype
                     if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | currentKeyboardState.IsKeyDown(Keys.Enter))
                     {
                         game.currentLevel = Prototype.Game1.Level.level1; //Game spelen wanneer Spatie ingedrukt is geweest
-
                     }
                     Level1Color = SelectedColor;
                     Level2Color = UnselectedColor;

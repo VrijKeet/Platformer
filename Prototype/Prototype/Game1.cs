@@ -54,6 +54,7 @@ namespace Prototype
         }
         public Level currentLevel = Level.level1;
 
+
         public double deathTimer = 0;
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
@@ -71,6 +72,11 @@ namespace Prototype
             optionsMenu = new OptionsMenu(this.Content, this);
             levelMenu = new LevelMenu(this.Content, this);
             deathScreen = new DeathScreen(this.Content, this);
+
+            character1Texture = this.Content.Load<Texture2D>("character1");
+            character2Texture = this.Content.Load<Texture2D>("character2");
+            character3Texture = this.Content.Load<Texture2D>("character3");
+
             level1 = new Level1(this.Content, this);
             level2 = new Level2(this.Content, this);
 
@@ -110,12 +116,7 @@ namespace Prototype
             Services.AddService(typeof(SpriteBatch), spriteBatch); // Zodat je de spriteBatch kan gebruiken in GameComponents
 
 
-            character1Texture = this.Content.Load<Texture2D>("character1");
-            character2Texture = this.Content.Load<Texture2D>("character2");
-            character3Texture = this.Content.Load<Texture2D>("character3");
-
             standardTexture = Content.Load<Texture2D>("platform");
-
 
             gunTexture1 = Content.Load<Texture2D>("gunTexture");
             gunPickedTexture1 = Content.Load<Texture2D>("gloves1");
@@ -163,7 +164,7 @@ namespace Prototype
                 if (currentLevel == Level.level1) //Kijk wat het huidige level is                
                     level1.Update(gameTime, currentKeyboardState, previousKeyboardState);
                 else if (currentLevel == Level.level2)
-                    level2.Draw(gameTime, spriteBatch);
+                    level2.Update(gameTime, currentKeyboardState, previousKeyboardState);
 
                 //UpdateProjectiles();
 
@@ -285,20 +286,17 @@ namespace Prototype
             }
             else if (gameState == GameState.running)
             {
-
+                spriteBatch.Begin();
 
                 if (currentLevel == Level.level1)
                 {
-                    spriteBatch.Begin();
                     level1.Draw(gameTime, spriteBatch);
-                    spriteBatch.End();
                 }
                 else if (currentLevel == Level.level2)
                 {
-                    spriteBatch.Begin();                    
                     level2.Draw(gameTime, spriteBatch);
-                    spriteBatch.End();
                 }
+
                 //gun.Draw(gameTime, spriteBatch);
 
                 //// Draw the Projectiles
@@ -307,7 +305,7 @@ namespace Prototype
                 //    projectiles[i].Draw(spriteBatch);
                 //}
 
-                
+                spriteBatch.End();
 
                 base.Draw(gameTime);
             }
