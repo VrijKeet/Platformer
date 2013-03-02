@@ -13,19 +13,18 @@ using Microsoft.Xna.Framework.Storage;
 
 namespace Prototype
 {
-    class Level1 : ILevel
+    public class Level1 : ILevel
     {
         public Game1 game;
         public Texture2D backgroundTexture;
         public Texture2D grassTexture1;
 
 
-        public static Character character;
+        public Character character;
 
-        public static int platformCount;
-        public static List<Platform> platforms;
-        public static Vector2[] startPosPlat;
-        public static List<Projectile> projectiles = new List<Projectile>();
+        public List<Platform> platforms;
+        public Vector2[] startPosPlat;
+        public List<Projectile> projectiles = new List<Projectile>();
 
 
 
@@ -43,6 +42,7 @@ namespace Prototype
             //testPlatform = new Platform();
             //testPlatform.Initialize(grassTexture1);
             //testPlatform.boundingBox = new Rectangle(100, 100, 300, 100);
+            platforms.Clear();
 
             Platform platform = new Platform();
             Platform platform2 = new Platform();
@@ -90,7 +90,8 @@ namespace Prototype
             platform8.boundingBox = new Rectangle((int)startPosPlat[7].X, (int)startPosPlat[7].Y, 100, 10);
             platform9.boundingBox = new Rectangle((int)startPosPlat[8].X, (int)startPosPlat[8].Y, 100, 10);
             platform10.boundingBox = new Rectangle((int)startPosPlat[9].X, (int)startPosPlat[9].Y, 100, 10);
-
+            
+            Character.bounds = new Rectangle(300, 280, 80, 80);
         }
 
 
@@ -112,6 +113,11 @@ namespace Prototype
                 platforms[i].Draw(gameTime, spriteBatch); //Teken iedere platform in de lijst
             }
             character.Draw(gameTime, spriteBatch);
+        }
+
+        public List<Platform> GetPlatforms()
+        {
+            return platforms;
         }
     }
 }

@@ -93,7 +93,8 @@ namespace Prototype
                 case Selected.level1:
                     if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | currentKeyboardState.IsKeyDown(Keys.Enter))
                     {
-                        game.currentLevel = Prototype.Game1.Level.level1; //Game spelen wanneer Spatie ingedrukt is geweest
+                        game.currentLevel = game.level1;
+                        game.currentLevel.Initialize();
                     }
                     Level1Color = SelectedColor;
                     Level2Color = UnselectedColor;
@@ -103,8 +104,8 @@ namespace Prototype
                 case Selected.level2:
                     if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | currentKeyboardState.IsKeyDown(Keys.Enter))
                     {
-                        game.currentLevel = Prototype.Game1.Level.level2;
-
+                        game.currentLevel = game.level2;
+                        game.currentLevel.Initialize();
                     }
                     Level1Color = UnselectedColor;
                     Level2Color = SelectedColor;
@@ -114,7 +115,8 @@ namespace Prototype
                 case Selected.boss:
                     if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | currentKeyboardState.IsKeyDown(Keys.Enter))
                     {
-                        game.currentLevel = Prototype.Game1.Level.boss;
+                        game.currentLevel = game.level3;
+                        game.currentLevel.Initialize();
                     }
                     Level1Color = UnselectedColor;
                     Level2Color = UnselectedColor;

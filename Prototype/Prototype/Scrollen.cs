@@ -17,7 +17,7 @@ namespace Prototype
     /// </summary>
     public class Scrollen : Microsoft.Xna.Framework.DrawableGameComponent
     {
-        public Scrollen(Game game)
+        public Scrollen(Game1 game)
             : base(game)
         {
             // TODO: Construct any child components here
@@ -45,7 +45,9 @@ namespace Prototype
             // TODO: Add your update code here
             int marge = 250;
 
-            platformList = Level1.platforms;
+            Game1 game = (Game1)base.Game;
+            platformList = game.currentLevel.GetPlatforms();
+            
 
             if (Character.bounds.X < marge) // Naar links
             {

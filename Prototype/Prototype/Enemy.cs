@@ -17,6 +17,8 @@ namespace Prototype
     /// </summary>
     class Enemy : Microsoft.Xna.Framework.DrawableGameComponent
     {
+        Platform mooiStatischPlatform;
+
         Texture2D enemyTexture;
         public static Rectangle boundingBox;
         public static Rectangle source;
@@ -56,8 +58,11 @@ namespace Prototype
 
         protected override void LoadContent()
         {
+            List<Platform> platforms = ((Game1)Game).currentLevel.GetPlatforms();
+            mooiStatischPlatform = platforms[4];
+
             enemyTexture = Game.Content.Load<Texture2D>("Slime");
-            boundingBox = new Rectangle(Level1.platforms[4].boundingBox.X, Level1.platforms[4].boundingBox.Y - source.Height, 85, 70);
+            boundingBox = new Rectangle(mooiStatischPlatform.boundingBox.X, mooiStatischPlatform.boundingBox.Y - source.Height, 85, 70);
             boundingBox = new Rectangle(boundingBox.X, boundingBox.Y, enemyTexture.Width, enemyTexture.Height);
 
             base.LoadContent();
@@ -83,7 +88,7 @@ namespace Prototype
                     currentFacing = facing.right;
                 }
                 distance += richting;
-                boundingBox = new Rectangle(Level1.platforms[4].boundingBox.X + distance, Level1.platforms[4].boundingBox.Y - source.Height, 85, 70);
+                boundingBox = new Rectangle(mooiStatischPlatform.boundingBox.X + distance, mooiStatischPlatform.boundingBox.Y - source.Height, 85, 70);
             }
 
             //if (alive && Character.bounds.X < boundingBox.X + boundingBox.Width && Character.feetBounds.Y + Character.feetBounds.Height > boundingBox.Y && Character.feetBounds.X + Character.feetBounds.Width > boundingBox.X && Character.feetBounds.Y < (boundingBox.Y + boundingBox.Height) - 60)

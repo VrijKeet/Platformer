@@ -21,8 +21,9 @@ namespace Prototype
         MainMenu mainMenu;
         OptionsMenu optionsMenu;
         DeathScreen deathScreen;
-        Level1 level1;
-        Level2 level2;
+        public Level1 level1;
+        public Level2 level2;
+        public Level3 level3;
         LevelMenu levelMenu;
         //public static Gun gun;
 
@@ -46,13 +47,13 @@ namespace Prototype
         }
         public GameState gameState = GameState.mainmenu;
 
-        public enum Level //Game status
-        {
-            level1,
-            level2,
-            boss
-        }
-        public Level currentLevel = Level.level1;
+        //public enum Level //Game status
+        //{
+        //    level1,
+        //    level2,
+        //    boss
+        //}
+        public ILevel currentLevel;
 
 
         public double deathTimer = 0;
@@ -77,8 +78,11 @@ namespace Prototype
             character2Texture = this.Content.Load<Texture2D>("character2");
             character3Texture = this.Content.Load<Texture2D>("character3");
 
+
             level1 = new Level1(this.Content, this);
             level2 = new Level2(this.Content, this);
+            level3 = new Level3(this.Content, this);
+            currentLevel = level1;
 
             level1.Initialize();
             level2.Initialize();
@@ -161,10 +165,11 @@ namespace Prototype
                 if (currentKeyboardState.IsKeyDown(Keys.Escape)) //Ga naar het startscherm als de "escape"-toets wordt ingedrukt
                     gameState = GameState.mainmenu;
 
-                if (currentLevel == Level.level1) //Kijk wat het huidige level is                
-                    level1.Update(gameTime, currentKeyboardState, previousKeyboardState);
-                else if (currentLevel == Level.level2)
-                    level2.Update(gameTime, currentKeyboardState, previousKeyboardState);
+                currentLevel.Update(gameTime, currentKeyboardState, previousKeyboardState);
+                //if (currentLevel == Level.level1) //Kijk wat het huidige level is                
+                //    level1.Update(gameTime, currentKeyboardState, previousKeyboardState);
+                //else if (currentLevel == Level.level2)
+                //    level2.Update(gameTime, currentKeyboardState, previousKeyboardState);
 
                 //UpdateProjectiles();
 
@@ -176,6 +181,7 @@ namespace Prototype
                 //    deathTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
                 //    //Character.currentState = Character.state.dead;
                 //}
+
                 if (deathTimer > 3000)
                     gameState = GameState.dead;
             }
@@ -276,6 +282,7 @@ namespace Prototype
             {
                 spriteBatch.Begin();
                 optionsMenu.Draw(gameTime, spriteBatch);
+                spriteBatch.Draw(gunTexture1, new Rectangle(100, 100, 100, 100), Color.Black);
                 spriteBatch.End();
             }
             else if (gameState == GameState.levelMenu)
@@ -288,14 +295,7 @@ namespace Prototype
             {
                 spriteBatch.Begin();
 
-                if (currentLevel == Level.level1)
-                {
-                    level1.Draw(gameTime, spriteBatch);
-                }
-                else if (currentLevel == Level.level2)
-                {
-                    level2.Draw(gameTime, spriteBatch);
-                }
+                currentLevel.Draw(gameTime, spriteBatch);
 
                 //gun.Draw(gameTime, spriteBatch);
 

@@ -24,6 +24,7 @@ namespace Prototype
         public static Texture2D playerTexture;
         public static int boundsWidth = 80; //Breedte van character in het spel
         public static int boundsHeight = 80; //Hoogte van character in het spel
+        public static Rectangle bounds;
         const int sourceWidth = 80; //Breedte van charactre in player.png
         const int sourceHeight = 80; //Hoogte van character in player.png
 
@@ -31,7 +32,6 @@ namespace Prototype
         ////////public static Rectangle characterBounds = new Rectangle((int)startPos.X, (int)startPos.Y, Character.boundsWidth, Character.boundsHeight); //Positie en grootte van character
         
         //public static Rectangle bounds = Level1.characterBounds; //Positie en grootte van character
-        public static Rectangle bounds = new Rectangle(300, 280, boundsHeight, boundsWidth);
         public static Rectangle source = new Rectangle(0, 0, sourceWidth, sourceHeight); //Bepaalt welk gedeelte van player.png wordt getoond
         public static Rectangle feetBounds = new Rectangle(bounds.X, bounds.Y + 50, 80, 30);
 
@@ -95,7 +95,7 @@ namespace Prototype
             ////////////else
             ////////////    onLadder = false;
 
-            ////////////if ((bounds.Y - (Level1.platforms[4].boundingBox.Y + Level1.platforms[4].boundingBox.Height)) > 200) // Als character meer dan 200 px onder platform 4 (onderste) komt respawnt hij
+            ////////////if ((bounds.Y - (Level1.platforms[4].Y + Level1.platforms[4].boundingBox.Height)) > 200) // Als character meer dan 200 px onder platform 4 (onderste) komt respawnt hij
             ////////////    respawn();
         }
 
@@ -577,10 +577,11 @@ namespace Prototype
 
         public Platform GetIntersectingPlatform(Rectangle feetBounds) //Kijken of een platform in de lijst in contact komt met character
         {
-            for (int i = 0; i < Level1.platforms.Count; i++) //Kijk voor iedere platform
+            List<Platform> platforms = game.currentLevel.GetPlatforms();
+            for (int i = 0; i < platforms.Count; i++) //Kijk voor iedere platform
             {
-                if (Level1.platforms[i].boundingBox.Intersects(feetBounds)) //Als een platform in contact is met character
-                    return Level1.platforms[i]; //Onthoud die informatie dan
+                if (platforms[i].boundingBox.Intersects(feetBounds)) //Als een platform in contact is met character
+                    return platforms[i]; //Onthoud die informatie dan
             }
             return null; //Als géén platform in de lijst in contact komt met character, onthoud die informatie
         }

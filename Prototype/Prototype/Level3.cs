@@ -13,27 +13,26 @@ using Microsoft.Xna.Framework.Storage;
 
 namespace Prototype
 {
-    public class Level2 : ILevel
+    public class Level3 : ILevel
     {
         public Game1 game;
         public Texture2D backgroundTexture;
         public Texture2D grassTexture1;
-        public Texture2D standard;
 
 
         public Character character;
+
         public List<Platform> platforms;
         public Vector2[] startPosPlat;
         public List<Projectile> projectiles = new List<Projectile>();
 
 
 
-        public Level2(ContentManager content, Game1 game1)
+        public Level3(ContentManager content, Game1 game1)
         {
             this.game = game1;
-            this.backgroundTexture = content.Load<Texture2D>("sky");
-            this.grassTexture1 = content.Load<Texture2D>("grassTexture1");
-            this.standard = content.Load<Texture2D>("platform");
+            backgroundTexture = content.Load<Texture2D>("sky");
+            grassTexture1 = content.Load<Texture2D>("gunTexture");
             platforms = new List<Platform>();
             character = new Character(game1); //"game1" omdat character een constructor heeft
         }
@@ -43,8 +42,6 @@ namespace Prototype
             //testPlatform = new Platform();
             //testPlatform.Initialize(grassTexture1);
             //testPlatform.boundingBox = new Rectangle(100, 100, 300, 100);
-
-            // Maak hard-coded platformen aan:
 
 
             platforms.Clear();
@@ -70,7 +67,7 @@ namespace Prototype
             platforms.Add(platform9);
             platforms.Add(platform10);
 
-            platforms[0].Initialize(standard);
+            platforms[0].Initialize(grassTexture1);
             platforms[1].Initialize(grassTexture1);
             platforms[2].Initialize(grassTexture1);
             platforms[3].Initialize(grassTexture1);
@@ -107,20 +104,23 @@ namespace Prototype
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            
             spriteBatch.Draw(backgroundTexture, new Rectangle(0, 0, backgroundTexture.Width, backgroundTexture.Height), Color.White);
+
+            // Maak hard-coded 4 platformen aan:
+
+
 
             for (int i = 0; i < platforms.Count; i++)
             {
                 platforms[i].Draw(gameTime, spriteBatch); //Teken iedere platform in de lijst
             }
             character.Draw(gameTime, spriteBatch);
-            
         }
 
         public List<Platform> GetPlatforms()
         {
             return platforms;
         }
+
     }
 }
