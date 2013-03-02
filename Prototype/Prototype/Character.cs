@@ -393,9 +393,10 @@ namespace Prototype
                             bounds.X += (int)speed;
 
 
-                            if (frameCount / delay >= 3)
+                            if (playerTexture == Game1.character1Texture && frameCount / delay >= 3)
                                 frameCount = 0;
-
+                            else if (frameCount / delay >= 4)
+                                frameCount = 0;
                             if (isShooting == false)
                             {
                                 source = new Rectangle(frameCount / delay * 80, 160, sourceWidth, sourceHeight);
@@ -416,8 +417,12 @@ namespace Prototype
                             bounds.X += (int)speed;
 
 
-                            if (frameCount / delay >= 3)
+                            if (playerTexture == Game1.character1Texture && frameCount / delay >= 3)
                                 frameCount = 0;
+                            else if (frameCount / delay >= 4)
+                                frameCount = 0;
+
+                            if (isShooting == false)
 
                             if (isShooting == false)
                             {
