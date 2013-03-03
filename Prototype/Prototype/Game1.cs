@@ -60,6 +60,11 @@ namespace Prototype
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
 
+        // Muziek
+        public static Song rickSong;
+        public static Song littleSong;
+        public static Song bonusSong;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -134,8 +139,13 @@ namespace Prototype
             //////////////    platforms[i].Initialize(standardTexture); //Geef iedere platform dezelfde texture
             //////////////}
 
+            // Muziek
+            rickSong = Content.Load<Song>("rickroll");
+            littleSong = Content.Load<Song>("little");
+            bonusSong = Content.Load<Song>("bonus");
 
-
+            MediaPlayer.Stop();
+            MediaPlayer.Play(littleSong);
         }
 
 

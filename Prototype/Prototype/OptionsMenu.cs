@@ -63,6 +63,8 @@ namespace Prototype
 
         Rectangle source = new Rectangle(0, 0, sourceWidth, sourceHeight); //Bepaalt welk gedeelte van player.png wordt getoond
 
+        int songCount = 1;
+
         public OptionsMenu(ContentManager content, Game1 game1)
         {
             this.menuFont = content.Load<SpriteFont>("menu");
@@ -219,6 +221,21 @@ namespace Prototype
                     if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | (currentKeyboardState.IsKeyDown(Keys.Enter) && !previousKeyboardState.IsKeyDown(Keys.Enter)))
                     {
                         //Change music
+                        if (songCount == 1)
+                        {
+                            MediaPlayer.Play(Game1.bonusSong);
+                            songCount++;
+                        }
+                        else if (songCount == 2)
+                        {
+                            MediaPlayer.Play(Game1.rickSong);
+                            songCount++;
+                        }
+                        else if (songCount == 3)
+                        {
+                            MediaPlayer.Play(Game1.littleSong);
+                            songCount = 1;
+                        }
                     }
 
                     DifficultyColor1 = UnselectedColor;
