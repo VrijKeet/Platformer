@@ -19,13 +19,14 @@ namespace Prototype
         public Texture2D backgroundTexture;
         public Texture2D grassTexture1;
         public Texture2D standard;
-
-
+        
+        public Texture2D enemyTexture2;
+        
         public Character character;
         public List<Platform> platforms;
         public Vector2[] startPosPlat;
         public List<Projectile> projectiles = new List<Projectile>();
-
+        public List<Enemy> enemies = new List<Enemy>();
 
 
         public Level2(ContentManager content, Game1 game1)
@@ -121,6 +122,10 @@ namespace Prototype
         public List<Platform> GetPlatforms()
         {
             return platforms;
+        }
+        public List<Enemy> GetEnemies()
+        {
+            return enemies;
         }
     }
 }

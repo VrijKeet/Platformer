@@ -24,8 +24,8 @@ namespace Prototype
 
         int selectCount = 1;
 
-        Color SelectedColor = new Color(255, 255, 255, 255);
-        Color UnselectedColor = new Color(0, 0, 0, 255);
+        Color SelectedColor = new Color(255, 255, 255, 255); 
+        Color UnselectedColor = new Color(255, 165, 0, 255);
         Color Level1Color = new Color(255, 255, 255, 255);
         Color Level2Color = new Color(100, 100, 100, 200);
         Color BossColor = new Color(100, 100, 100, 200);

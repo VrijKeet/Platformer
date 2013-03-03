@@ -15,7 +15,7 @@ namespace Prototype
 {
     public class Character
     {
-        Game1 game; //Omdat hij moet kijken of character platform raakt, en die code in game1.cs staat
+        Game1 game; //Omdat hij moet kijken of character platform raakt, en die code in game1.cs wordt opgeslagen
 
         double elapsedTime;
         float shootingDurance;
@@ -64,7 +64,6 @@ namespace Prototype
         float maxWalkingSpeed = 5;
         float maxRunningSpeed = 12;
         public static int jumpingSpeed = -10;
-        Vector2 maxJumpingHeight = new Vector2(0, 10);
 
         int frameCount = 0; //Telt welke frame op het moment in source is
         const int delay = 4; //Vertraagt de animatie en beweging
@@ -457,8 +456,8 @@ namespace Prototype
                             }
                         }
 
-                        jumpingSpeed += 1;
-                        if (jumpingSpeed == 0) //Als hij in de hoogste positie is
+                        jumpingSpeed += 2;
+                        if (jumpingSpeed >= 0) //Als hij in de hoogste positie is
                             currentState = state.falling;
 
                         bounds.X += (int)speed;
@@ -477,7 +476,7 @@ namespace Prototype
                             jumpingSpeed = 0;
                         bounds.Y += jumpingSpeed;
                         bounds.X += (int)speed;
-                        jumpingSpeed += 2;
+                        jumpingSpeed += 4;
 
                         if (jumpingSpeed >= 18) //Zorgt dat hij character niet sneller dan 18 pixels/frame naar beneden valt. Sneller dan 18 p/f zorgt ervoor dat character door een platform heen valt.
                             jumpingSpeed = 18;
@@ -487,7 +486,7 @@ namespace Prototype
                         {
                             bounds.Y = platform.boundingBox.Top - bounds.Height + 1; //Blijf op platform staan
                             jumpCount = 0;
-                            jumpingSpeed = -10;
+                            jumpingSpeed = -20;
                             currentState = state.standing;
                         }
 

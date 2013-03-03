@@ -20,26 +20,16 @@ namespace Prototype
         public Scrollen(Game1 game)
             : base(game)
         {
-            // TODO: Construct any child components here
         }
 
         List<Platform> platformList;
+        List<Enemy> enemyList;
 
-        /// <summary>
-        /// Allows the game component to perform any initialization it needs to before starting
-        /// to run.  This is where it can query for any required services and load content.
-        /// </summary>
         public override void Initialize()
         {
-            // TODO: Add your initialization code here
-
             base.Initialize();
         }
 
-        /// <summary>
-        /// Allows the game component to update itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
             // TODO: Add your update code here
@@ -47,7 +37,7 @@ namespace Prototype
 
             Game1 game = (Game1)base.Game;
             platformList = game.currentLevel.GetPlatforms();
-            
+            enemyList = game.currentLevel.GetEnemies();
 
             if (Character.bounds.X < marge) // Naar links
             {
@@ -56,6 +46,11 @@ namespace Prototype
                     platform.boundingBox = new Rectangle(platform.boundingBox.X + (marge - Character.bounds.X), platform.boundingBox.Y, platform.boundingBox.Width, platform.boundingBox.Height);
                     platform.boundingBoxTop = new Rectangle(platform.boundingBox.X, platform.boundingBox.Y, platform.boundingBox.Width, 5);
 
+                }
+
+                foreach (Enemy enemy in enemyList)
+                {
+                    enemy.bounds = new Rectangle(enemy.bounds.X + (marge - Character.bounds.X), enemy.bounds.Y, enemy.bounds.Width, enemy.bounds.Height);
                 }
                 //for (int i = 0; i < Game1.platforms.Count; i++)
                 //{
@@ -73,6 +68,11 @@ namespace Prototype
                     platform.boundingBox = new Rectangle(platform.boundingBox.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), platform.boundingBox.Y, platform.boundingBox.Width, platform.boundingBox.Height);
                     platform.boundingBoxTop = new Rectangle(platform.boundingBox.X, platform.boundingBox.Y, platform.boundingBox.Width, 5);
                 }
+
+                foreach (Enemy enemy in enemyList)
+                {
+                    enemy.bounds = new Rectangle(enemy.bounds.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), enemy.bounds.Y, enemy.bounds.Width, enemy.bounds.Height);
+                }
                 //Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), Game1.gun.boundingBox.Y, Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
                 //Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), Game1.gun.boundingBox.Y, Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height); 
                 Character.bounds.X = GraphicsDevice.Viewport.Width - marge - Character.bounds.Width;
@@ -85,6 +85,11 @@ namespace Prototype
                     platform.boundingBox = new Rectangle(platform.boundingBox.X, platform.boundingBox.Y + (marge - Character.bounds.Y), platform.boundingBox.Width, platform.boundingBox.Height);
                     platform.boundingBoxTop = new Rectangle(platform.boundingBox.X, platform.boundingBox.Y, platform.boundingBox.Width, 5);
                 }
+
+                foreach (Enemy enemy in enemyList)
+                {
+                    enemy.bounds = new Rectangle(enemy.bounds.X, enemy.bounds.Y + (marge - Character.bounds.Y), enemy.bounds.Width, enemy.bounds.Height);
+                }
                 //Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X, Game1.gun.boundingBox.Y + (marge - Character.bounds.Y), Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
                 Character.bounds.Y = marge;
             }
@@ -95,6 +100,11 @@ namespace Prototype
                 {
                     platform.boundingBox = new Rectangle(platform.boundingBox.X, platform.boundingBox.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)), platform.boundingBox.Width, platform.boundingBox.Height);
                     platform.boundingBoxTop = new Rectangle(platform.boundingBox.X, platform.boundingBox.Y, platform.boundingBox.Width, 5);
+                }
+
+                foreach (Enemy enemy in enemyList)
+                {
+                    enemy.bounds = new Rectangle(enemy.bounds.X, enemy.bounds.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)), enemy.bounds.Width, enemy.bounds.Height);
                 }
                 //Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X, Game1.gun.boundingBox.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)), Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
                 Character.bounds.Y = GraphicsDevice.Viewport.Height - marge - Character.bounds.Height;
