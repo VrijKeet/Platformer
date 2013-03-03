@@ -16,129 +16,95 @@ namespace Prototype
     class MainMenu
     {
         Game1 game;
-        SpriteFont menuFont;            
-
-        //List<string> MenuOptions = new List<string>();        
-        //List<Vector2> MenuOptionsPositions = new List<Vector2>();
-
-        enum Selected
-        {
-            start,
-            levelSelect,
-            options,
-            exit
-        }
-        Selected selected = Selected.start;
+        SpriteFont menuFont;
+        SpriteFont titelFont;        
 
         Color SelectedColor = new Color(255, 255, 255, 255);
         Color UnselectedColor = new Color(0, 0, 0, 255);
         Color StartColor = new Color(255, 255, 255, 255);
-        Color LevelSelectColor = new Color(255, 255, 255);
+        Color NewGameColor = new Color(255, 255, 255);
         Color OptionsColor = new Color(100, 100, 100, 200);
         Color ExitColor = new Color(100, 100, 100, 200);
+
+        int selectCount = 1;
 
         public MainMenu(ContentManager content, Game1 game1)
         {
             this.menuFont = content.Load<SpriteFont>("menu");
+            this.titelFont = content.Load<SpriteFont>("titel");
             this.game = game1;
         }
 
         public void Update(GameTime gameTime, KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
         {
-            CheckSelectedOption(currentKeyboardState, previousKeyboardState);
-            DoSelectedOption(currentKeyboardState, previousKeyboardState);
+            HandleOptions(currentKeyboardState, previousKeyboardState);
         }
 
         
+        
 
-
-        private void CheckSelectedOption(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
+        private void HandleOptions(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
         {
-            //Zorgen dat je andere menuopties kunt selecteren. Kan ook met bijvoorbeeld een integer SelectedIndex, maar ik ben hier maar niet voor gegaan, aangezien je dan ook nog moet definiëren wat "omhoog" en "omlaag" is.
-            if (selected == Selected.start)
+            if ((currentKeyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down)) | (currentKeyboardState.IsKeyDown(Keys.S) && !previousKeyboardState.IsKeyDown(Keys.S)))
             {
-                {
-                    if ((currentKeyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down)) | (currentKeyboardState.IsKeyDown(Keys.S) && !previousKeyboardState.IsKeyDown(Keys.S)))
-                        selected = Selected.levelSelect;
-                    if ((currentKeyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up)) | (currentKeyboardState.IsKeyDown(Keys.W) && !previousKeyboardState.IsKeyDown(Keys.W)))
-                        selected = Selected.exit;
-                }
+                selectCount++;
+                if (selectCount >= 5)
+                    selectCount = 1;
             }
-            else if (selected == Selected.levelSelect)
+            else if ((currentKeyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up)) | (currentKeyboardState.IsKeyDown(Keys.W) && !previousKeyboardState.IsKeyDown(Keys.W)))
             {
-                if ((currentKeyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down)) | (currentKeyboardState.IsKeyDown(Keys.S) && !previousKeyboardState.IsKeyDown(Keys.S)))
-                    selected = Selected.options;
-                if ((currentKeyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up)) | (currentKeyboardState.IsKeyDown(Keys.W) && !previousKeyboardState.IsKeyDown(Keys.W)))
-                    selected = Selected.start;
-            }
-            else if (selected == Selected.options)
+                selectCount--;
+                if (selectCount <= 0)
+                    selectCount = 4;
+            }   
+
+
+
+            switch (selectCount)
             {
-                if ((currentKeyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down)) | (currentKeyboardState.IsKeyDown(Keys.S) && !previousKeyboardState.IsKeyDown(Keys.S)))
-                    selected = Selected.exit;
-                if ((currentKeyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up)) | (currentKeyboardState.IsKeyDown(Keys.W) && !previousKeyboardState.IsKeyDown(Keys.W)))
-                    selected = Selected.levelSelect;
-            }
-            else if (selected == Selected.exit)
-            {
-                if ((currentKeyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down)) | (currentKeyboardState.IsKeyDown(Keys.S) && !previousKeyboardState.IsKeyDown(Keys.S)))
-                    selected = Selected.start;
-                if ((currentKeyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up)) | (currentKeyboardState.IsKeyDown(Keys.W) && !previousKeyboardState.IsKeyDown(Keys.W)))
-                    selected = Selected.options;
-            }
-        }
-
-
-
-
-
-
-        private void DoSelectedOption(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
-        {
-            switch (selected)
-            {
-                case Selected.start:
+                case 1: //Resume
                     if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | currentKeyboardState.IsKeyDown(Keys.Enter))
                     {
                         game.gameState = Prototype.Game1.GameState.running; //Game spelen wanneer Spatie ingedrukt is geweest            
                     }
                     StartColor = SelectedColor;
-                    LevelSelectColor = UnselectedColor;
+                    NewGameColor = UnselectedColor;
                     OptionsColor = UnselectedColor;
                     ExitColor = UnselectedColor;
                     break;
 
-                case Selected.levelSelect:
-                    if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | currentKeyboardState.IsKeyDown(Keys.Enter))
+                case 2: //New Game
+                    if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | currentKeyboardState.IsKeyDown(Keys.Enter) && !previousKeyboardState.IsKeyDown(Keys.Enter))
                     {
                         game.gameState = Prototype.Game1.GameState.levelMenu;
 
                     }
                     StartColor = UnselectedColor;
-                    LevelSelectColor = SelectedColor;
+                    NewGameColor = SelectedColor;
                     OptionsColor = UnselectedColor;
                     ExitColor = UnselectedColor;
                     break;
 
-                case Selected.options:
-                    if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | currentKeyboardState.IsKeyDown(Keys.Enter))
+                case 3: //Options
+                    if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | (currentKeyboardState.IsKeyDown(Keys.Enter) && !previousKeyboardState.IsKeyDown(Keys.Enter)))
                     {                        
                         game.gameState = Prototype.Game1.GameState.options;
                         
                     }
                     StartColor = UnselectedColor;
-                    LevelSelectColor = UnselectedColor;
+                    NewGameColor = UnselectedColor;
                     OptionsColor = SelectedColor;
                     ExitColor = UnselectedColor;                    
                     break;
                                     
 
-                case Selected.exit:
+                case 4: //Exit
                     if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | currentKeyboardState.IsKeyDown(Keys.Enter))
                     {
                         game.Exit();
                     }
                     StartColor = UnselectedColor;
-                    LevelSelectColor = UnselectedColor;
+                    NewGameColor = UnselectedColor;
                     OptionsColor = UnselectedColor;
                     ExitColor = SelectedColor;
                     break;
@@ -151,10 +117,13 @@ namespace Prototype
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {            
-            spriteBatch.DrawString(menuFont, "Start", new Vector2(50, 50), StartColor);
-            spriteBatch.DrawString(menuFont, "Level Select", new Vector2(50, 120), LevelSelectColor);
-            spriteBatch.DrawString(menuFont, "Options", new Vector2(50, 190), OptionsColor);
-            spriteBatch.DrawString(menuFont, "Exit", new Vector2(50, 330), ExitColor);
+            Vector2 length1 = titelFont.MeasureString("Yet an()other Platformer") / 2;
+            spriteBatch.DrawString(titelFont, "Yet an()other Platformer", new Vector2(Game1.graphics.GraphicsDevice.Viewport.Width / 2 - length1.X, 10), new Color(0, 0, 100));
+            
+            spriteBatch.DrawString(menuFont, "Resume", new Vector2(50, 140), StartColor);
+            spriteBatch.DrawString(menuFont, "New game", new Vector2(50, 230), NewGameColor);
+            spriteBatch.DrawString(menuFont, "Options", new Vector2(50, 290), OptionsColor);
+            spriteBatch.DrawString(menuFont, "Exit", new Vector2(50, 390), ExitColor);
         }
 
 

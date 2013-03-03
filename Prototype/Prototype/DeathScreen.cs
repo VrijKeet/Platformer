@@ -18,13 +18,6 @@ namespace Prototype
         Game1 game;
         SpriteFont menuFont;
         SpriteFont deathFont;
-        enum Selected
-        {
-            restart,
-            MainMenu,
-            exit
-        }
-        Selected selected = Selected.restart;
 
         Color SelectedColor = new Color(255, 255, 255, 255);
         Color UnselectedColor = new Color(0, 0, 0, 255);
@@ -32,6 +25,7 @@ namespace Prototype
         Color MainMenuColor = new Color(100, 100, 100, 200);
         Color ExitColor = new Color(100, 100, 100, 200);
 
+        int selectCount = 1;
         public DeathScreen(ContentManager content, Game1 game1)
         {
             this.menuFont = content.Load<SpriteFont>("menu");
@@ -41,39 +35,7 @@ namespace Prototype
 
         public void Update(GameTime gameTime, KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
         {
-            CheckSelectedOption(currentKeyboardState, previousKeyboardState);
-            DoSelectedOption(currentKeyboardState, previousKeyboardState);
-        }
-
-
-
-
-        private void CheckSelectedOption(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
-        {
-            //Zorgen dat je andere menuopties kunt selecteren. Kan ook met bijvoorbeeld een integer SelectedIndex, maar ik ben hier maar niet voor gegaan, aangezien je dan ook nog moet definiëren wat "omhoog" en "omlaag" is.
-            if (selected == Selected.restart)
-            {
-                {
-                    if ((currentKeyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down)) | (currentKeyboardState.IsKeyDown(Keys.S) && !previousKeyboardState.IsKeyDown(Keys.S)))
-                        selected = Selected.MainMenu;
-                    if ((currentKeyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up)) | (currentKeyboardState.IsKeyDown(Keys.W) && !previousKeyboardState.IsKeyDown(Keys.W)))
-                        selected = Selected.exit;
-                }
-            }
-            else if (selected == Selected.MainMenu)
-            {
-                if ((currentKeyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down)) | (currentKeyboardState.IsKeyDown(Keys.S) && !previousKeyboardState.IsKeyDown(Keys.S)))
-                    selected = Selected.exit;
-                if ((currentKeyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up)) | (currentKeyboardState.IsKeyDown(Keys.W) && !previousKeyboardState.IsKeyDown(Keys.W)))
-                    selected = Selected.restart;
-            }
-            else if (selected == Selected.exit)
-            {
-                if ((currentKeyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down)) | (currentKeyboardState.IsKeyDown(Keys.S) && !previousKeyboardState.IsKeyDown(Keys.S)))
-                    selected = Selected.restart;
-                if ((currentKeyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up)) | (currentKeyboardState.IsKeyDown(Keys.W) && !previousKeyboardState.IsKeyDown(Keys.W)))
-                    selected = Selected.MainMenu;
-            }
+            HandleOptions(currentKeyboardState, previousKeyboardState);
         }
 
 
@@ -81,11 +43,26 @@ namespace Prototype
 
 
 
-        private void DoSelectedOption(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
+        private void HandleOptions(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
         {
-            switch (selected)
+            if ((currentKeyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down)) | (currentKeyboardState.IsKeyDown(Keys.S) && !previousKeyboardState.IsKeyDown(Keys.S)))
             {
-                case Selected.restart:
+                selectCount++;
+                if (selectCount >= 5)
+                    selectCount = 1;
+            }
+            else if ((currentKeyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up)) | (currentKeyboardState.IsKeyDown(Keys.W) && !previousKeyboardState.IsKeyDown(Keys.W)))
+            {
+                selectCount--;
+                if (selectCount <= 0)
+                    selectCount = 4;
+            }   
+
+
+
+            switch (selectCount)
+            {
+                case 1: //Restart
                     if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | currentKeyboardState.IsKeyDown(Keys.Enter))
                     {
                         //health.lifes = 3;
@@ -99,7 +76,7 @@ namespace Prototype
                     ExitColor = UnselectedColor;
                     break;
 
-                case Selected.MainMenu:
+                case 2: // Main Menu
                     if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | currentKeyboardState.IsKeyDown(Keys.Enter))
                     {
                         game.gameState = Prototype.Game1.GameState.mainmenu;
@@ -110,7 +87,7 @@ namespace Prototype
                     ExitColor = UnselectedColor;
                     break;
 
-                case Selected.exit:
+                case 3: //Exit
                     if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | currentKeyboardState.IsKeyDown(Keys.Enter))
                     {
                         game.Exit();

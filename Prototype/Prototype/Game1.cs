@@ -36,6 +36,7 @@ namespace Prototype
         public static Texture2D character1Texture;
         public static Texture2D character2Texture;
         public static Texture2D character3Texture;
+        Texture2D backgroundTexture;
 
         public enum GameState //Game status
         {
@@ -63,7 +64,9 @@ namespace Prototype
         // Muziek
         public static Song rickSong;
         public static Song littleSong;
-        public static Song bonusSong;
+        public static Song rapidSong;
+        public static Song slagsmalklubbenSong;
+        public static Song soundtrackSong;
 
         public Game1()
         {
@@ -82,6 +85,7 @@ namespace Prototype
             character1Texture = this.Content.Load<Texture2D>("character1");
             character2Texture = this.Content.Load<Texture2D>("character2");
             character3Texture = this.Content.Load<Texture2D>("character3");
+
 
 
             level1 = new Level1(this.Content, this);
@@ -124,28 +128,22 @@ namespace Prototype
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Services.AddService(typeof(SpriteBatch), spriteBatch); // Zodat je de spriteBatch kan gebruiken in GameComponents
 
-
+            backgroundTexture = this.Content.Load<Texture2D>("Background 2");
             standardTexture = Content.Load<Texture2D>("platform");
-
             gunTexture1 = Content.Load<Texture2D>("gunTexture");
             gunPickedTexture1 = Content.Load<Texture2D>("gloves1");
-
             //gun.Initialize(gunTexture1);
-
             projectileTexture = Content.Load<Texture2D>("laser");
-
-            //////////////for (int i = 0; i < platforms.Count; i++)
-            //////////////{
-            //////////////    platforms[i].Initialize(standardTexture); //Geef iedere platform dezelfde texture
-            //////////////}
 
             // Muziek
             rickSong = Content.Load<Song>("rickroll");
             littleSong = Content.Load<Song>("little");
-            bonusSong = Content.Load<Song>("bonus");
+            rapidSong = Content.Load<Song>("rapid");
+            slagsmalklubbenSong = Content.Load<Song>("Slagsmalklubben");
+            soundtrackSong = Content.Load<Song>("LF2 Soundtrack");
 
             MediaPlayer.Stop();
-            MediaPlayer.Play(littleSong);
+            PlayMusic(soundtrackSong);
         }
 
 
@@ -213,6 +211,20 @@ namespace Prototype
             base.Update(gameTime);
         }
 
+        public static void PlayMusic(Song song)
+        {
+            // Due to the way the MediaPlayer plays music,
+            // we have to catch the exception. Music will play when the game is not tethered
+            try
+            {
+                // Play the music
+                MediaPlayer.Play(song);
+
+                // Loop the currently playing song
+                MediaPlayer.IsRepeating = true;
+            }
+            catch { }
+        }
 
 
 
@@ -279,32 +291,29 @@ namespace Prototype
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.ForestGreen);
 
+            spriteBatch.Begin();
+
+            spriteBatch.Draw(backgroundTexture, new Rectangle (0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height), Color.White);
+ 
             //Kijken welke status om te bepalen welk 'scherm' te tonen
             if (gameState == GameState.mainmenu)
             {
-                spriteBatch.Begin();
+
                 mainMenu.Draw(gameTime, spriteBatch);
-                spriteBatch.End();
+
             }
             else if (gameState == GameState.options)
             {
-                spriteBatch.Begin();
                 optionsMenu.Draw(gameTime, spriteBatch);
-                spriteBatch.Draw(gunTexture1, new Rectangle(100, 100, 100, 100), Color.Black);
-                spriteBatch.End();
             }
             else if (gameState == GameState.levelMenu)
             {
-                spriteBatch.Begin();
                 levelMenu.Draw(gameTime, spriteBatch);
-                spriteBatch.End();
             }
             else if (gameState == GameState.running)
             {
-                spriteBatch.Begin();
-
                 currentLevel.Draw(gameTime, spriteBatch);
 
                 //gun.Draw(gameTime, spriteBatch);
@@ -315,16 +324,15 @@ namespace Prototype
                 //    projectiles[i].Draw(spriteBatch);
                 //}
 
-                spriteBatch.End();
-
-                base.Draw(gameTime);
             }
             else if (gameState == GameState.dead)
             {
-                spriteBatch.Begin();
                 deathScreen.Draw(gameTime, spriteBatch);
-                spriteBatch.End();
             }
+
+            spriteBatch.End();
+
+            base.Draw(gameTime);
         }
     }
 }

@@ -17,15 +17,9 @@ namespace Prototype
     {
         Game1 game;
         SpriteFont menuFont;
-
-        enum Selected
-        {
-            difficulty,
-            character,
-            music,
-            back
-        }
-        Selected selected = Selected.difficulty;
+        
+        string selectedSong = "Soundtrack";
+        string selectedCharacter = "Bandit";
 
         Color SelectedColor = new Color(255, 255, 255, 255);
         Color UnselectedColor = new Color(0, 0, 0, 255);
@@ -34,16 +28,6 @@ namespace Prototype
         Color CharacterColor = new Color(100, 100, 100, 200);
         Color MusicColor = new Color(100, 100, 100, 200);
         Color BackColor = new Color(0, 0, 0, 0);
-        
-        enum SelectedCharacter
-        {
-            Bandit,
-            Jos,
-            Maarten
-        }
-        SelectedCharacter selectedCharacter = SelectedCharacter.Bandit;
-        SelectedCharacter nextSelectedCharacter;
-        SelectedCharacter previousSelectedCharacter;
 
         enum SelectedDifficulty
         {
@@ -52,8 +36,6 @@ namespace Prototype
             Hard
         }
         SelectedDifficulty selectedDifficulty = SelectedDifficulty.Medium;
-        SelectedDifficulty nextSelectedDifficulty;
-        SelectedDifficulty previousSelectedDifficulty;
 
         int frameCount = 0; //Telt welke frame op het moment in source is
         const int delay = 4; //Vertraagt de animatie en beweging
@@ -64,6 +46,9 @@ namespace Prototype
         Rectangle source = new Rectangle(0, 0, sourceWidth, sourceHeight); //Bepaalt welk gedeelte van player.png wordt getoond
 
         int songCount = 1;
+        int characterCount = 1;
+        int difficultyCount = 2;
+        int selectCount = 1;
 
         public OptionsMenu(ContentManager content, Game1 game1)
         {
@@ -73,10 +58,7 @@ namespace Prototype
 
         public void Update(GameTime gameTime, KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
         {
-            CheckSelectedOption(currentKeyboardState, previousKeyboardState);
-            DoSelectedOption(currentKeyboardState, previousKeyboardState);
-            CharacterSelection(currentKeyboardState, previousKeyboardState);
-            DifficultySelection(currentKeyboardState, previousKeyboardState);
+            HandleOptions(currentKeyboardState, previousKeyboardState);
 
             if (frameCount % delay == 0)
             {
@@ -85,106 +67,59 @@ namespace Prototype
                 source = new Rectangle(frameCount / delay * 80, 0, sourceWidth, sourceHeight);
             }
             frameCount++;
-        }
 
-        private void CharacterSelection(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
-        {
-            if (selectedCharacter == SelectedCharacter.Bandit)
-            {
-                nextSelectedCharacter = SelectedCharacter.Jos;
-                previousSelectedCharacter = SelectedCharacter.Maarten;
-                Character.playerTexture = Game1.character1Texture;
-            }
-            else if (selectedCharacter == SelectedCharacter.Jos)
-            {
-                nextSelectedCharacter = SelectedCharacter.Maarten;
-                previousSelectedCharacter = SelectedCharacter.Bandit;
-                Character.playerTexture = Game1.character2Texture;
-            }
-            else if (selectedCharacter == SelectedCharacter.Maarten)
-            {
-                nextSelectedCharacter = SelectedCharacter.Bandit;
-                previousSelectedCharacter = SelectedCharacter.Jos;
-                Character.playerTexture = Game1.character3Texture;
-            }
-        }
-
-
-        private void DifficultySelection(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
-        {
-            if (selectedDifficulty == SelectedDifficulty.Easy)
-            {
-                nextSelectedDifficulty = SelectedDifficulty.Medium;
-                previousSelectedDifficulty = SelectedDifficulty.Hard;
-                //health.lifes = 5;
-            }
-            else if (selectedDifficulty == SelectedDifficulty.Medium)
-            {
-                nextSelectedDifficulty = SelectedDifficulty.Hard;
-                previousSelectedDifficulty = SelectedDifficulty.Easy;
-                //health.lifes = 3;
-            }
-            else if (selectedDifficulty == SelectedDifficulty.Hard)
-            {
-                nextSelectedDifficulty = SelectedDifficulty.Easy;
-                previousSelectedDifficulty = SelectedDifficulty.Medium;
-                //health.lifes = 1;
-            }
-        }
-
-        private void CheckSelectedOption(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
-        {
             if ((currentKeyboardState.IsKeyDown(Keys.Escape) && !previousKeyboardState.IsKeyDown(Keys.Escape)) | (currentKeyboardState.IsKeyDown(Keys.Back) && !previousKeyboardState.IsKeyDown(Keys.Back)))
                 game.gameState = Prototype.Game1.GameState.mainmenu;
-
-            if (selected == Selected.difficulty)
-            {
-                {
-                    if ((currentKeyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down)) | (currentKeyboardState.IsKeyDown(Keys.S) && !previousKeyboardState.IsKeyDown(Keys.S)))
-                        selected = Selected.character;
-                    if ((currentKeyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up)) | (currentKeyboardState.IsKeyDown(Keys.W) && !previousKeyboardState.IsKeyDown(Keys.W)))
-                        selected = Selected.music;
-                }
-            }
-            else if (selected == Selected.character)
-            {
-                if ((currentKeyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down)) | (currentKeyboardState.IsKeyDown(Keys.S) && !previousKeyboardState.IsKeyDown(Keys.S)))
-                    selected = Selected.music;
-                if ((currentKeyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up)) | (currentKeyboardState.IsKeyDown(Keys.W) && !previousKeyboardState.IsKeyDown(Keys.W)))
-                    selected = Selected.difficulty;
-            }
-            else if (selected == Selected.music)
-            {
-                if ((currentKeyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down)) | (currentKeyboardState.IsKeyDown(Keys.S) && !previousKeyboardState.IsKeyDown(Keys.S)))
-                    selected = Selected.back;
-                if ((currentKeyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up)) | (currentKeyboardState.IsKeyDown(Keys.W) && !previousKeyboardState.IsKeyDown(Keys.W)))
-                    selected = Selected.character;
-            }
-            else if (selected == Selected.back)
-            {
-                if ((currentKeyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down)) | (currentKeyboardState.IsKeyDown(Keys.S) && !previousKeyboardState.IsKeyDown(Keys.S)))
-                    selected = Selected.difficulty;
-                if ((currentKeyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up)) | (currentKeyboardState.IsKeyDown(Keys.W) && !previousKeyboardState.IsKeyDown(Keys.W)))
-                    selected = Selected.music;
-            }
         }
 
 
 
-
-
-        private void DoSelectedOption(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
+        private void HandleOptions(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
         {
-            switch (selected)
+            if ((currentKeyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down)) | (currentKeyboardState.IsKeyDown(Keys.S) && !previousKeyboardState.IsKeyDown(Keys.S)))
             {
-                case Selected.difficulty:
+                selectCount++;
+                if (selectCount >= 5)
+                    selectCount = 1;
+            }
+            else if ((currentKeyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up)) | (currentKeyboardState.IsKeyDown(Keys.W) && !previousKeyboardState.IsKeyDown(Keys.W)))
+            {
+                selectCount--;
+                if (selectCount <= 0)
+                    selectCount = 4;
+            }   
+
+
+            switch (selectCount)
+            {
+                case 1: //Difficulty
                     if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | (currentKeyboardState.IsKeyDown(Keys.Enter) && !previousKeyboardState.IsKeyDown(Keys.Enter)) | (currentKeyboardState.IsKeyDown(Keys.Right) && !previousKeyboardState.IsKeyDown(Keys.Right)) | (currentKeyboardState.IsKeyDown(Keys.D) && !previousKeyboardState.IsKeyDown(Keys.D)))
                     {
-                        selectedDifficulty = nextSelectedDifficulty;
+                        difficultyCount++;
+                        if (difficultyCount >= 4)
+                            difficultyCount = 1;
                     }
                     else if ((currentKeyboardState.IsKeyDown(Keys.Left) && !previousKeyboardState.IsKeyDown(Keys.Left)) | (currentKeyboardState.IsKeyDown(Keys.A) && !previousKeyboardState.IsKeyDown(Keys.A)))
                     {
-                        selectedDifficulty = previousSelectedDifficulty;
+                        difficultyCount--;
+                        if (difficultyCount <= 0)
+                            difficultyCount = 3;
+                    }
+
+                    if (difficultyCount == 1)
+                    {
+                        selectedDifficulty = SelectedDifficulty.Easy;
+                        //health.lifes = 5;
+                    }
+                    else if (difficultyCount == 2)
+                    {
+                        selectedDifficulty = SelectedDifficulty.Medium;
+                        //health.lifes = 3;
+                    }
+                    else if (difficultyCount == 3)
+                    {
+                        selectedDifficulty = SelectedDifficulty.Hard;
+                        //health.lifes = 1;
                     }
 
                     if (selectedDifficulty == SelectedDifficulty.Easy)
@@ -200,43 +135,97 @@ namespace Prototype
                     BackColor = UnselectedColor;
                     break;
 
-                case Selected.character:
+                case 2: //Medium
                     if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | (currentKeyboardState.IsKeyDown(Keys.Enter) && !previousKeyboardState.IsKeyDown(Keys.Enter)) | (currentKeyboardState.IsKeyDown(Keys.Right) && !previousKeyboardState.IsKeyDown(Keys.Right)) | (currentKeyboardState.IsKeyDown(Keys.D) && !previousKeyboardState.IsKeyDown(Keys.D)))
                     {
-                        selectedCharacter = nextSelectedCharacter;
+                        characterCount++;
+                        if (characterCount >= 4)
+                            characterCount = 1;
                     }
                     else if ((currentKeyboardState.IsKeyDown(Keys.Left) && !previousKeyboardState.IsKeyDown(Keys.Left)) | (currentKeyboardState.IsKeyDown(Keys.A) && !previousKeyboardState.IsKeyDown(Keys.A)))
                     {
-                        selectedCharacter = previousSelectedCharacter;
+                        characterCount--;
+                        if (characterCount <= 0)
+                            characterCount = 3;
                     }
 
+                    if (characterCount == 1)
+                    {
+                        Character.playerTexture = Game1.character1Texture;
+                        selectedCharacter = "Bandit";
+                    }
+                    else if (characterCount == 2)
+                    {
+                        Character.playerTexture = Game1.character2Texture;
+                        selectedCharacter = "Jos";
+                    }
+                    else if (characterCount == 3)
+                    {
+
+                        Character.playerTexture = Game1.character3Texture;
+                        selectedCharacter = "Maarten";
+                    }
+                    
                     DifficultyColor1 = UnselectedColor;
                     CharacterColor = SelectedColor;
                     MusicColor = UnselectedColor;
                     BackColor = UnselectedColor;
                     break;
 
-                case Selected.music:
+                case 3: //Music
 
-                    if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | (currentKeyboardState.IsKeyDown(Keys.Enter) && !previousKeyboardState.IsKeyDown(Keys.Enter)))
+                    if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | (currentKeyboardState.IsKeyDown(Keys.Enter) && !previousKeyboardState.IsKeyDown(Keys.Enter)) | (currentKeyboardState.IsKeyDown(Keys.Right) && !previousKeyboardState.IsKeyDown(Keys.Right)) | (currentKeyboardState.IsKeyDown(Keys.D) && !previousKeyboardState.IsKeyDown(Keys.D)))
+                    {
+                        songCount++;
+                        if (songCount >= 7)
+                            songCount = 1;
+                    }
+                    else if ((currentKeyboardState.IsKeyDown(Keys.Left) && !previousKeyboardState.IsKeyDown(Keys.Left)) | (currentKeyboardState.IsKeyDown(Keys.A) && !previousKeyboardState.IsKeyDown(Keys.A)))
+                    {
+                        songCount--;
+                        if (songCount <= 0)
+                            songCount = 6;
+                    }
+
+
+                    if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | (currentKeyboardState.IsKeyDown(Keys.Enter) && !previousKeyboardState.IsKeyDown(Keys.Enter)) | (currentKeyboardState.IsKeyDown(Keys.Right) && !previousKeyboardState.IsKeyDown(Keys.Right)) | (currentKeyboardState.IsKeyDown(Keys.D) && !previousKeyboardState.IsKeyDown(Keys.D)) | (currentKeyboardState.IsKeyDown(Keys.Left) && !previousKeyboardState.IsKeyDown(Keys.Left)) | (currentKeyboardState.IsKeyDown(Keys.A) && !previousKeyboardState.IsKeyDown(Keys.A)))
                     {
                         //Change music
-                        if (songCount == 1)
+                         if (songCount == 1)
                         {
-                            MediaPlayer.Play(Game1.bonusSong);
-                            songCount++;
+                            Game1.PlayMusic(Game1.soundtrackSong);
+                            selectedSong = "Soundtrack";
                         }
                         else if (songCount == 2)
                         {
-                            MediaPlayer.Play(Game1.rickSong);
-                            songCount++;
+                            MediaPlayer.Stop();
+                            selectedSong = "None";
                         }
                         else if (songCount == 3)
                         {
-                            MediaPlayer.Play(Game1.littleSong);
-                            songCount = 1;
+                            Game1.PlayMusic(Game1.rapidSong);
+                            selectedSong = "Rapid";
                         }
+                        else if (songCount == 4)
+                        {
+                            Game1.PlayMusic(Game1.rickSong);
+                            selectedSong = "Rick Roll";
+                        }
+                        else if (songCount == 5)
+                        {
+                            Game1.PlayMusic(Game1.littleSong);
+                            selectedSong = "Little";
+                        }
+                        else if (songCount == 6)
+                        {
+                            Game1.PlayMusic(Game1.slagsmalklubbenSong);
+                            selectedSong = "Slagsmalklubben";
+                        }
+                        
+
                     }
+                    
+
 
                     DifficultyColor1 = UnselectedColor;
                     CharacterColor = UnselectedColor;
@@ -244,7 +233,7 @@ namespace Prototype
                     BackColor = UnselectedColor;
                     break;
 
-                case Selected.back:
+                case 4: //back
 
                     if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | (currentKeyboardState.IsKeyDown(Keys.Enter) && !previousKeyboardState.IsKeyDown(Keys.Enter)))
                     {
@@ -265,11 +254,11 @@ namespace Prototype
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(menuFont, "Difficulty:", new Vector2(50, 50), DifficultyColor1);
-            spriteBatch.DrawString(menuFont, " " +selectedDifficulty, new Vector2(300, 50), DifficultyColor2);
+            spriteBatch.DrawString(menuFont, "Difficulty: ", new Vector2(50, 50), DifficultyColor1);
+            spriteBatch.DrawString(menuFont, " " + selectedDifficulty, new Vector2(300, 50), DifficultyColor2);
             spriteBatch.DrawString(menuFont, "Character: " + selectedCharacter, new Vector2(50, 120), CharacterColor);
-            spriteBatch.DrawString(menuFont, "Music", new Vector2(50, 190), MusicColor);
-            spriteBatch.DrawString(menuFont, "Back", new Vector2(50, 330), BackColor);
+            spriteBatch.DrawString(menuFont, "Music: " + selectedSong, new Vector2(50, 190), MusicColor);
+            spriteBatch.DrawString(menuFont, "Back", new Vector2(50, 390), BackColor);
 
             spriteBatch.Draw(Character.playerTexture, new Rectangle(500, 100, 320, 320), source, Color.White, 0f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
         }

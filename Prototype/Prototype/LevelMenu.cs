@@ -21,19 +21,15 @@ namespace Prototype
         //List<string> MenuLevel2 = new List<string>();        
         //List<Vector2> MenuLevel2Positions = new List<Vector2>();
 
-        enum Selected
-        {
-            level1,
-            level2,
-            boss
-        }
-        Selected selected = Selected.level1;
+
+        int selectCount = 1;
 
         Color SelectedColor = new Color(255, 255, 255, 255);
         Color UnselectedColor = new Color(0, 0, 0, 255);
         Color Level1Color = new Color(255, 255, 255, 255);
         Color Level2Color = new Color(100, 100, 100, 200);
         Color BossColor = new Color(100, 100, 100, 200);
+        Color BackColor = new Color(100, 100, 100, 200);
 
         public LevelMenu(ContentManager content, Game1 game1)
         {
@@ -43,8 +39,7 @@ namespace Prototype
 
         public void Update(GameTime gameTime, KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
         {
-            CheckSelectedOption(currentKeyboardState, previousKeyboardState);
-            DoSelectedOption(currentKeyboardState, previousKeyboardState);
+            HandleOptions(currentKeyboardState, previousKeyboardState);
 
             if (currentKeyboardState.IsKeyDown(Keys.Escape) && !previousKeyboardState.IsKeyDown(Keys.Escape))               
             game.gameState = Prototype.Game1.GameState.mainmenu;
@@ -53,74 +48,71 @@ namespace Prototype
 
 
 
-        private void CheckSelectedOption(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
+        private void HandleOptions(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
         {
-            //Zorgen dat je andere menuopties kunt selecteren. Kan ook met bijvoorbeeld een integer SelectedIndex, maar ik ben hier maar niet voor gegaan, aangezien je dan ook nog moet definiëren wat "omhoog" en "omlaag" is.
-            if (selected == Selected.level1)
+            if ((currentKeyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down)) | (currentKeyboardState.IsKeyDown(Keys.S) && !previousKeyboardState.IsKeyDown(Keys.S)))
             {
-                {
-                    if ((currentKeyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down)) | (currentKeyboardState.IsKeyDown(Keys.S) && !previousKeyboardState.IsKeyDown(Keys.S)))
-                        selected = Selected.level2;
-                    if ((currentKeyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up)) | (currentKeyboardState.IsKeyDown(Keys.W) && !previousKeyboardState.IsKeyDown(Keys.W)))
-                        selected = Selected.boss;
-                }
+                selectCount++;
+                if (selectCount >= 5)
+                    selectCount = 1;
             }
-            else if (selected == Selected.level2)
+            else if ((currentKeyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up)) | (currentKeyboardState.IsKeyDown(Keys.W) && !previousKeyboardState.IsKeyDown(Keys.W)))
             {
-                if ((currentKeyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down)) | (currentKeyboardState.IsKeyDown(Keys.S) && !previousKeyboardState.IsKeyDown(Keys.S)))
-                    selected = Selected.boss;
-                if ((currentKeyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up)) | (currentKeyboardState.IsKeyDown(Keys.W) && !previousKeyboardState.IsKeyDown(Keys.W)))
-                    selected = Selected.level1;
-            }
-            else if (selected == Selected.boss)
+                selectCount--;
+                if (selectCount <= 0)
+                    selectCount = 4;
+            }   
+
+            switch (selectCount)
             {
-                if ((currentKeyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down)) | (currentKeyboardState.IsKeyDown(Keys.S) && !previousKeyboardState.IsKeyDown(Keys.S)))
-                    selected = Selected.level1;
-                if ((currentKeyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up)) | (currentKeyboardState.IsKeyDown(Keys.W) && !previousKeyboardState.IsKeyDown(Keys.W)))
-                    selected = Selected.level2;
-            }
-        }
-
-
-
-
-
-
-        private void DoSelectedOption(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
-        {
-            switch (selected)
-            {
-                case Selected.level1:
-                    if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | currentKeyboardState.IsKeyDown(Keys.Enter))
+                case 1: //Level1
+                    if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | currentKeyboardState.IsKeyDown(Keys.Enter) && !previousKeyboardState.IsKeyDown(Keys.Enter))
                     {
                         game.currentLevel = game.level1;
                         game.currentLevel.Initialize();
+                        game.gameState = Prototype.Game1.GameState.running;
                     }
                     Level1Color = SelectedColor;
                     Level2Color = UnselectedColor;
                     BossColor = UnselectedColor;
+                    BackColor = UnselectedColor;
                     break;
 
-                case Selected.level2:
-                    if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | currentKeyboardState.IsKeyDown(Keys.Enter))
+                case 2: //Level2
+                    if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | currentKeyboardState.IsKeyDown(Keys.Enter) && !previousKeyboardState.IsKeyDown(Keys.Enter))
                     {
                         game.currentLevel = game.level2;
                         game.currentLevel.Initialize();
+                        game.gameState = Prototype.Game1.GameState.running;
                     }
                     Level1Color = UnselectedColor;
                     Level2Color = SelectedColor;
                     BossColor = UnselectedColor;
+                    BackColor = UnselectedColor;
                     break;
 
-                case Selected.boss:
-                    if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | currentKeyboardState.IsKeyDown(Keys.Enter))
+                case 3: //Boss
+                    if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | currentKeyboardState.IsKeyDown(Keys.Enter) && !previousKeyboardState.IsKeyDown(Keys.Enter))
                     {
                         game.currentLevel = game.level3;
                         game.currentLevel.Initialize();
+                        game.gameState = Prototype.Game1.GameState.running;
                     }
                     Level1Color = UnselectedColor;
                     Level2Color = UnselectedColor;
                     BossColor = SelectedColor;
+                    BackColor = UnselectedColor;
+                    break;
+
+                case 4: //Back
+                    if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | currentKeyboardState.IsKeyDown(Keys.Enter) && !previousKeyboardState.IsKeyDown(Keys.Enter))
+                    {                        
+                        game.gameState = Prototype.Game1.GameState.mainmenu;
+                    }
+                    Level1Color = UnselectedColor;
+                    Level2Color = UnselectedColor;
+                    BossColor = UnselectedColor;
+                    BackColor = SelectedColor;
                     break;
             }
         }
@@ -134,6 +126,7 @@ namespace Prototype
             spriteBatch.DrawString(menuFont, "Level 1", new Vector2(50, 50), Level1Color);
             spriteBatch.DrawString(menuFont, "Level2", new Vector2(50, 120), Level2Color);
             spriteBatch.DrawString(menuFont, "Boss", new Vector2(50, 190), BossColor);
+            spriteBatch.DrawString(menuFont, "Back", new Vector2(50, 390), BackColor);
         }
 
 
