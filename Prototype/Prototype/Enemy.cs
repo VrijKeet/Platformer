@@ -59,10 +59,10 @@ namespace Prototype
         protected override void LoadContent()
         {
             List<Platform> platforms = ((Game1)Game).currentLevel.GetPlatforms();
-            mooiStatischPlatform = platforms[4];
+            //mooiStatischPlatform = platforms[4];
 
             enemyTexture = Game.Content.Load<Texture2D>("Slime");
-            boundingBox = new Rectangle(mooiStatischPlatform.boundingBox.X, mooiStatischPlatform.boundingBox.Y - source.Height, 85, 70);
+            //boundingBox = new Rectangle(mooiStatischPlatform.boundingBox.X, mooiStatischPlatform.boundingBox.Y - source.Height, 85, 70);
             boundingBox = new Rectangle(boundingBox.X, boundingBox.Y, enemyTexture.Width, enemyTexture.Height);
 
             base.LoadContent();
@@ -88,7 +88,7 @@ namespace Prototype
                     currentFacing = facing.right;
                 }
                 distance += richting;
-                boundingBox = new Rectangle(mooiStatischPlatform.boundingBox.X + distance, mooiStatischPlatform.boundingBox.Y - source.Height, 85, 70);
+                //boundingBox = new Rectangle(mooiStatischPlatform.boundingBox.X + distance, mooiStatischPlatform.boundingBox.Y - source.Height, 85, 70);
             }
 
             //if (alive && Character.bounds.X < boundingBox.X + boundingBox.Width && Character.feetBounds.Y + Character.feetBounds.Height > boundingBox.Y && Character.feetBounds.X + Character.feetBounds.Width > boundingBox.X && Character.feetBounds.Y < (boundingBox.Y + boundingBox.Height) - 60)
