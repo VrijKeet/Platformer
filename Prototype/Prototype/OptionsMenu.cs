@@ -22,7 +22,7 @@ namespace Prototype
         string selectedCharacter = "Bandit";
 
         Color SelectedColor = new Color(255, 255, 255, 255);
-        Color UnselectedColor = new Color(0, 0, 0, 255);
+        Color UnselectedColor = new Color(255, 165, 0, 255);
         Color DifficultyColor1 = new Color(255, 255, 255, 255);
         Color DifficultyColor2 = new Color(255, 255, 255, 255);
         Color CharacterColor = new Color(100, 100, 100, 200);

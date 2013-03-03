@@ -52,6 +52,23 @@ namespace Prototype
             bounds = Bounds;
             richting = 1;
             alive = true;
+<<<<<<< HEAD
+
+            base.Initialize();
+        }
+
+        protected override void LoadContent()
+        {
+            List<Platform> platforms = ((Game1)Game).currentLevel.GetPlatforms();
+            //mooiStatischPlatform = platforms[4];
+
+            enemyTexture = Game.Content.Load<Texture2D>("Slime");
+            //boundingBox = new Rectangle(mooiStatischPlatform.boundingBox.X, mooiStatischPlatform.boundingBox.Y - source.Height, 85, 70);
+            boundingBox = new Rectangle(boundingBox.X, boundingBox.Y, enemyTexture.Width, enemyTexture.Height);
+
+            base.LoadContent();
+=======
+>>>>>>> a1326cb4867add30fae39ef5bec33ec6f74a769e
         }
 
         public void Update(GameTime gameTime)
@@ -103,7 +120,12 @@ namespace Prototype
                     }
                     
                 }
+<<<<<<< HEAD
+                distance += richting;
+                //boundingBox = new Rectangle(mooiStatischPlatform.boundingBox.X + distance, mooiStatischPlatform.boundingBox.Y - source.Height, 85, 70);
+=======
                 frameCount++;
+>>>>>>> a1326cb4867add30fae39ef5bec33ec6f74a769e
             }
 
             if (alive && Character.bounds.X < bounds.X + bounds.Width && Character.feetBounds.Y + Character.feetBounds.Height > bounds.Y && Character.feetBounds.X + Character.feetBounds.Width > bounds.X && Character.feetBounds.Y < (bounds.Y + bounds.Height) - 60)

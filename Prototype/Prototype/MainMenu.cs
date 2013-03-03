@@ -20,7 +20,7 @@ namespace Prototype
         SpriteFont titelFont;        
 
         Color SelectedColor = new Color(255, 255, 255, 255);
-        Color UnselectedColor = new Color(0, 0, 0, 255);
+        Color UnselectedColor = new Color(255, 165, 0, 255);
         Color StartColor = new Color(255, 255, 255, 255);
         Color NewGameColor = new Color(255, 255, 255);
         Color OptionsColor = new Color(100, 100, 100, 200);
@@ -117,8 +117,8 @@ namespace Prototype
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {            
-            Vector2 length1 = titelFont.MeasureString("Yet an()other Platformer") / 2;
-            spriteBatch.DrawString(titelFont, "Yet an()other Platformer", new Vector2(Game1.graphics.GraphicsDevice.Viewport.Width / 2 - length1.X, 10), new Color(0, 0, 100));
+            Vector2 length1 = titelFont.MeasureString("Little Platformer") / 2;
+            spriteBatch.DrawString(titelFont, "Little Platformer", new Vector2(Game1.graphics.GraphicsDevice.Viewport.Width / 2 - length1.X, 10), new Color(0, 0, 100));
             
             spriteBatch.DrawString(menuFont, "Resume", new Vector2(50, 140), StartColor);
             spriteBatch.DrawString(menuFont, "New game", new Vector2(50, 230), NewGameColor);

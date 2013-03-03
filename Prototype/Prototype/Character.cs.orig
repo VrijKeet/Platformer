@@ -63,7 +63,11 @@ namespace Prototype
         float speed = 0; //Snelheid waarmee character zich in de horizontale richting voortbeweegt
         float maxWalkingSpeed = 5;
         float maxRunningSpeed = 12;
+<<<<<<< HEAD
         public static int jumpingSpeed = -20;
+=======
+        public static int jumpingSpeed = -10;
+>>>>>>> a1326cb4867add30fae39ef5bec33ec6f74a769e
 
         int frameCount = 0; //Telt welke frame op het moment in source is
         const int delay = 4; //Vertraagt de animatie en beweging

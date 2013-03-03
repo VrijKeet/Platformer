@@ -11,5 +11,6 @@ namespace Prototype
         void Initialize();
         void Update(GameTime gameTime, KeyboardState currentKeyboardState, KeyboardState previousKeyboardState);
         List<Platform> GetPlatforms();
+        List<Enemy> GetEnemies();
     }
 }

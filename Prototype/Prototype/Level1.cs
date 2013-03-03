@@ -20,12 +20,13 @@ namespace Prototype
         public Texture2D grassTexture1;
 
 
+        public Texture2D enemyTexture2;
         public Character character;
 
         public List<Platform> platforms;
         public List<Rectangle> startDimPlat;
         public List<Projectile> projectiles = new List<Projectile>();
-
+        public List<Enemy> enemies = new List<Enemy>();
 
 
         public Level1(ContentManager content, Game1 game1)
@@ -94,10 +95,6 @@ namespace Prototype
         {
             spriteBatch.Draw(backgroundTexture, new Rectangle(0, 0, backgroundTexture.Width, backgroundTexture.Height), Color.White);
 
-            // Maak hard-coded 4 platformen aan:
-
-          
-
             for (int i = 0; i < platforms.Count; i++)
             {
                 platforms[i].Draw(gameTime, spriteBatch); //Teken iedere platform in de lijst
@@ -108,6 +105,11 @@ namespace Prototype
         public List<Platform> GetPlatforms()
         {
             return platforms;
+        }
+
+        public List<Enemy> GetEnemies()
+        {
+            return enemies;
         }
     }
 }

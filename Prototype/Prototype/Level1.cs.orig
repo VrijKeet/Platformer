@@ -13,44 +13,29 @@ using Microsoft.Xna.Framework.Storage;
 
 namespace Prototype
 {
-    public class Level3 : ILevel
+    public class Level1 : ILevel
     {
         public Game1 game;
         public Texture2D backgroundTexture;
         public Texture2D grassTexture1;
-        public Texture2D enemyTexture1;
-        public static Texture2D enemyTexture2;
+
+
+        public Texture2D enemyTexture2;
         public Character character;
 
-
-        public List<Enemy> enemies;
-
         public List<Platform> platforms;
-        public Vector2[] startPosPlat;
+        public List<Rectangle> startDimPlat;
         public List<Projectile> projectiles = new List<Projectile>();
+        public List<Enemy> enemies = new List<Enemy>();
 
 
-
-        public Level3(ContentManager content, Game1 game1)
+        public Level1(ContentManager content, Game1 game1)
         {
             this.game = game1;
             backgroundTexture = content.Load<Texture2D>("sky");
-            grassTexture1 = content.Load<Texture2D>("gunTexture");
-            enemyTexture1 = content.Load<Texture2D>("Slime");
-            enemyTexture2 = content.Load<Texture2D>("Dragon");
+            grassTexture1 = content.Load<Texture2D>("grassTexture1");
             platforms = new List<Platform>();
-            enemies = new List<Enemy>();
             character = new Character(game1); //"game1" omdat character een constructor heeft
-
-            Enemy enemy1 = new Enemy(content);
-            Enemy enemy2 = new Enemy(content);
-
-            enemies.Add(enemy1);
-            enemies.Add(enemy2);
-
-            enemies[0].Initialize(enemyTexture1, new Rectangle(330, 260, 85, 70)); //Texture en (positie, grootte)
-            enemies[1].Initialize(enemyTexture2, new Rectangle(-150, 80, 170, 140));
-
         }
 
         public void Initialize()
@@ -58,10 +43,48 @@ namespace Prototype
             //testPlatform = new Platform();
             //testPlatform.Initialize(grassTexture1);
             //testPlatform.boundingBox = new Rectangle(100, 100, 300, 100);
-
-
             platforms.Clear();
 
+<<<<<<< HEAD
+            // Lijst met posities van platformen
+            startDimPlat = new List<Rectangle>();
+
+            startDimPlat.Add(new Rectangle(0, 350, 2000, 350)); // Huge platform
+            startDimPlat.Add(new Rectangle(600, 250, 100, 100));
+            startDimPlat.Add(new Rectangle(1200, 250, 100, 100));
+            startDimPlat.Add(new Rectangle(1900, 250, 100, 100));
+            startDimPlat.Add(new Rectangle(750, 150, 400, 100)); // Groot platform onder
+            startDimPlat.Add(new Rectangle(800, 50, 90, 60));
+            startDimPlat.Add(new Rectangle(905, 50, 90, 60));
+            startDimPlat.Add(new Rectangle(1020, 50, 90, 60));
+            startDimPlat.Add(new Rectangle(700, -50, 500, 100)); // Groot platform boven
+            startDimPlat.Add(new Rectangle(600, -150, 200, 100)); // Wolk begin
+            startDimPlat.Add(new Rectangle(300, -250, 200, 100));
+            startDimPlat.Add(new Rectangle(0, -350, 200, 100));
+            startDimPlat.Add(new Rectangle(-300, -450, 200, 100)); // Wolk einde
+            startDimPlat.Add(new Rectangle(2100, 350, 500, 100));
+            startDimPlat.Add(new Rectangle(2800, 450, 300, 100));
+            startDimPlat.Add(new Rectangle(3300, 550, 300, 100));
+            startDimPlat.Add(new Rectangle(3850, 550, 1000, 350));
+            startDimPlat.Add(new Rectangle(4950, 550, 1000, 350));
+
+            // Platformen aanmaken
+            for (int i = 0; i < startDimPlat.Count; i++)
+            {
+                Platform platform = new Platform();
+                platforms.Add(platform);
+            }
+
+            // Platformen texture geven
+            for (int i = 0; i < platforms.Count; i++)
+                platforms[i].Initialize(grassTexture1);
+
+            // Platformen posities geven
+            for (int i = 0; i < platforms.Count; i++)
+                platforms[i].boundingBox = startDimPlat[i];
+            
+            Character.bounds = new Rectangle(300, platforms[0].boundingBox.Y - Game1.character1Texture.Height, 80, 80);
+=======
             Platform platform = new Platform();
             Platform platform2 = new Platform();
             Platform platform3 = new Platform();
@@ -109,53 +132,35 @@ namespace Prototype
             platform9.boundingBox = new Rectangle((int)startPosPlat[8].X, (int)startPosPlat[8].Y, 100, 10);
             platform10.boundingBox = new Rectangle((int)startPosPlat[9].X, (int)startPosPlat[9].Y, 100, 10);
 
-            
-            
-
-            
-
-
             Character.bounds = new Rectangle(300, 280, 80, 80);
+>>>>>>> a1326cb4867add30fae39ef5bec33ec6f74a769e
         }
 
 
         public void Update(GameTime gameTime, KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
         {
             character.Update(gameTime, currentKeyboardState, previousKeyboardState);
-
-            for (int i = 0; i < enemies.Count; i++)
-            {
-                enemies[i].Update(gameTime);
-            }
         }
 
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(backgroundTexture, new Rectangle(0, 0, backgroundTexture.Width, backgroundTexture.Height), Color.White);
+
+            for (int i = 0; i < platforms.Count; i++)
+            {
+                platforms[i].Draw(gameTime, spriteBatch); //Teken iedere platform in de lijst
+            }
+            character.Draw(gameTime, spriteBatch);
+        }
 
         public List<Platform> GetPlatforms()
         {
             return platforms;
         }
+
         public List<Enemy> GetEnemies()
         {
             return enemies;
-        }
-
-
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(backgroundTexture, new Rectangle(0, 0, backgroundTexture.Width, backgroundTexture.Height), Color.White);
-                        
-            for (int i = 0; i < platforms.Count; i++)
-            {
-                platforms[i].Draw(gameTime, spriteBatch); //Teken iedere platform in de lijst
-            }
-
-
-            for (int i = 0; i < enemies.Count; i++)
-            {
-                enemies[i].Draw(gameTime, spriteBatch); //Teken iedere enemy in de lijst
-            }
-
-            character.Draw(gameTime, spriteBatch);
         }
     }
 }

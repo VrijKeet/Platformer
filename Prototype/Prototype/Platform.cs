@@ -27,7 +27,8 @@ namespace Prototype
 
         public void Initialize(Texture2D texture)
         {
-            platformTexture = texture; //texture haalt hij van game1.cs
+            platformTexture = texture; //texture haalt hij van level
+            boundingBoxTop = new Rectangle(boundingBox.X, boundingBox.Y, boundingBox.Width, 5);
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

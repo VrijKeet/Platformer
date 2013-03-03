@@ -17,6 +17,7 @@ namespace Prototype
     {
         public static GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        public static Game1 instance;
 
         MainMenu mainMenu;
         OptionsMenu optionsMenu;
@@ -48,12 +49,6 @@ namespace Prototype
         }
         public GameState gameState = GameState.mainmenu;
 
-        //public enum Level //Game status
-        //{
-        //    level1,
-        //    level2,
-        //    boss
-        //}
         public ILevel currentLevel;
 
 
@@ -72,10 +67,11 @@ namespace Prototype
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            instance = this; //om game1 te kunnen benaderen vanuit andere classes.
         }
 
 
-        protected override void Initialize()
+        protected override void Initialize() //Contenmanager, zodat deze aan ieder leve gegeven kan worden, zodat deze het weer aan objecten kunnen geven en daar textures in geladen kunnen worden.
         {
             mainMenu = new MainMenu(this.Content, this);
             optionsMenu = new OptionsMenu(this.Content, this);
@@ -95,6 +91,7 @@ namespace Prototype
 
             level1.Initialize();
             level2.Initialize();
+            level3.Initialize();
 
 
             //for (int i = 0; i < platforms.Count; i++)
@@ -112,7 +109,6 @@ namespace Prototype
             //// Game Components opnemen
             Components.Add(new Scrollen(this));
             //Components.Add(new health(this));
-            Components.Add(new Enemy(this));
             //Components.Add(new score(this));
             //Components.Add(new ladder(this));
 
@@ -143,7 +139,7 @@ namespace Prototype
             soundtrackSong = Content.Load<Song>("LF2 Soundtrack");
 
             MediaPlayer.Stop();
-            PlayMusic(soundtrackSong);
+            //PlayMusic(soundtrackSong);
         }
 
 
@@ -174,11 +170,7 @@ namespace Prototype
                     gameState = GameState.mainmenu;
 
                 currentLevel.Update(gameTime, currentKeyboardState, previousKeyboardState);
-                //if (currentLevel == Level.level1) //Kijk wat het huidige level is                
-                //    level1.Update(gameTime, currentKeyboardState, previousKeyboardState);
-                //else if (currentLevel == Level.level2)
-                //    level2.Update(gameTime, currentKeyboardState, previousKeyboardState);
-
+                
                 //UpdateProjectiles();
 
                 //if (gun.picked)
