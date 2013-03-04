@@ -28,7 +28,7 @@ namespace Prototype
         public List<Platform> platforms;
         public List<Rectangle> startDimPlat;
         public List<Projectile> projectiles = new List<Projectile>();
-        public List<Enemy> enemies;
+        public static List<Enemy> enemies;
 
 
         public Level1(ContentManager content, Game1 game1)
@@ -107,8 +107,6 @@ namespace Prototype
             // Platformen posities geven
             for (int i = 0; i < platforms.Count; i++)
                 platforms[i].boundingBox = startDimPlat[i];
-
-            Character.bounds = new Rectangle(300, platforms[0].boundingBox.Y - Game1.character1Texture.Height, 40, 40);
         }
 
 

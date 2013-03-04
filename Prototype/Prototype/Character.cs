@@ -27,6 +27,7 @@ namespace Prototype
         public static Rectangle bounds;
         const int sourceWidth = 80; //Breedte van charactre in player.png
         const int sourceHeight = 80; //Hoogte van character in player.png
+        public static Rectangle boundingBox = new Rectangle(bounds.X + 30, bounds.Y, 20, bounds.Height);
 
         ////////public static Vector2 startPos = new Vector2(300, 300);
         ////////public static Rectangle characterBounds = new Rectangle((int)startPos.X, (int)startPos.Y, Character.boundsWidth, Character.boundsHeight); //Positie en grootte van character
@@ -85,6 +86,7 @@ namespace Prototype
             elapsedTime += gameTime.ElapsedGameTime.TotalMilliseconds;
 
             feetBounds = new Rectangle(bounds.X + 30, bounds.Y + 70, 20, 10);
+            boundingBox = new Rectangle(bounds.X + 30, bounds.Y, 20, bounds.Height);
             KeyInput(currentKeyboardState, previousKeyboardState);
             //if (!onLadder)
                 Movement();

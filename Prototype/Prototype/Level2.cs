@@ -26,7 +26,7 @@ namespace Prototype
         public List<Platform> platforms;
         public Vector2[] startPosPlat;
         public List<Projectile> projectiles = new List<Projectile>();
-        public List<Enemy> enemies = new List<Enemy>();
+        public static List<Enemy> enemies = new List<Enemy>();
 
 
         public Level2(ContentManager content, Game1 game1)
