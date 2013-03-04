@@ -52,6 +52,12 @@ namespace Prototype
                 {
                     enemy.bounds = new Rectangle(enemy.bounds.X + (marge - Character.bounds.X), enemy.bounds.Y, enemy.bounds.Width, enemy.bounds.Height);
                 }
+
+                if (game.currentLevel == game.level1)
+                    Level1.goalPos = new Vector2(Level1.goalPos.X + (marge - Character.bounds.X), Level1.goalPos.Y);
+                //else if (game.currentLevel == game.level2)
+                //    Level2.goalPos = new Vector2(Level2.goalPos.X + (marge - Character.bounds.X), Level2.goalPos.Y);
+
                 //for (int i = 0; i < Game1.platforms.Count; i++)
                 //{
 
@@ -73,6 +79,12 @@ namespace Prototype
                 {
                     enemy.bounds = new Rectangle(enemy.bounds.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), enemy.bounds.Y, enemy.bounds.Width, enemy.bounds.Height);
                 }
+
+                if (game.currentLevel == game.level1)
+                    Level1.goalPos = new Vector2(Level1.goalPos.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), Level1.goalPos.Y);
+                //else if(game.currentLevel == game.level2)
+                //    Level2.goalPos = new Vector2(Level2.goalPos.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), Level2.goalPos.Y);
+
                 //Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), Game1.gun.boundingBox.Y, Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
                 //Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), Game1.gun.boundingBox.Y, Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height); 
                 Character.bounds.X = GraphicsDevice.Viewport.Width - marge - Character.bounds.Width;
@@ -90,6 +102,12 @@ namespace Prototype
                 {
                     enemy.bounds = new Rectangle(enemy.bounds.X, enemy.bounds.Y + (marge - Character.bounds.Y), enemy.bounds.Width, enemy.bounds.Height);
                 }
+
+                if (game.currentLevel == game.level1)
+                    Level1.goalPos = new Vector2(Level1.goalPos.X, Level1.goalPos.Y + (marge - Character.bounds.Y));
+                //else if( game.currentLevel == game.level2)
+                //    Level2.goalPos = new Vector2(Level2.goalPos.X, Level2.goalPos.Y + (marge - Character.bounds.Y));
+
                 //Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X, Game1.gun.boundingBox.Y + (marge - Character.bounds.Y), Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
                 Character.bounds.Y = marge;
             }
@@ -106,6 +124,12 @@ namespace Prototype
                 {
                     enemy.bounds = new Rectangle(enemy.bounds.X, enemy.bounds.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)), enemy.bounds.Width, enemy.bounds.Height);
                 }
+
+                if (game.currentLevel == game.level1)
+                    Level1.goalPos = new Vector2(Level1.goalPos.X, Level1.goalPos.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)));
+                //else if(game.currentLevel == game.level2)
+                //    Level2.goalPos = new Vector2(Level2.goalPos.X, Level2.goalPos.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)));
+
                 //Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X, Game1.gun.boundingBox.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)), Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
                 Character.bounds.Y = GraphicsDevice.Viewport.Height - marge - Character.bounds.Height;
             }

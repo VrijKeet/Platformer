@@ -64,6 +64,8 @@ namespace Prototype
         public static Song slagsmalklubbenSong;
         public static Song soundtrackSong;
 
+        public static Texture2D holeTexture;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -132,6 +134,8 @@ namespace Prototype
             gunPickedTexture1 = Content.Load<Texture2D>("gloves1");
             //gun.Initialize(gunTexture1);
             projectileTexture = Content.Load<Texture2D>("laser");
+            holeTexture = Content.Load<Texture2D>("hole");
+
 
             // Muziek
             rickSong = Content.Load<Song>("rickroll");

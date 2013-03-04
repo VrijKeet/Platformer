@@ -30,6 +30,8 @@ namespace Prototype
         public List<Projectile> projectiles = new List<Projectile>();
         public static List<Enemy> enemies;
 
+        public static Vector2 goalPos;
+
 
         public Level1(ContentManager content, Game1 game1)
         {
@@ -84,7 +86,7 @@ namespace Prototype
             startDimPlat.Add(new Rectangle(2100, 350, 500, 100)); //13
             startDimPlat.Add(new Rectangle(2800, 450, 300, 100)); //14
             startDimPlat.Add(new Rectangle(3300, 550, 300, 100)); //15
-            startDimPlat.Add(new Rectangle(3850, 550, 1000, 350)); //16
+            startDimPlat.Add(new Rectangle(3800, 550, 1000, 350)); //16
             startDimPlat.Add(new Rectangle(4950, 550, 1000, 350)); //17
 
             // Platformen aanmaken
@@ -107,6 +109,8 @@ namespace Prototype
             // Platformen posities geven
             for (int i = 0; i < platforms.Count; i++)
                 platforms[i].boundingBox = startDimPlat[i];
+
+            goalPos = new Vector2(5851, 453);
         }
 
 
@@ -116,6 +120,13 @@ namespace Prototype
             for (int i = 0; i < enemies.Count; i++)
             {
                 enemies[i].Update(gameTime);
+            }
+
+            if (Character.boundingBox.X < goalPos.X + Game1.holeTexture.Width && Character.boundingBox.X + Character.boundingBox.Width > goalPos.X && Character.boundingBox.Y < goalPos.Y + Game1.holeTexture.Height && Character.boundingBox.Y + Character.boundingBox.Height > goalPos.Y)
+            {
+                game.currentLevel = game.level2;
+                game.currentLevel.Initialize();
+                health.lifes = health.startLifes;
             }
         }
 
@@ -131,6 +142,8 @@ namespace Prototype
             {
                 enemies[i].Draw(gameTime, spriteBatch); //Teken iedere enemy in de lijst
             }
+
+            spriteBatch.Draw(Game1.holeTexture, goalPos, Color.White);
 
             character.Draw(gameTime, spriteBatch);
 
