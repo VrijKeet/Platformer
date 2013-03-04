@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Character.cs" />
+    <Compile Include="coins.cs" />
     <Compile Include="DeathScreen.cs" />
     <Compile Include="Gun.cs" />
     <Compile Include="ILevel.cs" />

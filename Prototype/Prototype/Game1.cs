@@ -115,6 +115,7 @@ namespace Prototype
             Components.Add(new health(this));
             //Components.Add(new score(this));
             //Components.Add(new ladder(this));
+            Components.Add(new coins(this));
 
 
 
