@@ -23,7 +23,7 @@ namespace Prototype
         public Character character;
 
 
-        public List<Enemy> enemies;
+        public static List<Enemy> enemies;
 
         public List<Platform> platforms;
         public Vector2[] startPosPlat;

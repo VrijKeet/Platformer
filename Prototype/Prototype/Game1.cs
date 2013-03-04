@@ -108,7 +108,7 @@ namespace Prototype
 
             //// Game Components opnemen
             Components.Add(new Scrollen(this));
-            //Components.Add(new health(this));
+            Components.Add(new health(this));
             //Components.Add(new score(this));
             //Components.Add(new ladder(this));
 

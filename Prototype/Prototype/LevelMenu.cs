@@ -70,6 +70,7 @@ namespace Prototype
                     {
                         game.currentLevel = game.level1;
                         game.currentLevel.Initialize();
+                        health.lifes = health.startLifes;
                         game.gameState = Prototype.Game1.GameState.running;
                     }
                     Level1Color = SelectedColor;
@@ -83,6 +84,7 @@ namespace Prototype
                     {
                         game.currentLevel = game.level2;
                         game.currentLevel.Initialize();
+                        health.lifes = health.startLifes;
                         game.gameState = Prototype.Game1.GameState.running;
                     }
                     Level1Color = UnselectedColor;
@@ -96,6 +98,7 @@ namespace Prototype
                     {
                         game.currentLevel = game.level3;
                         game.currentLevel.Initialize();
+                        health.lifes = health.startLifes;
                         game.gameState = Prototype.Game1.GameState.running;
                     }
                     Level1Color = UnselectedColor;

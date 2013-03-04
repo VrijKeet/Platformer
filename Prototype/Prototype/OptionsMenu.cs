@@ -109,17 +109,17 @@ namespace Prototype
                     if (difficultyCount == 1)
                     {
                         selectedDifficulty = SelectedDifficulty.Easy;
-                        //health.lifes = 5;
+                        health.startLifes = 5;
                     }
                     else if (difficultyCount == 2)
                     {
                         selectedDifficulty = SelectedDifficulty.Medium;
-                        //health.lifes = 3;
+                        health.startLifes = 3;
                     }
                     else if (difficultyCount == 3)
                     {
                         selectedDifficulty = SelectedDifficulty.Hard;
-                        //health.lifes = 1;
+                        health.startLifes = 1;
                     }
 
                     if (selectedDifficulty == SelectedDifficulty.Easy)
@@ -135,7 +135,7 @@ namespace Prototype
                     BackColor = UnselectedColor;
                     break;
 
-                case 2: //Medium
+                case 2: //Character
                     if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | (currentKeyboardState.IsKeyDown(Keys.Enter) && !previousKeyboardState.IsKeyDown(Keys.Enter)) | (currentKeyboardState.IsKeyDown(Keys.Right) && !previousKeyboardState.IsKeyDown(Keys.Right)) | (currentKeyboardState.IsKeyDown(Keys.D) && !previousKeyboardState.IsKeyDown(Keys.D)))
                     {
                         characterCount++;
