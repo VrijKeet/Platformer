@@ -22,6 +22,7 @@ namespace Prototype
         Texture2D texture;
         Texture2D enemyTexture1;
         Texture2D enemyTexture2;
+        Texture2D enemyTexture3;
         
         public Rectangle bounds;
         public Rectangle source;
@@ -44,6 +45,7 @@ namespace Prototype
         {
             enemyTexture1 = content.Load<Texture2D>("Slime");
             enemyTexture2 = content.Load<Texture2D>("Dragon");
+            enemyTexture3 = content.Load<Texture2D>("Mario");
         }
 
         public void Initialize(Texture2D Texture, Rectangle Bounds)
@@ -60,7 +62,7 @@ namespace Prototype
             {
                 Platform platform = GetIntersectingPlatform(feetBounds); //Kijk in game1.cs of de character in contact is met een platform is de lijst
 
-                if (platform == null && turningTimer == 0)//Als enemy geen platform raakt.
+                if (platform == null)//Als enemy geen platform raakt.
                 {
                     bounds.X += richting;
                     bounds.Y++;
@@ -85,6 +87,7 @@ namespace Prototype
                 else
                 {
                     bounds.X += richting;
+                    if (turningTimer >= 1)
                     turningTimer++;
                     if (turningTimer >= 10)
                         turningTimer = 0;
@@ -94,14 +97,27 @@ namespace Prototype
 
                 if (frameCount % delay == 0) //Eens in de <delay-waarde> frames
                 {
-                    if (texture == enemyTexture2)
+                    if (texture == enemyTexture1) //Slime
                     {
                         if (frameCount / delay >= 3)
                             frameCount = 0;
 
-                        source = new Rectangle(frameCount / delay * 96, 2 * 96, 96, 96);
+                        source = new Rectangle(frameCount / delay * 0, 0, 75, 55);
                     }
-                    
+                    else if (texture == enemyTexture2) //Draak
+                    {
+                        if (frameCount / delay >= 3)
+                            frameCount = 0;
+
+                        source = new Rectangle(frameCount / delay * 96, 2*96, 96, 96);
+                    }
+                    else if (texture == enemyTexture3) //mario
+                    {
+                        if (frameCount / delay >= 3)
+                            frameCount = 0;
+
+                        source = new Rectangle(frameCount / delay * 22, 0, 22, 33);
+                    }
                 }
                 frameCount++;
             }
@@ -131,14 +147,21 @@ namespace Prototype
         {
             if (alive)
             {
-                if (texture == enemyTexture1)
+                if (texture == enemyTexture1) //Slime
                 {
                     if (currentFacing == facing.left)
                         spriteBatch.Draw(texture, bounds, source, Color.White);
                     else
                         spriteBatch.Draw(texture, bounds, source, Color.White, 0f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
                 }
-                else if (texture == enemyTexture2)
+                else if (texture == enemyTexture2) //Dragon
+                {
+                    if (currentFacing == facing.right)
+                        spriteBatch.Draw(texture, bounds, source, Color.White);
+                    else
+                        spriteBatch.Draw(texture, bounds, source, Color.White, 0f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+                }
+                else if (texture == enemyTexture3) //Mario
                 {
                     if (currentFacing == facing.right)
                         spriteBatch.Draw(texture, bounds, source, Color.White);

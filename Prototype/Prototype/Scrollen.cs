@@ -44,7 +44,7 @@ namespace Prototype
                 foreach (Platform platform in platformList)
                 {
                     platform.boundingBox = new Rectangle(platform.boundingBox.X + (marge - Character.bounds.X), platform.boundingBox.Y, platform.boundingBox.Width, platform.boundingBox.Height);
-                    platform.boundingBoxTop = new Rectangle(platform.boundingBox.X, platform.boundingBox.Y, platform.boundingBox.Width, 5);
+                    platform.boundingBoxTop = new Rectangle(platform.boundingBox.X, platform.boundingBox.Y+10, platform.boundingBox.Width, 18);
 
                 }
 
@@ -66,7 +66,7 @@ namespace Prototype
                 foreach (Platform platform in platformList)
                 {
                     platform.boundingBox = new Rectangle(platform.boundingBox.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), platform.boundingBox.Y, platform.boundingBox.Width, platform.boundingBox.Height);
-                    platform.boundingBoxTop = new Rectangle(platform.boundingBox.X, platform.boundingBox.Y, platform.boundingBox.Width, 5);
+                    platform.boundingBoxTop = new Rectangle(platform.boundingBox.X, platform.boundingBox.Y + 10, platform.boundingBox.Width, 18);
                 }
 
                 foreach (Enemy enemy in enemyList)
@@ -83,7 +83,7 @@ namespace Prototype
                 foreach (Platform platform in platformList)
                 {
                     platform.boundingBox = new Rectangle(platform.boundingBox.X, platform.boundingBox.Y + (marge - Character.bounds.Y), platform.boundingBox.Width, platform.boundingBox.Height);
-                    platform.boundingBoxTop = new Rectangle(platform.boundingBox.X, platform.boundingBox.Y, platform.boundingBox.Width, 5);
+                    platform.boundingBoxTop = new Rectangle(platform.boundingBox.X, platform.boundingBox.Y + 10, platform.boundingBox.Width, 18);
                 }
 
                 foreach (Enemy enemy in enemyList)
@@ -99,7 +99,7 @@ namespace Prototype
                 foreach (Platform platform in platformList)
                 {
                     platform.boundingBox = new Rectangle(platform.boundingBox.X, platform.boundingBox.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)), platform.boundingBox.Width, platform.boundingBox.Height);
-                    platform.boundingBoxTop = new Rectangle(platform.boundingBox.X, platform.boundingBox.Y, platform.boundingBox.Width, 5);
+                    platform.boundingBoxTop = new Rectangle(platform.boundingBox.X, platform.boundingBox.Y + 10, platform.boundingBox.Width, 18);
                 }
 
                 foreach (Enemy enemy in enemyList)
