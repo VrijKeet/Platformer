@@ -484,7 +484,7 @@ namespace Prototype
                         platform = GetIntersectingPlatform(feetBounds); //Kijk in game1.cs of de character in contact is met een platform is de lijst
                         if (platform != null) //Als character niet geen, dus wél een platform raakt.
                         {
-                            bounds.Y = platform.boundingBox.Top - bounds.Height + 1; //Blijf op platform staan
+                            bounds.Y = platform.boundingBoxTop.Y - bounds.Height + 1; //Blijf op platform staan
                             jumpCount = 0;
                             jumpingSpeed = -20;
                             currentState = state.standing;
@@ -584,7 +584,7 @@ namespace Prototype
             List<Platform> platforms = game.currentLevel.GetPlatforms();
             for (int i = 0; i < platforms.Count; i++) //Kijk voor iedere platform
             {
-                if (platforms[i].boundingBox.Intersects(feetBounds)) //Als een platform in contact is met character
+                if (platforms[i].boundingBoxTop.Intersects(feetBounds)) //Als een platform in contact is met character
                     return platforms[i]; //Onthoud die informatie dan
             }
             return null; //Als géén platform in de lijst in contact komt met character, onthoud die informatie

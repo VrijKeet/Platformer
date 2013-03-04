@@ -18,6 +18,7 @@ namespace Prototype
         public static GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         public static Game1 instance;
+        public static ContentManager contentInstance;
 
         MainMenu mainMenu;
         OptionsMenu optionsMenu;
@@ -68,6 +69,7 @@ namespace Prototype
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             instance = this; //om game1 te kunnen benaderen vanuit andere classes.
+            contentInstance = this.Content;
         }
 
 

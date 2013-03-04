@@ -17,11 +17,13 @@ namespace Prototype
     {
         public Game1 game;
         public Texture2D backgroundTexture;
-        public Texture2D grassTexture1;
+        public Texture2D grassTexture;
+        public Texture2D cloudTexture;
         public Texture2D enemyTexture1;
-        public static Texture2D enemyTexture2;
-        public Character character;
+        public Texture2D enemyTexture2;
+        public Texture2D enemyTexture3;
 
+        public Character character;
 
         public List<Enemy> enemies;
 
@@ -35,22 +37,28 @@ namespace Prototype
         {
             this.game = game1;
             backgroundTexture = content.Load<Texture2D>("sky");
-            grassTexture1 = content.Load<Texture2D>("gunTexture");
+            grassTexture = content.Load<Texture2D>("Cloud");
             enemyTexture1 = content.Load<Texture2D>("Slime");
             enemyTexture2 = content.Load<Texture2D>("Dragon");
+            enemyTexture3 = content.Load<Texture2D>("Mario");
             platforms = new List<Platform>();
-            enemies = new List<Enemy>();
+
             character = new Character(game1); //"game1" omdat character een constructor heeft
+
+            enemies = new List<Enemy>();
+            enemies.Clear();
 
             Enemy enemy1 = new Enemy(content);
             Enemy enemy2 = new Enemy(content);
+            Enemy enemy3 = new Enemy(content);
 
             enemies.Add(enemy1);
             enemies.Add(enemy2);
+            enemies.Add(enemy3);
 
-            enemies[0].Initialize(enemyTexture1, new Rectangle(330, 260, 85, 70)); //Texture en (positie, grootte)
+            enemies[0].Initialize(enemyTexture1, new Rectangle(330, 260, 75, 55)); //Texture en (positie, grootte)
             enemies[1].Initialize(enemyTexture2, new Rectangle(-150, 80, 170, 140));
-
+            enemies[2].Initialize(enemyTexture3, new Rectangle(380, 260, 22, 33));
         }
 
         public void Initialize()
@@ -83,16 +91,16 @@ namespace Prototype
             platforms.Add(platform9);
             platforms.Add(platform10);
 
-            platforms[0].Initialize(grassTexture1);
-            platforms[1].Initialize(grassTexture1);
-            platforms[2].Initialize(grassTexture1);
-            platforms[3].Initialize(grassTexture1);
-            platforms[4].Initialize(grassTexture1);
-            platforms[5].Initialize(grassTexture1);
-            platforms[6].Initialize(grassTexture1);
-            platforms[7].Initialize(grassTexture1);
-            platforms[8].Initialize(grassTexture1);
-            platforms[9].Initialize(grassTexture1);
+            platforms[0].Initialize(grassTexture);
+            platforms[1].Initialize(grassTexture);
+            platforms[2].Initialize(grassTexture);
+            platforms[3].Initialize(grassTexture);
+            platforms[4].Initialize(grassTexture);
+            platforms[5].Initialize(grassTexture);
+            platforms[6].Initialize(grassTexture);
+            platforms[7].Initialize(grassTexture);
+            platforms[8].Initialize(grassTexture);
+            platforms[9].Initialize(grassTexture);
 
 
             startPosPlat = new Vector2[10] { new Vector2(233, 380), new Vector2(150, 290), new Vector2(350, 330), 
@@ -108,13 +116,7 @@ namespace Prototype
             platform8.boundingBox = new Rectangle((int)startPosPlat[7].X, (int)startPosPlat[7].Y, 100, 10);
             platform9.boundingBox = new Rectangle((int)startPosPlat[8].X, (int)startPosPlat[8].Y, 100, 10);
             platform10.boundingBox = new Rectangle((int)startPosPlat[9].X, (int)startPosPlat[9].Y, 100, 10);
-
-            
-            
-
-            
-
-
+                        
             Character.bounds = new Rectangle(300, 280, 80, 80);
         }
 
@@ -143,7 +145,7 @@ namespace Prototype
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(backgroundTexture, new Rectangle(0, 0, backgroundTexture.Width, backgroundTexture.Height), Color.White);
-                        
+
             for (int i = 0; i < platforms.Count; i++)
             {
                 platforms[i].Draw(gameTime, spriteBatch); //Teken iedere platform in de lijst
