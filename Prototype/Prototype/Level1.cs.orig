@@ -133,6 +133,7 @@ namespace Prototype
             for (int i = 0; i < coins.Count; i++)
                 coins[i].position = startPosCoins[i];
 =======
+>>>>>>> 461fe43b5dd892e93eb3da30ff3e75610119d8c6
 
             enemies = new List<Enemy>();
             enemies.Clear();
@@ -145,7 +146,6 @@ namespace Prototype
             enemies[0].Initialize(enemyTexture3, new Rectangle(350, 350 - Game1.character1Texture.Height, 22, 33)); //Texture en (positie, grootte)
             enemies[1].Initialize(enemyTexture3, new Rectangle(-150, 80, 93, 69));
             enemies[2].Initialize(enemyTexture3, new Rectangle(380, 260, 93, 69));
->>>>>>> 461fe43b5dd892e93eb3da30ff3e75610119d8c6
         }
 
 
