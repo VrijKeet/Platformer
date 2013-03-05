@@ -28,6 +28,8 @@ namespace Prototype
         public Level3 level3;
         LevelMenu levelMenu;
         //public static Gun gun;
+        public static List<Projectile> projectiles;
+
 
 
         Texture2D standardTexture;
@@ -97,6 +99,7 @@ namespace Prototype
             level2.Initialize();
             level3.Initialize();
 
+            projectiles = new List<Projectile>();
 
             //for (int i = 0; i < platforms.Count; i++)
             //{
@@ -177,11 +180,9 @@ namespace Prototype
                     gameState = GameState.mainmenu;
 
                 currentLevel.Update(gameTime, currentKeyboardState, previousKeyboardState);
-                
-                //UpdateProjectiles();
 
-                //if (gun.picked)
-                //    gun.gunTexture = gunPickedTexture1;
+                if (projectiles != null)
+                    UpdateProjectiles();
 
                 //if (health.lifes <= 0)
                 //{
@@ -226,64 +227,117 @@ namespace Prototype
         }
 
 
-
-        //public static void AddProjectile(Vector2 position)
+        //private void UpdateCollision()
         //{
-        //    Projectile projectile = new Projectile();
-        //    projectile.Initialize(projectileTexture, position);
+        //    // Use the Rectangle's built-in intersect function to
+        //    // determine if two objects are overlapping
+        //    Rectangle rectangle1;
+        //    Rectangle rectangle2;
 
-        //    if (Character.currentFacing == Character.facing.right)
-        //        projectile.projectileMoveSpeed = 3;
-        //    else
-        //        projectile.projectileMoveSpeed = -3;
+        //    // Only create the rectangle once for the player
+        //    rectangle1 = new Rectangle((int)Character.bounds.X, (int)Character.bounds.Y, Character.bounds.Width, Character.bounds.Height);
 
-        //    projectiles.Add(projectile);
-        //}
-
-
-
-
-        //public static void UpdateProjectiles()
-        //{
-        //    // Update the Projectiles
-        //    for (int i = projectiles.Count - 1; i >= 0; i--)
+        //    // Do the collision between the player and the enemies
+        //    for (int i = 0; i < currentlevel.enemies.Count; i++)
         //    {
-        //        projectiles[i].Update();
+        //        rectangle2 = new Rectangle((int)enemies[i].Position.X,
+        //        (int)enemies[i].Position.Y,
+        //        enemies[i].Width,
+        //        enemies[i].Height);
 
-        //        //CheckCollisionProjectile(projectiles[i]);
-
-        //        if (projectiles[i].Active == false)
+        //        // Determine if the two objects collided with each
+        //        // other
+        //        if (rectangle1.Intersects(rectangle2))
         //        {
-        //            projectiles.RemoveAt(i);
+        //            // Subtract the health from the player based on
+        //            // the enemy damage
+        //            player.Health -= enemies[i].Damage;
+
+        //            // Since the enemy collided with the player
+        //            // destroy it
+        //            enemies[i].Health = 0;
+
+        //            // If the player health is less than zero we died
+        //            if (player.Health <= 0)
+        //            {
+        //                player.Active = false;
+        //                alive = false;
+        //            }
+        //        }
+        //    }
+        //    // Projectile vs Enemy Collision
+        //    for (int i = 0; i < projectiles.Count; i++)
+        //    {
+        //        for (int j = 0; j < enemies.Count; j++)
+        //        {
+        //            // Create the rectangles we need to determine if we collided with each other
+        //            rectangle1 = new Rectangle((int)projectiles[i].Position.X -
+        //            projectiles[i].Width / 2, (int)projectiles[i].Position.Y -
+        //            projectiles[i].Height / 2, projectiles[i].Width, projectiles[i].Height);
+
+        //            rectangle2 = new Rectangle((int)enemies[j].Position.X - enemies[j].Width / 2,
+        //            (int)enemies[j].Position.Y - enemies[j].Height / 2,
+        //            enemies[j].Width, enemies[j].Height);
+
+        //            // Determine if the two objects collided with each other
+        //            if (rectangle1.Intersects(rectangle2))
+        //            {
+        //                enemies[j].Health -= projectiles[i].Damage;
+        //                projectiles[i].Active = false;
+        //            }
         //        }
         //    }
         //}
 
-        //public static List<Enemy> enemies;
-
-        //public static void CheckCollisionProjectile(Projectile p)
-        //{
-        //    for(int i = enemies.Count; i>0; i--){
-        //        if (enemies[i].boundingBox.Intersects(p.boundingBox))
-        //        {
-        //            enemies.RemoveAt(i);
-        //            projectiles.Remove(p);
-        //        }
-        //    }
-        //}
+        
 
 
 
+        public static void AddProjectile(Vector2 position)
+        {
+            Projectile projectile = new Projectile();
+            projectile.Initialize(projectileTexture, position);
+
+            if (Character.currentFacing == Character.facing.right)
+                projectile.projectileMoveSpeed = 3;
+            else
+                projectile.projectileMoveSpeed = -3;
+
+            projectiles.Add(projectile);
+        }
 
 
 
-        //public Gun GetIntersectingGun(Rectangle feetBounds)
-        //{
-        //    if (gun.boundingBox.Intersects(feetBounds))
-        //        return gun;
+        public static void UpdateProjectiles()
+        {
+            // Update the Projectiles
+            for (int i = 0; i < projectiles.Count; i++)
+            {
+                projectiles[i].Update();
 
-        //    return null;
-        //}
+
+
+                if (projectiles[i].Active == false)
+                {
+                    projectiles.RemoveAt(i);
+                }
+                CheckCollisionProjectile(projectiles[i]);
+            }
+        }
+
+
+        public static void CheckCollisionProjectile(Projectile projectile)
+        {
+            List<Enemy> enemies = instance.currentLevel.GetEnemies();
+            for (int i = 0; i < enemies.Count; i++) //Kijk voor iedere enemy
+            {
+                if (enemies[i].bounds.Intersects(projectile.bounds))
+                {
+                    enemies.RemoveAt(i);
+                    projectiles.Remove(projectile);
+                }
+            }
+        }
 
 
 
@@ -317,11 +371,12 @@ namespace Prototype
 
                 //gun.Draw(gameTime, spriteBatch);
 
-                //// Draw the Projectiles
-                //for (int i = 0; i < projectiles.Count; i++)
-                //{
-                //    projectiles[i].Draw(spriteBatch);
-                //}
+                // Draw the Projectiles
+                for (int i = 0; i < projectiles.Count; i++)
+                {
+                    projectiles[i].Draw(spriteBatch);
+                }
+
 
             }
             else if (gameState == GameState.dead)

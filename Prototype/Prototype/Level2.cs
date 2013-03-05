@@ -27,6 +27,8 @@ namespace Prototype
         public Vector2[] startPosPlat;
         public List<Projectile> projectiles = new List<Projectile>();
         public static List<Enemy> enemies = new List<Enemy>();
+        public Gun gun;
+
 
 
         public Level2(ContentManager content, Game1 game1)
@@ -127,5 +129,10 @@ namespace Prototype
         {
             return enemies;
         }
+        public Gun GetGun()
+        {
+            return gun;
+        }
+
     }
 }

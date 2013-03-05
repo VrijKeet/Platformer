@@ -24,6 +24,8 @@ namespace Prototype
 
         List<Platform> platformList;
         List<Enemy> enemyList;
+        List<Projectile> projectileList;
+
 
         public override void Initialize()
         {
@@ -38,13 +40,15 @@ namespace Prototype
             Game1 game = (Game1)base.Game;
             platformList = game.currentLevel.GetPlatforms();
             enemyList = game.currentLevel.GetEnemies();
+            projectileList = Game1.projectiles;
+
 
             if (Character.bounds.X < marge) // Naar links
             {
                 foreach (Platform platform in platformList)
                 {
                     platform.boundingBox = new Rectangle(platform.boundingBox.X + (marge - Character.bounds.X), platform.boundingBox.Y, platform.boundingBox.Width, platform.boundingBox.Height);
-                    platform.boundingBoxTop = new Rectangle(platform.boundingBox.X, platform.boundingBox.Y+10, platform.boundingBox.Width, 18);
+                    platform.boundingBoxTop = new Rectangle(platform.boundingBox.X, platform.boundingBox.Y + 10, platform.boundingBox.Width, 18);
 
                 }
 
@@ -53,17 +57,23 @@ namespace Prototype
                     enemy.bounds = new Rectangle(enemy.bounds.X + (marge - Character.bounds.X), enemy.bounds.Y, enemy.bounds.Width, enemy.bounds.Height);
                 }
 
+                foreach (Projectile projectile in projectileList)
+                {
+                    projectile.bounds = new Rectangle((int)projectile.bounds.X + (marge - Character.bounds.X), projectile.bounds.Y, projectile.bounds.Width, projectile.bounds.Height);
+                }
+
+
                 if (game.currentLevel == game.level1)
                     Level1.goalPos = new Vector2(Level1.goalPos.X + (marge - Character.bounds.X), Level1.goalPos.Y);
                 //else if (game.currentLevel == game.level2)
                 //    Level2.goalPos = new Vector2(Level2.goalPos.X + (marge - Character.bounds.X), Level2.goalPos.Y);
 
-                //for (int i = 0; i < Game1.platforms.Count; i++)
-                //{
+                if (game.currentLevel == game.level3)
+                {
+                    Level3.gun.bounds = new Rectangle(Level3.gun.bounds.X + (marge - Character.bounds.X), Level3.gun.bounds.Y, Level3.gun.bounds.Width, Level3.gun.bounds.Height);
+                }
 
-                //}
-                //Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X + (marge - Character.bounds.X), Game1.gun.boundingBox.Y, Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
-                //Game1.projectiles.Position = new Rectangle(Game1.projectiles.Position.X + (marge - Character.bounds.X), Game1.gun.boundingBox.Y, Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
+
                 Character.bounds.X = marge;
             }
 
@@ -79,14 +89,20 @@ namespace Prototype
                 {
                     enemy.bounds = new Rectangle(enemy.bounds.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), enemy.bounds.Y, enemy.bounds.Width, enemy.bounds.Height);
                 }
+                foreach (Projectile projectile in projectileList)
+                {
+                    projectile.bounds = new Rectangle(projectile.bounds.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), projectile.bounds.Y, projectile.bounds.Width, projectile.bounds.Height);
+                }
 
                 if (game.currentLevel == game.level1)
                     Level1.goalPos = new Vector2(Level1.goalPos.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), Level1.goalPos.Y);
                 //else if(game.currentLevel == game.level2)
                 //    Level2.goalPos = new Vector2(Level2.goalPos.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), Level2.goalPos.Y);
 
-                //Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), Game1.gun.boundingBox.Y, Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
-                //Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), Game1.gun.boundingBox.Y, Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height); 
+                if (game.currentLevel == game.level3)
+                {
+                    Level3.gun.bounds = new Rectangle(Level3.gun.bounds.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), Level3.gun.bounds.Y, Level3.gun.bounds.Width, Level3.gun.bounds.Height);
+                }
                 Character.bounds.X = GraphicsDevice.Viewport.Width - marge - Character.bounds.Width;
             }
 
@@ -102,13 +118,19 @@ namespace Prototype
                 {
                     enemy.bounds = new Rectangle(enemy.bounds.X, enemy.bounds.Y + (marge - Character.bounds.Y), enemy.bounds.Width, enemy.bounds.Height);
                 }
+                foreach (Projectile projectile in projectileList)
+                {
+                    projectile.bounds = new Rectangle(projectile.bounds.X, projectile.bounds.Y + (marge - Character.bounds.Y), projectile.bounds.Width, projectile.bounds.Height);
+                }
 
                 if (game.currentLevel == game.level1)
                     Level1.goalPos = new Vector2(Level1.goalPos.X, Level1.goalPos.Y + (marge - Character.bounds.Y));
                 //else if( game.currentLevel == game.level2)
                 //    Level2.goalPos = new Vector2(Level2.goalPos.X, Level2.goalPos.Y + (marge - Character.bounds.Y));
-
-                //Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X, Game1.gun.boundingBox.Y + (marge - Character.bounds.Y), Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
+                if (game.currentLevel == game.level3)
+                {
+                    Level3.gun.bounds = new Rectangle(Level3.gun.bounds.X, Level3.gun.bounds.Y + (marge - Character.bounds.Y), Level3.gun.bounds.Width, Level3.gun.bounds.Height);
+                }
                 Character.bounds.Y = marge;
             }
 
@@ -124,18 +146,22 @@ namespace Prototype
                 {
                     enemy.bounds = new Rectangle(enemy.bounds.X, enemy.bounds.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)), enemy.bounds.Width, enemy.bounds.Height);
                 }
+                foreach (Projectile projectile in projectileList)
+                {
+                    projectile.bounds = new Rectangle(projectile.bounds.X, projectile.bounds.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)), projectile.bounds.Width, projectile.bounds.Height);
+                }
 
                 if (game.currentLevel == game.level1)
                     Level1.goalPos = new Vector2(Level1.goalPos.X, Level1.goalPos.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)));
                 //else if(game.currentLevel == game.level2)
                 //    Level2.goalPos = new Vector2(Level2.goalPos.X, Level2.goalPos.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)));
 
-                //Game1.gun.boundingBox = new Rectangle(Game1.gun.boundingBox.X, Game1.gun.boundingBox.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)), Game1.gun.boundingBox.Width, Game1.gun.boundingBox.Height);
+                if (game.currentLevel == game.level3)
+                {
+                    Level3.gun.bounds = new Rectangle(Level3.gun.bounds.X, Level3.gun.bounds.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)), Level3.gun.bounds.Width, Level3.gun.bounds.Height);
+                }
                 Character.bounds.Y = GraphicsDevice.Viewport.Height - marge - Character.bounds.Height;
             }
-
-            //Enemy.boundingBox = new Rectangle(Game1.platforms[4].boundingBox.X + Enemy.distance, Game1.platforms[4].boundingBox.Y - Enemy.source.Height, 85, 70);
-
             base.Update(gameTime);
         }
     }

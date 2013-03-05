@@ -23,7 +23,8 @@ namespace Prototype
 
         public Texture2D enemyTexture2;
         public Texture2D enemyTexture3;
-        public Character character;
+        public Character character;        
+        public Gun gun;
 
         public List<Platform> platforms;
         public List<Rectangle> startDimPlat;
@@ -42,6 +43,7 @@ namespace Prototype
             cloudTexture = content.Load<Texture2D>("Cloud");
             enemyTexture3 = content.Load<Texture2D>("Mario");
             platforms = new List<Platform>();
+
             character = new Character(game1); //"game1" omdat character een constructor heeft
             
             enemies = new List<Enemy>();
@@ -158,5 +160,10 @@ namespace Prototype
         {
             return enemies;
         }
+        public Gun GetGun()
+        {
+            return gun;
+        }
+
     }
 }

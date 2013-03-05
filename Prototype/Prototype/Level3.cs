@@ -22,8 +22,10 @@ namespace Prototype
         public Texture2D enemyTexture1;
         public Texture2D enemyTexture2;
         public Texture2D enemyTexture3;
+        public Texture2D gunTexture;
 
         public Character character;
+        public static Gun gun;
 
         public static List<Enemy> enemies;
 
@@ -59,6 +61,9 @@ namespace Prototype
             enemies[0].Initialize(enemyTexture1, new Rectangle(330, 260, 75, 55)); //Texture en (positie, grootte)
             enemies[1].Initialize(enemyTexture2, new Rectangle(-150, 80, 170, 140));
             enemies[2].Initialize(enemyTexture3, new Rectangle(380, 260, 22, 33));
+
+            gun = new Gun(content);
+            gun.bounds = new Rectangle(500, 320, 20, 20);
         }
 
         public void Initialize()
@@ -129,6 +134,7 @@ namespace Prototype
             {
                 enemies[i].Update(gameTime);
             }
+            gun.Update(gameTime);
         }
 
 
@@ -140,6 +146,11 @@ namespace Prototype
         {
             return enemies;
         }
+        public Gun GetGun()
+        {
+            return gun;
+        }
+
 
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -158,6 +169,7 @@ namespace Prototype
             }
 
             character.Draw(gameTime, spriteBatch);
+            gun.Draw(gameTime, spriteBatch);
         }
     }
 }

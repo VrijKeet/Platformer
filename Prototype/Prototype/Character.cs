@@ -27,14 +27,16 @@ namespace Prototype
         public static Rectangle bounds;
         const int sourceWidth = 80; //Breedte van charactre in player.png
         const int sourceHeight = 80; //Hoogte van character in player.png
+        public static Rectangle feetBounds = new Rectangle(bounds.X, bounds.Y + 50, 80, 30);
         public static Rectangle boundingBox = new Rectangle(bounds.X + 30, bounds.Y, 20, bounds.Height);
+
+
 
         ////////public static Vector2 startPos = new Vector2(300, 300);
         ////////public static Rectangle characterBounds = new Rectangle((int)startPos.X, (int)startPos.Y, Character.boundsWidth, Character.boundsHeight); //Positie en grootte van character
-        
+
         //public static Rectangle bounds = Level1.characterBounds; //Positie en grootte van character
         public static Rectangle source = new Rectangle(0, 0, sourceWidth, sourceHeight); //Bepaalt welk gedeelte van player.png wordt getoond
-        public static Rectangle feetBounds = new Rectangle(bounds.X, bounds.Y + 50, 80, 30);
 
         public enum facing
         {
@@ -89,7 +91,7 @@ namespace Prototype
             boundingBox = new Rectangle(bounds.X + 30, bounds.Y, 20, bounds.Height);
             KeyInput(currentKeyboardState, previousKeyboardState);
             //if (!onLadder)
-                Movement();
+            Movement();
 
             ////////////if (Character.bounds.X + Character.bounds.Width > ladder.position.X && Character.bounds.X < ladder.position.X + ladder.ladderTexture.Width && Character.bounds.Y < ladder.position.Y + ladder.ladderTexture.Height && Character.bounds.Y + Character.bounds.Height > ladder.position.Y - (ladder.rails - 1) * ladder.ladderTexture.Height)
             ////////////    onLadder = true;
@@ -163,14 +165,15 @@ namespace Prototype
                         {
                             if (currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space))
                             {
-                                //if (currentFacing == facing.left)
-                                //    Game1.AddProjectile(new Vector2(bounds.X, bounds.Y + sourceHeight / 2));
-                                //else
-                                //    Game1.AddProjectile(new Vector2(bounds.X + source.Width, bounds.Y + sourceHeight / 2));
+                                if (currentFacing == facing.left)
+                                    Game1.AddProjectile(new Vector2(bounds.X, bounds.Y + sourceHeight / 2));
+                                else
+                                    Game1.AddProjectile(new Vector2(bounds.X + source.Width, bounds.Y + sourceHeight / 2));
 
-                                //currentState = state.shooting;
+                                currentState = state.shooting;
                                 shootingTimer = 0;
                                 isShooting = true;
+
                             }
                         }
                     }
@@ -289,6 +292,7 @@ namespace Prototype
                 {
                     shootingDurance = 0;
                     isShooting = false;
+                    source = new Rectangle(frameCount / delay * 80, 0, sourceWidth, sourceHeight);
                 }
             }
 
@@ -425,10 +429,10 @@ namespace Prototype
 
                             if (isShooting == false)
 
-                            if (isShooting == false)
-                            {
-                                source = new Rectangle(frameCount / delay * 80, 160, sourceWidth, sourceHeight);
-                            }
+                                if (isShooting == false)
+                                {
+                                    source = new Rectangle(frameCount / delay * 80, 160, sourceWidth, sourceHeight);
+                                }
                         }
                         break;
 
@@ -509,7 +513,7 @@ namespace Prototype
                         break;
 
                     case state.picking:
-                        //Gun gun = game.GetIntersectingGun(feetBounds);
+                        Gun gun = GetIntersectingGun(feetBounds);
 
                         speed = 0;
                         frameCount = 6 * delay;
@@ -519,11 +523,11 @@ namespace Prototype
                             source = new Rectangle(frameCount / delay * 80, 6 * 80, sourceWidth, sourceHeight);
                         }
 
-                        //if (gun != null) //als character bij een gun staat
-                        //{
-                        //    carryingGun = true;
-                        //    gun.picked = true;
-                        //}
+                        if (gun != null) //als character bij een gun staat
+                        {
+                            carryingGun = true;
+                            gun.picked = true;
+                        }
 
                         break;
 
@@ -593,11 +597,30 @@ namespace Prototype
         }
 
 
+
+        public Gun GetIntersectingGun(Rectangle feetBounds)
+        {
+            Gun gun = game.currentLevel.GetGun();
+            if (gun.bounds.Intersects(feetBounds))
+                return gun;
+
+            return null;
+        }
+
+
+
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (playerTexture != null)
+            if (alive == true)
             {
-                if (alive == true)
+                if (carryingGun)
+                {
+                    if (currentFacing == facing.right)
+                        spriteBatch.Draw(playerTexture, bounds, source, Color.Yellow);
+                    else
+                        spriteBatch.Draw(playerTexture, bounds, source, Color.Yellow, 0f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+                }
+                else
                 {
                     if (currentFacing == facing.right)
                         spriteBatch.Draw(playerTexture, bounds, source, Color.White);
@@ -605,6 +628,7 @@ namespace Prototype
                         spriteBatch.Draw(playerTexture, bounds, source, Color.White, 0f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
                 }
             }
+
         }
 
 
