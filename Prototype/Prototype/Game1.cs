@@ -32,15 +32,20 @@ namespace Prototype
 
 
 
-        Texture2D standardTexture;
-        Texture2D gunTexture1;
-        Texture2D gunPickedTexture1;
+        public static Texture2D standardTexture;
+        public static Texture2D gunTexture;
         public static Texture2D projectileTexture;
-
         public static Texture2D character1Texture;
         public static Texture2D character2Texture;
         public static Texture2D character3Texture;
-        Texture2D backgroundTexture;
+        public static Texture2D enemyTexture1;
+        public static Texture2D enemyTexture2;
+        public static Texture2D enemyTexture3;
+        public static Texture2D backgroundTexture1;
+        public static Texture2D backgroundTexture2;
+        public static Texture2D grassTexture;
+        public static Texture2D baseTexture;
+        public static Texture2D cloudTexture;
 
         public enum GameState //Game status
         {
@@ -79,11 +84,14 @@ namespace Prototype
 
         protected override void Initialize() //Contenmanager, zodat deze aan ieder leve gegeven kan worden, zodat deze het weer aan objecten kunnen geven en daar textures in geladen kunnen worden.
         {
+
+
             mainMenu = new MainMenu(this.Content, this);
             optionsMenu = new OptionsMenu(this.Content, this);
             levelMenu = new LevelMenu(this.Content, this);
             deathScreen = new DeathScreen(this.Content, this);
 
+            //Laad textures van character. Dit staat hier en niet in LoadContent, omdat ze al in het menu gebruikt worden, die in Initialize staat.
             character1Texture = this.Content.Load<Texture2D>("character1");
             character2Texture = this.Content.Load<Texture2D>("character2");
             character3Texture = this.Content.Load<Texture2D>("character3");
@@ -101,26 +109,12 @@ namespace Prototype
 
             projectiles = new List<Projectile>();
 
-            //for (int i = 0; i < platforms.Count; i++)
-            //{
-            //    platforms[i].boundingBoxTop = new Rectangle(platforms[i].boundingBox.X, platforms[i].boundingBox.Y,
-            //        platforms[i].boundingBox.Width, 5);
-            //    //Maak voor iedere platform een rechthoek van de top aan.
-            //}
-
-            //gun = new Gun();
-            //gun.boundingBox = new Rectangle(500, 320, 10, 10);
-
-            //projectiles = new List<Projectile>();
 
             //// Game Components opnemen
             Components.Add(new Scrollen(this));
             Components.Add(new health(this));
             //Components.Add(new score(this));
-            //Components.Add(new ladder(this));
             Components.Add(new coins(this));
-
-
 
             base.Initialize();
         }
@@ -132,14 +126,21 @@ namespace Prototype
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Services.AddService(typeof(SpriteBatch), spriteBatch); // Zodat je de spriteBatch kan gebruiken in GameComponents
 
-            backgroundTexture = this.Content.Load<Texture2D>("Background 2");
+            backgroundTexture1 = Content.Load<Texture2D>("Background 2");
+            backgroundTexture2 = Content.Load<Texture2D>("sky");
+
+            enemyTexture1 = Content.Load<Texture2D>("Slime");
+            enemyTexture2 = Content.Load<Texture2D>("Dragon");
+            enemyTexture3 = Content.Load<Texture2D>("spider");
+
+            grassTexture = Content.Load<Texture2D>("grassTexture1");
+            baseTexture = Content.Load<Texture2D>("Ondergrond");
+            cloudTexture = Content.Load<Texture2D>("Cloud");
             standardTexture = Content.Load<Texture2D>("platform");
-            gunTexture1 = Content.Load<Texture2D>("gunTexture");
-            gunPickedTexture1 = Content.Load<Texture2D>("gloves1");
-            //gun.Initialize(gunTexture1);
+
+            gunTexture = Content.Load<Texture2D>("star");
             projectileTexture = Content.Load<Texture2D>("laser");
             holeTexture = Content.Load<Texture2D>("hole");
-
 
             // Muziek
             rickSong = Content.Load<Song>("rickroll");
@@ -289,7 +290,7 @@ namespace Prototype
         //    }
         //}
 
-        
+
 
 
 
@@ -342,14 +343,28 @@ namespace Prototype
 
 
 
+
+
+
+
+        //public void ResetLevel(ContentManager content, Game1 game)
+        //{
+        //    level1 = new Level1(content, game);
+        //}
+
+
+
+
+
+
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.ForestGreen);
 
             spriteBatch.Begin();
 
-            spriteBatch.Draw(backgroundTexture, new Rectangle (0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height), Color.White);
- 
+            spriteBatch.Draw(backgroundTexture1, new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height), Color.White);
+
             //Kijken welke status om te bepalen welk 'scherm' te tonen
             if (gameState == GameState.mainmenu)
             {

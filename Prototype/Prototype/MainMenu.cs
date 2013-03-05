@@ -65,7 +65,7 @@ namespace Prototype
                 case 1: //Resume
                     if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | currentKeyboardState.IsKeyDown(Keys.Enter))
                     {
-                        game.gameState = Prototype.Game1.GameState.running; //Game spelen wanneer Spatie ingedrukt is geweest            
+                        game.gameState = Prototype.Game1.GameState.running; //Game spelen wanneer Spatie ingedrukt is geweest
                     }
                     StartColor = SelectedColor;
                     NewGameColor = UnselectedColor;

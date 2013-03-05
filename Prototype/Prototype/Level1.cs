@@ -20,7 +20,7 @@ namespace Prototype
         public Texture2D grassTexture;
         public Texture2D baseTexture;
         public Texture2D cloudTexture;
-
+        public Texture2D gunTexture;
         public Texture2D enemyTexture2;
         public Texture2D enemyTexture3;
         public Character character;        
@@ -37,36 +37,25 @@ namespace Prototype
         public Level1(ContentManager content, Game1 game1)
         {
             this.game = game1;
-            backgroundTexture = content.Load<Texture2D>("sky");
-            grassTexture = content.Load<Texture2D>("grassTexture1");
-            baseTexture = content.Load<Texture2D>("Ondergrond");
-            cloudTexture = content.Load<Texture2D>("Cloud");
-            enemyTexture3 = content.Load<Texture2D>("Mario");
-            platforms = new List<Platform>();
-
+            
             character = new Character(game1); //"game1" omdat character een constructor heeft
             
-            enemies = new List<Enemy>();
-            enemies.Clear();
-
-            Enemy enemy1 = new Enemy(content);
-            Enemy enemy2 = new Enemy(content);
-            Enemy enemy3 = new Enemy(content);
-
-            enemies.Add(enemy1);
-            enemies.Add(enemy2);
-            enemies.Add(enemy3);
-
-            enemies[0].Initialize(enemyTexture3, new Rectangle(350, 350 - Game1.character1Texture.Height, 22, 33)); //Texture en (positie, grootte)
-            enemies[1].Initialize(enemyTexture3, new Rectangle(-150, 80, 170, 140));
-            enemies[2].Initialize(enemyTexture3, new Rectangle(380, 260, 22, 33));
+            
         }
 
         public void Initialize()
-        {
-            //testPlatform = new Platform();
-            //testPlatform.Initialize(grassTexture1);
-            //testPlatform.boundingBox = new Rectangle(100, 100, 300, 100);
+        {            
+            backgroundTexture = Game1.backgroundTexture2;
+            grassTexture = Game1.grassTexture;
+            baseTexture = Game1.baseTexture;
+            cloudTexture = Game1.cloudTexture;
+            enemyTexture3 = Game1.enemyTexture3;
+            gunTexture = Game1.gunTexture;
+
+            gun = new Gun();
+            gun.Initialize(gunTexture, new Rectangle(200, 200, 100, 100));
+
+            platforms = new List<Platform>();
             platforms.Clear();
 
             // Lijst met posities van platformen
@@ -113,6 +102,19 @@ namespace Prototype
                 platforms[i].boundingBox = startDimPlat[i];
 
             goalPos = new Vector2(5851, 453);
+
+
+            enemies = new List<Enemy>();
+            enemies.Clear();
+            Enemy enemy1 = new Enemy();
+            Enemy enemy2 = new Enemy();
+            Enemy enemy3 = new Enemy();
+            enemies.Add(enemy1);
+            enemies.Add(enemy2);
+            enemies.Add(enemy3);
+            enemies[0].Initialize(enemyTexture3, new Rectangle(350, 350 - Game1.character1Texture.Height, 22, 33)); //Texture en (positie, grootte)
+            enemies[1].Initialize(enemyTexture3, new Rectangle(-150, 80, 93, 69));
+            enemies[2].Initialize(enemyTexture3, new Rectangle(380, 260, 93, 69));
         }
 
 
@@ -134,7 +136,7 @@ namespace Prototype
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(backgroundTexture, new Rectangle(0, 0, backgroundTexture.Width, backgroundTexture.Height), Color.White);
+            spriteBatch.Draw(backgroundTexture, new Rectangle(0, 0, Game1.backgroundTexture2.Width, Game1.backgroundTexture2.Height), Color.White);
 
             for (int i = 0; i < platforms.Count; i++)
             {

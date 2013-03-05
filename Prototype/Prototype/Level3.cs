@@ -38,22 +38,26 @@ namespace Prototype
         public Level3(ContentManager content, Game1 game1)
         {
             this.game = game1;
-            backgroundTexture = content.Load<Texture2D>("sky");
-            grassTexture = content.Load<Texture2D>("Cloud");
-            enemyTexture1 = content.Load<Texture2D>("Slime");
-            enemyTexture2 = content.Load<Texture2D>("Dragon");
-            enemyTexture3 = content.Load<Texture2D>("Mario");
-            platforms = new List<Platform>();
+            character = new Character(game1); //"game1" omdat character een constructor heeft            
+        }
 
-            character = new Character(game1); //"game1" omdat character een constructor heeft
+        public void Initialize()
+        {
+            backgroundTexture = Game1.backgroundTexture2;
+            grassTexture = Game1.grassTexture;
+            enemyTexture1 = Game1.enemyTexture1;
+            enemyTexture2 = Game1.enemyTexture2;
+            enemyTexture3 = Game1.enemyTexture3;
+            gunTexture = Game1.gunTexture;
+
+            gun = new Gun();
+            gun.Initialize(gunTexture, new Rectangle(500, 320, 20, 20));
 
             enemies = new List<Enemy>();
             enemies.Clear();
-
-            Enemy enemy1 = new Enemy(content);
-            Enemy enemy2 = new Enemy(content);
-            Enemy enemy3 = new Enemy(content);
-
+            Enemy enemy1 = new Enemy();
+            Enemy enemy2 = new Enemy();
+            Enemy enemy3 = new Enemy();
             enemies.Add(enemy1);
             enemies.Add(enemy2);
             enemies.Add(enemy3);
@@ -62,19 +66,10 @@ namespace Prototype
             enemies[1].Initialize(enemyTexture2, new Rectangle(-150, 80, 170, 140));
             enemies[2].Initialize(enemyTexture3, new Rectangle(380, 260, 22, 33));
 
-            gun = new Gun(content);
-            gun.bounds = new Rectangle(500, 320, 20, 20);
-        }
+            
 
-        public void Initialize()
-        {
-            //testPlatform = new Platform();
-            //testPlatform.Initialize(grassTexture1);
-            //testPlatform.boundingBox = new Rectangle(100, 100, 300, 100);
-
-
+            platforms = new List<Platform>();
             platforms.Clear();
-
             Platform platform = new Platform();
             Platform platform2 = new Platform();
             Platform platform3 = new Platform();

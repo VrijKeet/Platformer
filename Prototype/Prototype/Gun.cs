@@ -16,16 +16,21 @@ namespace Prototype
     public class Gun
     {
         public Texture2D texture;
+        public Texture2D gunTexture;
         public Rectangle bounds;
         public bool picked = false;
 
         Rectangle source; //Bepaalt welk gedeelte van gun.png wordt getoond        
 
-
-
-        public Gun(ContentManager content)
+        public Gun()
         {
-            texture = content.Load<Texture2D>("star");
+            gunTexture = Game1.gunTexture;
+        }
+
+        public void Initialize(Texture2D Texture, Rectangle bounds)
+        {
+            texture = Texture;
+            this.bounds = bounds;
         }
 
         public void Update(GameTime gameTime)
@@ -34,14 +39,17 @@ namespace Prototype
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (!picked)
-                spriteBatch.Draw(texture, bounds, Color.White);
-            else
+            if (texture != null)
             {
-                if (Character.currentFacing == Character.facing.right)
-                    spriteBatch.Draw(texture, Character.bounds, source, Color.White);
+                if (!picked)
+                    spriteBatch.Draw(texture, bounds, Color.White);
                 else
-                    spriteBatch.Draw(texture, Character.bounds, source, Color.White, 0f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+                {
+                    if (Character.currentFacing == Character.facing.right)
+                        spriteBatch.Draw(texture, Character.bounds, source, Color.White);
+                    else
+                        spriteBatch.Draw(texture, Character.bounds, source, Color.White, 0f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+                }
             }
         }
     }

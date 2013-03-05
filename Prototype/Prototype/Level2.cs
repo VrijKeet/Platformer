@@ -17,11 +17,11 @@ namespace Prototype
     {
         public Game1 game;
         public Texture2D backgroundTexture;
-        public Texture2D grassTexture1;
+        public Texture2D grassTexture;
         public Texture2D standard;
-        
+
         public Texture2D enemyTexture2;
-        
+
         public Character character;
         public List<Platform> platforms;
         public Vector2[] startPosPlat;
@@ -34,24 +34,18 @@ namespace Prototype
         public Level2(ContentManager content, Game1 game1)
         {
             this.game = game1;
-            this.backgroundTexture = content.Load<Texture2D>("sky");
-            this.grassTexture1 = content.Load<Texture2D>("grassTexture1");
-            this.standard = content.Load<Texture2D>("platform");
-            platforms = new List<Platform>();
             character = new Character(game1); //"game1" omdat character een constructor heeft
         }
 
         public void Initialize()
         {
-            //testPlatform = new Platform();
-            //testPlatform.Initialize(grassTexture1);
-            //testPlatform.boundingBox = new Rectangle(100, 100, 300, 100);
+            backgroundTexture = Game1.backgroundTexture2;
+            grassTexture = Game1.grassTexture;
 
-            // Maak hard-coded platformen aan:
+            gun = new Gun();
 
 
-            platforms.Clear();
-
+            platforms = new List<Platform>();
             Platform platform = new Platform();
             Platform platform2 = new Platform();
             Platform platform3 = new Platform();
@@ -73,16 +67,16 @@ namespace Prototype
             platforms.Add(platform9);
             platforms.Add(platform10);
 
-            platforms[0].Initialize(standard);
-            platforms[1].Initialize(grassTexture1);
-            platforms[2].Initialize(grassTexture1);
-            platforms[3].Initialize(grassTexture1);
-            platforms[4].Initialize(grassTexture1);
-            platforms[5].Initialize(grassTexture1);
-            platforms[6].Initialize(grassTexture1);
-            platforms[7].Initialize(grassTexture1);
-            platforms[8].Initialize(grassTexture1);
-            platforms[9].Initialize(grassTexture1);
+            platforms[0].Initialize(grassTexture);
+            platforms[1].Initialize(grassTexture);
+            platforms[2].Initialize(grassTexture);
+            platforms[3].Initialize(grassTexture);
+            platforms[4].Initialize(grassTexture);
+            platforms[5].Initialize(grassTexture);
+            platforms[6].Initialize(grassTexture);
+            platforms[7].Initialize(grassTexture);
+            platforms[8].Initialize(grassTexture);
+            platforms[9].Initialize(grassTexture);
 
 
             startPosPlat = new Vector2[10] { new Vector2(233, 380), new Vector2(150, 290), new Vector2(350, 330), 
@@ -110,7 +104,7 @@ namespace Prototype
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            
+
             spriteBatch.Draw(backgroundTexture, new Rectangle(0, 0, backgroundTexture.Width, backgroundTexture.Height), Color.White);
 
             for (int i = 0; i < platforms.Count; i++)
@@ -118,7 +112,7 @@ namespace Prototype
                 platforms[i].Draw(gameTime, spriteBatch); //Teken iedere platform in de lijst
             }
             character.Draw(gameTime, spriteBatch);
-            
+
         }
 
         public List<Platform> GetPlatforms()

@@ -39,13 +39,13 @@ namespace Prototype
         facing currentFacing = facing.right;
 
         int frameCount = 0;
-        int delay = 4;
+        int delay = 10;
 
-        public Enemy(ContentManager content)
+        public Enemy()
         {
-            enemyTexture1 = content.Load<Texture2D>("Slime");
-            enemyTexture2 = content.Load<Texture2D>("Dragon");
-            enemyTexture3 = content.Load<Texture2D>("Mario");
+            enemyTexture1 = Game1.enemyTexture1;
+            enemyTexture2 = Game1.enemyTexture2;
+            enemyTexture3 = Game1.enemyTexture3;
         }
 
         public void Initialize(Texture2D Texture, Rectangle Bounds)
@@ -111,22 +111,22 @@ namespace Prototype
 
                         source = new Rectangle(frameCount / delay * 96, 2*96, 96, 96);
                     }
-                    else if (texture == enemyTexture3) //mario
+                    else if (texture == enemyTexture3) //Spider
                     {
-                        if (frameCount / delay >= 3)
+                        if (frameCount / delay >= 4)
                             frameCount = 0;
 
-                        source = new Rectangle(frameCount / delay * 22, 0, 22, 33);
+                        source = new Rectangle(frameCount / delay * 93, 3, 89, 69);
                     }
                 }
                 frameCount++;
             }
 
-            if (alive && Character.bounds.X < bounds.X + bounds.Width && Character.feetBounds.Y + Character.feetBounds.Height > bounds.Y && Character.feetBounds.X + Character.feetBounds.Width > bounds.X && Character.feetBounds.Y < (bounds.Y + bounds.Height) - 60)
-            {
-                score.currentScore += 1;
-                alive = false;
-            }
+            //if (alive && Character.bounds.X < bounds.X + bounds.Width && Character.feetBounds.Y + Character.feetBounds.Height > bounds.Y && Character.feetBounds.X + Character.feetBounds.Width > bounds.X && Character.feetBounds.Y < (bounds.Y + bounds.Height) - 60)
+            //{
+            //    score.currentScore += 1;
+            //    alive = false;
+            //}
         }
 
 
@@ -161,7 +161,7 @@ namespace Prototype
                     else
                         spriteBatch.Draw(texture, bounds, source, Color.White, 0f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
                 }
-                else if (texture == enemyTexture3) //Mario
+                else if (texture == enemyTexture3) //Spider
                 {
                     if (currentFacing == facing.right)
                         spriteBatch.Draw(texture, bounds, source, Color.White);
