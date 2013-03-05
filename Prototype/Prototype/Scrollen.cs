@@ -54,7 +54,11 @@ namespace Prototype
                 }
 
                 if (game.currentLevel == game.level1)
+                {
                     Level1.goalPos = new Vector2(Level1.goalPos.X + (marge - Character.bounds.X), Level1.goalPos.Y);
+                    for (int i = 0; i < Level1.coins.Count; i++)
+                        Level1.coins[i].position = new Vector2(Level1.coins[i].position.X + (marge - Character.bounds.X), Level1.coins[i].position.Y);
+                }
                 //else if (game.currentLevel == game.level2)
                 //    Level2.goalPos = new Vector2(Level2.goalPos.X + (marge - Character.bounds.X), Level2.goalPos.Y);
 
@@ -81,7 +85,11 @@ namespace Prototype
                 }
 
                 if (game.currentLevel == game.level1)
+                {
                     Level1.goalPos = new Vector2(Level1.goalPos.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), Level1.goalPos.Y);
+                    for (int i = 0; i < Level1.coins.Count; i++)
+                        Level1.coins[i].position = new Vector2(Level1.coins[i].position.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), Level1.coins[i].position.Y);
+                }
                 //else if(game.currentLevel == game.level2)
                 //    Level2.goalPos = new Vector2(Level2.goalPos.X - ((Character.bounds.X + Character.bounds.Width) - (GraphicsDevice.Viewport.Width - marge)), Level2.goalPos.Y);
 
@@ -104,7 +112,11 @@ namespace Prototype
                 }
 
                 if (game.currentLevel == game.level1)
+                {
                     Level1.goalPos = new Vector2(Level1.goalPos.X, Level1.goalPos.Y + (marge - Character.bounds.Y));
+                    for (int i = 0; i < Level1.coins.Count; i++)
+                        Level1.coins[i].position = new Vector2(Level1.coins[i].position.X, Level1.coins[i].position.Y + (marge - Character.bounds.Y));
+                }
                 //else if( game.currentLevel == game.level2)
                 //    Level2.goalPos = new Vector2(Level2.goalPos.X, Level2.goalPos.Y + (marge - Character.bounds.Y));
 
@@ -126,7 +138,11 @@ namespace Prototype
                 }
 
                 if (game.currentLevel == game.level1)
+                {
                     Level1.goalPos = new Vector2(Level1.goalPos.X, Level1.goalPos.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)));
+                    for (int i = 0; i < Level1.coins.Count; i++)
+                        Level1.coins[i].position = new Vector2(Level1.coins[i].position.X, Level1.coins[i].position.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)));
+                }
                 //else if(game.currentLevel == game.level2)
                 //    Level2.goalPos = new Vector2(Level2.goalPos.X, Level2.goalPos.Y - ((Character.bounds.Y + Character.bounds.Height) - (GraphicsDevice.Viewport.Height - marge)));
 

@@ -17,14 +17,17 @@ namespace Prototype
     /// </summary>
     public class coins : Microsoft.Xna.Framework.DrawableGameComponent
     {
-        Texture2D coinTexture;
-        public static Vector2 position;
-        bool taken;
+        Game1 game;
 
-        public coins(Game game)
-            : base(game)
+        Texture2D coinTexture;
+        public Vector2 position;
+        public List<bool> taken;
+
+        public coins(Game1 game1)
+            : base(game1)
         {
             // TODO: Construct any child components here
+            this.game = game1;
         }
 
         /// <summary>
@@ -34,8 +37,13 @@ namespace Prototype
         public override void Initialize()
         {
             // TODO: Add your initialization code here
-            taken = false;
-            position = new Vector2(0, 0);
+            taken = new List<bool>();
+
+            for (int i = 0; i < Level1.coins.Count; i++)
+            {
+                taken.Add(new bool());
+                taken[i] = false;
+            }
 
             base.Initialize();
         }
@@ -54,10 +62,13 @@ namespace Prototype
         public override void Update(GameTime gameTime)
         {
             // TODO: Add your update code here
-            if (!taken && Character.bounds.Y < position.Y + coinTexture.Height && Character.bounds.X < position.X + coinTexture.Width && Character.bounds.Y + Character.bounds.Height > position.Y && Character.bounds.X + Character.bounds.Width > position.X)
+            for (int i = 0; i < Level1.coins.Count; i++)
             {
-                score.currentScore += 1;
-                taken = true;
+                if (!taken[i] && Character.boundingBox.Y < Level1.coins[i].position.Y + coinTexture.Height && Character.boundingBox.X < Level1.coins[i].position.X + coinTexture.Width && Character.boundingBox.Y + Character.boundingBox.Height > Level1.coins[i].position.Y && Character.boundingBox.X + Character.boundingBox.Width > Level1.coins[i].position.X)
+                {
+                    score.currentScore += 1;
+                    taken[i] = true;
+                }
             }
 
             base.Update(gameTime);
@@ -68,10 +79,15 @@ namespace Prototype
             SpriteBatch spriteBatch = Game.Services.GetService(typeof(SpriteBatch)) as SpriteBatch;
 
             spriteBatch.Begin();
-            if (!taken)
+
+            for (int i = 0; i < Level1.coins.Count; i++)
             {
-                spriteBatch.Draw(coinTexture, position, Color.White);
+                if (game.gameState == Game1.GameState.running && !taken[i])
+                {
+                    spriteBatch.Draw(coinTexture, Level1.coins[i].position, Color.White);
+                }
             }
+
             spriteBatch.End();
 
             base.Draw(gameTime);

@@ -29,6 +29,8 @@ namespace Prototype
         public List<Rectangle> startDimPlat;
         public List<Projectile> projectiles = new List<Projectile>();
         public static List<Enemy> enemies;
+        public static List<coins> coins;
+        public static List<Vector2> startPosCoins;
 
         public static Vector2 goalPos;
 
@@ -111,6 +113,33 @@ namespace Prototype
                 platforms[i].boundingBox = startDimPlat[i];
 
             goalPos = new Vector2(5851, 453);
+
+            // Muntjes
+            startPosCoins = new List<Vector2>();
+
+            startPosCoins.Add(new Vector2(763, 112));
+            startPosCoins.Add(new Vector2(813, 112));
+            startPosCoins.Add(new Vector2(863, 112));
+            startPosCoins.Add(new Vector2(913, 112));
+            startPosCoins.Add(new Vector2(963, 112));
+            startPosCoins.Add(new Vector2(1013, 112));
+            startPosCoins.Add(new Vector2(1063, 112));
+            startPosCoins.Add(new Vector2(1113, 112));
+            startPosCoins.Add(new Vector2(5038, 512));
+            startPosCoins.Add(new Vector2(5238, 512));
+            startPosCoins.Add(new Vector2(5438, 512));
+            startPosCoins.Add(new Vector2(5638, 512));
+
+            coins = new List<coins>();
+
+            for (int i = 0; i < startPosCoins.Count; i++)
+            {
+                coins coin = new coins(game);
+                coins.Add(coin);
+            }
+
+            for (int i = 0; i < coins.Count; i++)
+                coins[i].position = startPosCoins[i];
         }
 
 
