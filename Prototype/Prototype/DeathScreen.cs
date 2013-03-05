@@ -20,10 +20,10 @@ namespace Prototype
         SpriteFont deathFont;
 
         Color SelectedColor = new Color(255, 255, 255, 255);
-        Color UnselectedColor = new Color(0, 0, 0, 255);
-        Color RestartColor = new Color(255, 255, 255, 255);
-        Color MainMenuColor = new Color(100, 100, 100, 200);
-        Color ExitColor = new Color(100, 100, 100, 200);
+        Color UnselectedColor = new Color(255, 0 , 0);
+        Color RestartColor;
+        Color MainMenuColor;
+        Color ExitColor;
 
         int selectCount = 1;
         public DeathScreen(ContentManager content, Game1 game1)
@@ -37,10 +37,7 @@ namespace Prototype
         {
             HandleOptions(currentKeyboardState, previousKeyboardState);
         }
-
-
-
-
+        
 
 
         private void HandleOptions(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
@@ -65,10 +62,10 @@ namespace Prototype
                 case 1: //Restart
                     if ((currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space)) | currentKeyboardState.IsKeyDown(Keys.Enter))
                     {
-                        //health.lifes = 3;
-                        game.deathTimer = 0;
-                        //Character.currentState = Character.state.standing;
-                        //game.gameState = Prototype.Game1.GameState.running; //Game spelen wanneer Spatie ingedrukt is geweest                         
+                        health.lifes = health.startLifes;
+                        Character.deathTimer = 0;
+                        Character.currentState = Character.state.standing;
+                        game.gameState = Prototype.Game1.GameState.running; //Game spelen wanneer Spatie ingedrukt is geweest                         
                         //Character.respawn();
                     }
                     RestartColor = SelectedColor;
@@ -109,13 +106,10 @@ namespace Prototype
             Vector2 length2 = deathFont.MeasureString("Restart") / 2;
             Vector2 length3 = deathFont.MeasureString("Go to the main menu") / 2;
             Vector2 length4 = deathFont.MeasureString("Exit") / 2;
-            spriteBatch.DrawString(menuFont, "YOU DIED", new Vector2(Game1.graphics.GraphicsDevice.Viewport.Width / 2 - length1.X, 50), new Color(0, 0, 100));
+            spriteBatch.DrawString(menuFont, "YOU DIED", new Vector2(Game1.graphics.GraphicsDevice.Viewport.Width / 2 - length1.X, 50), new Color(255, 0, 0));
             spriteBatch.DrawString(deathFont, "Restart", new Vector2(Game1.graphics.GraphicsDevice.Viewport.Width / 2 - length2.X, 190), RestartColor);
             spriteBatch.DrawString(deathFont, "Go to the main menu", new Vector2(Game1.graphics.GraphicsDevice.Viewport.Width / 2 - length3.X, 240), MainMenuColor);
             spriteBatch.DrawString(deathFont, "Exit", new Vector2(Game1.graphics.GraphicsDevice.Viewport.Width / 2 - length4.X, 330), ExitColor);
         }
-
-
-
     }
 }

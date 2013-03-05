@@ -58,8 +58,6 @@ namespace Prototype
                     selectCount = 4;
             }   
 
-
-
             switch (selectCount)
             {
                 case 1: //Resume

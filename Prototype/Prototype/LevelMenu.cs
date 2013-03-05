@@ -18,10 +18,6 @@ namespace Prototype
         Game1 game;
         SpriteFont menuFont;
 
-        //List<string> MenuLevel2 = new List<string>();        
-        //List<Vector2> MenuLevel2Positions = new List<Vector2>();
-
-
         int selectCount = 1;
 
         Color SelectedColor = new Color(255, 255, 255, 255); 

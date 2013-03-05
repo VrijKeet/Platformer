@@ -22,6 +22,7 @@ namespace Prototype
         float shootingTimer;
         float hurtTimer = 100;
         float hurtDurance;
+        public static double deathTimer = 0;
         int instantBounceBack = 50;
         int bounceBackSpeed = 5;
 
@@ -96,6 +97,12 @@ namespace Prototype
             }
 
 
+            if (health.lifes <= 0)
+            {
+                deathTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                Character.currentState = Character.state.dead;
+            }
+
             if (isShooting == true)
             {
                 shoot();
@@ -107,6 +114,9 @@ namespace Prototype
                 hurt();
             }
             hurtTimer++;
+
+
+
         }
 
         private void CollisionEnemies()
@@ -197,7 +207,7 @@ namespace Prototype
                                 currentState = state.hurtLeft;
                                 currentFacing = facing.right;
                                 bounds.X -= instantBounceBack;
-                                speed = bounceBackSpeed;
+                                  speed = bounceBackSpeed;
                             }
                         }
                     }
@@ -620,46 +630,24 @@ namespace Prototype
                         }
 
                         break;
-
-                    case state.hurtLeft:
-                        if (frameCount / delay >= 5)
-                            frameCount = 5 * delay;
-
-
-                        bounds.X += (int)speed;
-
-                        //bounds.Y += jumpingSpeed;
-                        jumpCount++;
-
-                        speed++; //Laat hem steeds minder snel naar links gaan.
-
-                        source = new Rectangle(frameCount / delay * 80, 6 * 80, sourceWidth, sourceHeight);
-
-                        if (hurtTimer >= 20)
-                            currentState = state.standing;
-                        break;
-
-                    case state.hurtRight:
-                        if (frameCount / delay >= 5)
-                            frameCount = 5 * delay;
-
-                        bounds.X += (int)speed;
-
-                        //bounds.Y += jumpingSpeed;
-                        jumpCount++;
-
-                        speed--; //Laat hem steeds minder snel naar rechts gaan.
-
-                        source = new Rectangle(frameCount / delay * 80, 6 * 80, sourceWidth, sourceHeight);
-
-                        if (hurtTimer >= 20)
-                            currentState = state.standing;
-                        break;
-
+                                            
                     case state.dead:
-                        //platform = game.GetIntersectingPlatform(feetBounds);
+                        platform = GetIntersectingPlatform(feetBounds);
+                        
+                        bounds.Y += jumpingSpeed;
+                        bounds.X += (int)speed;
 
-                        speed = 0;
+                        jumpingSpeed += 4;
+
+                        if (jumpingSpeed >= 18)
+                            jumpingSpeed = 18;
+
+                        if (platform != null) //Als character niet geen, dus wél een platform raakt.
+                        {
+                            bounds.Y = platform.boundingBoxTop.Y - bounds.Height + 1; //Blijf op platform staan
+                            jumpCount = 0;
+                            jumpingSpeed = -20;
+                        }
 
                         if (frameCount / delay >= 5)
                             frameCount = 5 * delay;

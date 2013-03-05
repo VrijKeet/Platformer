@@ -60,7 +60,6 @@ namespace Prototype
         public ILevel currentLevel;
 
 
-        public double deathTimer = 0;
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
 
@@ -185,13 +184,9 @@ namespace Prototype
                 if (projectiles != null)
                     UpdateProjectiles();
 
-                //if (health.lifes <= 0)
-                //{
-                //    deathTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
-                //    //Character.currentState = Character.state.dead;
-                //}
 
-                if (deathTimer > 3000)
+
+                if (Character.deathTimer > 2500)
                     gameState = GameState.dead;
             }
             else if (gameState == GameState.dead)
@@ -363,41 +358,47 @@ namespace Prototype
 
             spriteBatch.Begin();
 
-            spriteBatch.Draw(backgroundTexture1, new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height), Color.White);
+
 
             //Kijken welke status om te bepalen welk 'scherm' te tonen
             if (gameState == GameState.mainmenu)
             {
-
+                spriteBatch.Draw(backgroundTexture1, new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height), Color.White);
                 mainMenu.Draw(gameTime, spriteBatch);
-
             }
             else if (gameState == GameState.options)
             {
+                spriteBatch.Draw(backgroundTexture1, new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height), Color.White);
                 optionsMenu.Draw(gameTime, spriteBatch);
             }
             else if (gameState == GameState.levelMenu)
             {
+                spriteBatch.Draw(backgroundTexture1, new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height), Color.White);
                 levelMenu.Draw(gameTime, spriteBatch);
             }
-            else if (gameState == GameState.running)
+            else if (gameState == GameState.running | gameState == GameState.dead)
             {
                 currentLevel.Draw(gameTime, spriteBatch);
 
-                //gun.Draw(gameTime, spriteBatch);
-
-                // Draw the Projectiles
+                //Teken de projectielen
                 for (int i = 0; i < projectiles.Count; i++)
                 {
                     projectiles[i].Draw(spriteBatch);
                 }
 
+                if (gameState == GameState.dead)
+                {
+                    //zorgt voor een donkerdere achtergrond. Deze code is overgenomen uit een ander spel.
+                    Color transparant = new Color(0, 0, 0, 100);
+                    Texture2D whiteTexture = new Texture2D(GraphicsDevice, 1, 1);
+                    whiteTexture.SetData<Color>(new Color[] { transparant });
 
+                    spriteBatch.Draw(whiteTexture, new Rectangle(0, 0, 800, 800), Color.White);
+
+                    deathScreen.Draw(gameTime, spriteBatch);
+                }
             }
-            else if (gameState == GameState.dead)
-            {
-                deathScreen.Draw(gameTime, spriteBatch);
-            }
+
 
             spriteBatch.End();
 
