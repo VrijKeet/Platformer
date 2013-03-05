@@ -28,17 +28,24 @@ namespace Prototype
         public Level3 level3;
         LevelMenu levelMenu;
         //public static Gun gun;
+        public static List<Projectile> projectiles;
 
 
-        Texture2D standardTexture;
-        Texture2D gunTexture1;
-        Texture2D gunPickedTexture1;
+
+        public static Texture2D standardTexture;
+        public static Texture2D gunTexture;
         public static Texture2D projectileTexture;
-
         public static Texture2D character1Texture;
         public static Texture2D character2Texture;
         public static Texture2D character3Texture;
-        Texture2D backgroundTexture;
+        public static Texture2D enemyTexture1;
+        public static Texture2D enemyTexture2;
+        public static Texture2D enemyTexture3;
+        public static Texture2D backgroundTexture1;
+        public static Texture2D backgroundTexture2;
+        public static Texture2D grassTexture;
+        public static Texture2D baseTexture;
+        public static Texture2D cloudTexture;
 
         public enum GameState //Game status
         {
@@ -53,7 +60,6 @@ namespace Prototype
         public ILevel currentLevel;
 
 
-        public double deathTimer = 0;
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
 
@@ -77,11 +83,14 @@ namespace Prototype
 
         protected override void Initialize() //Contenmanager, zodat deze aan ieder leve gegeven kan worden, zodat deze het weer aan objecten kunnen geven en daar textures in geladen kunnen worden.
         {
+
+
             mainMenu = new MainMenu(this.Content, this);
             optionsMenu = new OptionsMenu(this.Content, this);
             levelMenu = new LevelMenu(this.Content, this);
             deathScreen = new DeathScreen(this.Content, this);
 
+            //Laad textures van character. Dit staat hier en niet in LoadContent, omdat ze al in het menu gebruikt worden, die in Initialize staat.
             character1Texture = this.Content.Load<Texture2D>("character1");
             character2Texture = this.Content.Load<Texture2D>("character2");
             character3Texture = this.Content.Load<Texture2D>("character3");
@@ -97,27 +106,14 @@ namespace Prototype
             level2.Initialize();
             level3.Initialize();
 
+            projectiles = new List<Projectile>();
 
-            //for (int i = 0; i < platforms.Count; i++)
-            //{
-            //    platforms[i].boundingBoxTop = new Rectangle(platforms[i].boundingBox.X, platforms[i].boundingBox.Y,
-            //        platforms[i].boundingBox.Width, 5);
-            //    //Maak voor iedere platform een rechthoek van de top aan.
-            //}
-
-            //gun = new Gun();
-            //gun.boundingBox = new Rectangle(500, 320, 10, 10);
-
-            //projectiles = new List<Projectile>();
 
             //// Game Components opnemen
             Components.Add(new Scrollen(this));
             Components.Add(new health(this));
             //Components.Add(new score(this));
-            //Components.Add(new ladder(this));
             Components.Add(new coins(this));
-
-
 
             base.Initialize();
         }
@@ -129,14 +125,21 @@ namespace Prototype
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Services.AddService(typeof(SpriteBatch), spriteBatch); // Zodat je de spriteBatch kan gebruiken in GameComponents
 
-            backgroundTexture = this.Content.Load<Texture2D>("Background 2");
+            backgroundTexture1 = Content.Load<Texture2D>("Background 2");
+            backgroundTexture2 = Content.Load<Texture2D>("sky");
+
+            enemyTexture1 = Content.Load<Texture2D>("Slime");
+            enemyTexture2 = Content.Load<Texture2D>("Dragon");
+            enemyTexture3 = Content.Load<Texture2D>("spider");
+
+            grassTexture = Content.Load<Texture2D>("grassTexture1");
+            baseTexture = Content.Load<Texture2D>("Ondergrond");
+            cloudTexture = Content.Load<Texture2D>("Cloud");
             standardTexture = Content.Load<Texture2D>("platform");
-            gunTexture1 = Content.Load<Texture2D>("gunTexture");
-            gunPickedTexture1 = Content.Load<Texture2D>("gloves1");
-            //gun.Initialize(gunTexture1);
+
+            gunTexture = Content.Load<Texture2D>("star");
             projectileTexture = Content.Load<Texture2D>("laser");
             holeTexture = Content.Load<Texture2D>("hole");
-
 
             // Muziek
             rickSong = Content.Load<Song>("rickroll");
@@ -177,19 +180,13 @@ namespace Prototype
                     gameState = GameState.mainmenu;
 
                 currentLevel.Update(gameTime, currentKeyboardState, previousKeyboardState);
-                
-                //UpdateProjectiles();
 
-                //if (gun.picked)
-                //    gun.gunTexture = gunPickedTexture1;
+                if (projectiles != null)
+                    UpdateProjectiles();
 
-                //if (health.lifes <= 0)
-                //{
-                //    deathTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
-                //    //Character.currentState = Character.state.dead;
-                //}
 
-                if (deathTimer > 3000)
+
+                if (Character.deathTimer > 2500)
                     gameState = GameState.dead;
             }
             else if (gameState == GameState.dead)
@@ -226,64 +223,131 @@ namespace Prototype
         }
 
 
-
-        //public static void AddProjectile(Vector2 position)
+        //private void UpdateCollision()
         //{
-        //    Projectile projectile = new Projectile();
-        //    projectile.Initialize(projectileTexture, position);
+        //    // Use the Rectangle's built-in intersect function to
+        //    // determine if two objects are overlapping
+        //    Rectangle rectangle1;
+        //    Rectangle rectangle2;
 
-        //    if (Character.currentFacing == Character.facing.right)
-        //        projectile.projectileMoveSpeed = 3;
-        //    else
-        //        projectile.projectileMoveSpeed = -3;
+        //    // Only create the rectangle once for the player
+        //    rectangle1 = new Rectangle((int)Character.bounds.X, (int)Character.bounds.Y, Character.bounds.Width, Character.bounds.Height);
 
-        //    projectiles.Add(projectile);
-        //}
-
-
-
-
-        //public static void UpdateProjectiles()
-        //{
-        //    // Update the Projectiles
-        //    for (int i = projectiles.Count - 1; i >= 0; i--)
+        //    // Do the collision between the player and the enemies
+        //    for (int i = 0; i < currentlevel.enemies.Count; i++)
         //    {
-        //        projectiles[i].Update();
+        //        rectangle2 = new Rectangle((int)enemies[i].Position.X,
+        //        (int)enemies[i].Position.Y,
+        //        enemies[i].Width,
+        //        enemies[i].Height);
 
-        //        //CheckCollisionProjectile(projectiles[i]);
-
-        //        if (projectiles[i].Active == false)
+        //        // Determine if the two objects collided with each
+        //        // other
+        //        if (rectangle1.Intersects(rectangle2))
         //        {
-        //            projectiles.RemoveAt(i);
+        //            // Subtract the health from the player based on
+        //            // the enemy damage
+        //            player.Health -= enemies[i].Damage;
+
+        //            // Since the enemy collided with the player
+        //            // destroy it
+        //            enemies[i].Health = 0;
+
+        //            // If the player health is less than zero we died
+        //            if (player.Health <= 0)
+        //            {
+        //                player.Active = false;
+        //                alive = false;
+        //            }
+        //        }
+        //    }
+        //    // Projectile vs Enemy Collision
+        //    for (int i = 0; i < projectiles.Count; i++)
+        //    {
+        //        for (int j = 0; j < enemies.Count; j++)
+        //        {
+        //            // Create the rectangles we need to determine if we collided with each other
+        //            rectangle1 = new Rectangle((int)projectiles[i].Position.X -
+        //            projectiles[i].Width / 2, (int)projectiles[i].Position.Y -
+        //            projectiles[i].Height / 2, projectiles[i].Width, projectiles[i].Height);
+
+        //            rectangle2 = new Rectangle((int)enemies[j].Position.X - enemies[j].Width / 2,
+        //            (int)enemies[j].Position.Y - enemies[j].Height / 2,
+        //            enemies[j].Width, enemies[j].Height);
+
+        //            // Determine if the two objects collided with each other
+        //            if (rectangle1.Intersects(rectangle2))
+        //            {
+        //                enemies[j].Health -= projectiles[i].Damage;
+        //                projectiles[i].Active = false;
+        //            }
         //        }
         //    }
         //}
 
-        //public static List<Enemy> enemies;
 
-        //public static void CheckCollisionProjectile(Projectile p)
+
+
+
+        public static void AddProjectile(Vector2 position)
+        {
+            Projectile projectile = new Projectile();
+            projectile.Initialize(projectileTexture, position);
+
+            if (Character.currentFacing == Character.facing.right)
+                projectile.projectileMoveSpeed = 3;
+            else
+                projectile.projectileMoveSpeed = -3;
+
+            projectiles.Add(projectile);
+        }
+
+
+
+        public static void UpdateProjectiles()
+        {
+            // Update the Projectiles
+            for (int i = 0; i < projectiles.Count; i++)
+            {
+                projectiles[i].Update();
+
+
+
+                if (projectiles[i].Active == false)
+                {
+                    projectiles.RemoveAt(i);
+                }
+                CheckCollisionProjectile(projectiles[i]);
+            }
+        }
+
+
+        public static void CheckCollisionProjectile(Projectile projectile)
+        {
+            List<Enemy> enemies = instance.currentLevel.GetEnemies();
+            for (int i = 0; i < enemies.Count; i++) //Kijk voor iedere enemy
+            {
+                if (enemies[i].bounds.Intersects(projectile.bounds))
+                {
+                    enemies.RemoveAt(i);
+                    projectiles.Remove(projectile);
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+        //public void ResetLevel(ContentManager content, Game1 game)
         //{
-        //    for(int i = enemies.Count; i>0; i--){
-        //        if (enemies[i].boundingBox.Intersects(p.boundingBox))
-        //        {
-        //            enemies.RemoveAt(i);
-        //            projectiles.Remove(p);
-        //        }
-        //    }
+        //    level1 = new Level1(content, game);
         //}
 
 
-
-
-
-
-        //public Gun GetIntersectingGun(Rectangle feetBounds)
-        //{
-        //    if (gun.boundingBox.Intersects(feetBounds))
-        //        return gun;
-
-        //    return null;
-        //}
 
 
 
@@ -294,40 +358,47 @@ namespace Prototype
 
             spriteBatch.Begin();
 
-            spriteBatch.Draw(backgroundTexture, new Rectangle (0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height), Color.White);
- 
+
+
             //Kijken welke status om te bepalen welk 'scherm' te tonen
             if (gameState == GameState.mainmenu)
             {
-
+                spriteBatch.Draw(backgroundTexture1, new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height), Color.White);
                 mainMenu.Draw(gameTime, spriteBatch);
-
             }
             else if (gameState == GameState.options)
             {
+                spriteBatch.Draw(backgroundTexture1, new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height), Color.White);
                 optionsMenu.Draw(gameTime, spriteBatch);
             }
             else if (gameState == GameState.levelMenu)
             {
+                spriteBatch.Draw(backgroundTexture1, new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height), Color.White);
                 levelMenu.Draw(gameTime, spriteBatch);
             }
-            else if (gameState == GameState.running)
+            else if (gameState == GameState.running | gameState == GameState.dead)
             {
                 currentLevel.Draw(gameTime, spriteBatch);
 
-                //gun.Draw(gameTime, spriteBatch);
+                //Teken de projectielen
+                for (int i = 0; i < projectiles.Count; i++)
+                {
+                    projectiles[i].Draw(spriteBatch);
+                }
 
-                //// Draw the Projectiles
-                //for (int i = 0; i < projectiles.Count; i++)
-                //{
-                //    projectiles[i].Draw(spriteBatch);
-                //}
+                if (gameState == GameState.dead)
+                {
+                    //zorgt voor een donkerdere achtergrond. Deze code is overgenomen uit een ander spel.
+                    Color transparant = new Color(0, 0, 0, 100);
+                    Texture2D whiteTexture = new Texture2D(GraphicsDevice, 1, 1);
+                    whiteTexture.SetData<Color>(new Color[] { transparant });
 
+                    spriteBatch.Draw(whiteTexture, new Rectangle(0, 0, 800, 800), Color.White);
+
+                    deathScreen.Draw(gameTime, spriteBatch);
+                }
             }
-            else if (gameState == GameState.dead)
-            {
-                deathScreen.Draw(gameTime, spriteBatch);
-            }
+
 
             spriteBatch.End();
 

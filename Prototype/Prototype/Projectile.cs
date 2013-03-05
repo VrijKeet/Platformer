@@ -20,7 +20,7 @@ namespace Prototype
         public bool Active;
         public int Damage; //Schade aan vijand
         public float projectileMoveSpeed;
-        public Rectangle boundingBox;
+        public Rectangle bounds;
 
         // Get the width of the projectile ship
         public int Width
@@ -37,19 +37,18 @@ namespace Prototype
         public void Initialize(Texture2D texture, Vector2 position)
         {
             Texture = texture;
-            Position = position;
             Active = true;
             Damage = 2;
-            boundingBox = new Rectangle((int)Position.X, (int)Position.Y, Game1.projectileTexture.Width, Game1.projectileTexture.Height);
+            bounds = new Rectangle((int)position.X, (int)position.Y, Game1.projectileTexture.Width, Game1.projectileTexture.Height);
         }
         public void Update()
         {
-            Position.X += projectileMoveSpeed;
+            bounds.X += (int)projectileMoveSpeed;
         }
+
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Texture, Position, null, Color.White, 0f,
-            new Vector2(Width / 2, Height / 2), 1f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(Texture, bounds, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.White);
         }
     }
 }

@@ -22,8 +22,10 @@ namespace Prototype
         public Texture2D enemyTexture1;
         public Texture2D enemyTexture2;
         public Texture2D enemyTexture3;
+        public Texture2D gunTexture;
 
         public Character character;
+        public static Gun gun;
 
         public static List<Enemy> enemies;
 
@@ -36,22 +38,26 @@ namespace Prototype
         public Level3(ContentManager content, Game1 game1)
         {
             this.game = game1;
-            backgroundTexture = content.Load<Texture2D>("sky");
-            grassTexture = content.Load<Texture2D>("Cloud");
-            enemyTexture1 = content.Load<Texture2D>("Slime");
-            enemyTexture2 = content.Load<Texture2D>("Dragon");
-            enemyTexture3 = content.Load<Texture2D>("Mario");
-            platforms = new List<Platform>();
+            character = new Character(game1); //"game1" omdat character een constructor heeft            
+        }
 
-            character = new Character(game1); //"game1" omdat character een constructor heeft
+        public void Initialize()
+        {
+            backgroundTexture = Game1.backgroundTexture2;
+            grassTexture = Game1.grassTexture;
+            enemyTexture1 = Game1.enemyTexture1;
+            enemyTexture2 = Game1.enemyTexture2;
+            enemyTexture3 = Game1.enemyTexture3;
+            gunTexture = Game1.gunTexture;
+
+            gun = new Gun();
+            gun.Initialize(gunTexture, new Rectangle(500, 320, 20, 20));
 
             enemies = new List<Enemy>();
             enemies.Clear();
-
-            Enemy enemy1 = new Enemy(content);
-            Enemy enemy2 = new Enemy(content);
-            Enemy enemy3 = new Enemy(content);
-
+            Enemy enemy1 = new Enemy();
+            Enemy enemy2 = new Enemy();
+            Enemy enemy3 = new Enemy();
             enemies.Add(enemy1);
             enemies.Add(enemy2);
             enemies.Add(enemy3);
@@ -59,17 +65,11 @@ namespace Prototype
             enemies[0].Initialize(enemyTexture1, new Rectangle(330, 260, 75, 55)); //Texture en (positie, grootte)
             enemies[1].Initialize(enemyTexture2, new Rectangle(-150, 80, 170, 140));
             enemies[2].Initialize(enemyTexture3, new Rectangle(380, 260, 22, 33));
-        }
 
-        public void Initialize()
-        {
-            //testPlatform = new Platform();
-            //testPlatform.Initialize(grassTexture1);
-            //testPlatform.boundingBox = new Rectangle(100, 100, 300, 100);
+            
 
-
+            platforms = new List<Platform>();
             platforms.Clear();
-
             Platform platform = new Platform();
             Platform platform2 = new Platform();
             Platform platform3 = new Platform();
@@ -129,6 +129,7 @@ namespace Prototype
             {
                 enemies[i].Update(gameTime);
             }
+            gun.Update(gameTime);
         }
 
 
@@ -140,6 +141,11 @@ namespace Prototype
         {
             return enemies;
         }
+        public Gun GetGun()
+        {
+            return gun;
+        }
+
 
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -158,6 +164,7 @@ namespace Prototype
             }
 
             character.Draw(gameTime, spriteBatch);
+            gun.Draw(gameTime, spriteBatch);
         }
     }
 }

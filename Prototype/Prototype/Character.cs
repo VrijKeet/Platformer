@@ -20,6 +20,11 @@ namespace Prototype
         double elapsedTime;
         float shootingDurance;
         float shootingTimer;
+        float hurtTimer = 100;
+        float hurtDurance;
+        public static double deathTimer = 0;
+        int instantBounceBack = 50;
+        int bounceBackSpeed = 5;
 
         public static Texture2D playerTexture;
         public static int boundsWidth = 80; //Breedte van character in het spel
@@ -27,14 +32,10 @@ namespace Prototype
         public static Rectangle bounds;
         const int sourceWidth = 80; //Breedte van charactre in player.png
         const int sourceHeight = 80; //Hoogte van character in player.png
-        public static Rectangle boundingBox = new Rectangle(bounds.X + 30, bounds.Y, 20, bounds.Height);
-
-        ////////public static Vector2 startPos = new Vector2(300, 300);
-        ////////public static Rectangle characterBounds = new Rectangle((int)startPos.X, (int)startPos.Y, Character.boundsWidth, Character.boundsHeight); //Positie en grootte van character
-        
-        //public static Rectangle bounds = Level1.characterBounds; //Positie en grootte van character
-        public static Rectangle source = new Rectangle(0, 0, sourceWidth, sourceHeight); //Bepaalt welk gedeelte van player.png wordt getoond
         public static Rectangle feetBounds = new Rectangle(bounds.X, bounds.Y + 50, 80, 30);
+        public static Rectangle boundingBox = new Rectangle(bounds.X + 30, bounds.Y + 10, 20, bounds.Height - 20); //Voor collisie met enemies
+
+        public static Rectangle source = new Rectangle(0, 0, sourceWidth, sourceHeight); //Bepaalt welk gedeelte van player.png wordt getoond
 
         public enum facing
         {
@@ -54,12 +55,15 @@ namespace Prototype
             falling,
             picking,
             shooting,
+            hurtLeft,
+            hurtRight,
             dead
         }
         public static state currentState = state.standing;
 
-        bool carryingGun = false;
+        public static bool carryingGun = false;
         bool isShooting = false;
+        bool isHurt = false;
 
         float speed = 0; //Snelheid waarmee character zich in de horizontale richting voortbeweegt
         float maxWalkingSpeed = 5;
@@ -71,9 +75,6 @@ namespace Prototype
         public static int jumpCount = 0; //Telt hoelang character aan het springen is
 
         public bool alive = true;
-
-        // Ladder
-        bool onLadder = false;
 
         public Character(Game1 game1) //Constructor
         {
@@ -87,36 +88,134 @@ namespace Prototype
 
             feetBounds = new Rectangle(bounds.X + 30, bounds.Y + 70, 20, 10);
             boundingBox = new Rectangle(bounds.X + 30, bounds.Y, 20, bounds.Height);
-            KeyInput(currentKeyboardState, previousKeyboardState);
-            //if (!onLadder)
+            CollisionEnemies();
+
+            if (!isHurt)
+            {
                 Movement();
+                KeyInput(currentKeyboardState, previousKeyboardState);
+            }
 
-            ////////////if (Character.bounds.X + Character.bounds.Width > ladder.position.X && Character.bounds.X < ladder.position.X + ladder.ladderTexture.Width && Character.bounds.Y < ladder.position.Y + ladder.ladderTexture.Height && Character.bounds.Y + Character.bounds.Height > ladder.position.Y - (ladder.rails - 1) * ladder.ladderTexture.Height)
-            ////////////    onLadder = true;
-            ////////////else
-            ////////////    onLadder = false;
 
-            ////////////if ((bounds.Y - (Level1.platforms[4].Y + Level1.platforms[4].boundingBox.Height)) > 200) // Als character meer dan 200 px onder platform 4 (onderste) komt respawnt hij
-            ////////////    respawn();
+            if (health.lifes <= 0)
+            {
+                deathTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                Character.currentState = Character.state.dead;
+            }
+
+            if (isShooting == true)
+            {
+                shoot();
+            }
+            shootingTimer++;
+
+            if (isHurt == true)
+            {
+                hurt();
+            }
+            hurtTimer++;
+
+
+
         }
 
-        //public static void respawn()
-        //{
-        //    for (int i = 0; i < Game1.platforms.Count; i++) // Platformen op begin positie plaatsen
-        //    {
-        //        Game1.platforms[i].boundingBox = new Rectangle((int)Game1.startPosPlat[i].X, (int)Game1.startPosPlat[i].Y, Game1.platforms[i].boundingBox.Width, Game1.platforms[i].boundingBox.Height);
-        //        Game1.platforms[i].boundingBoxTop = new Rectangle(Game1.platforms[i].boundingBox.X, Game1.platforms[i].boundingBox.Y, Game1.platforms[i].boundingBox.Width, 5);
-        //        //Game1.gun.boundingBox = new Rectangle((int)Game1.gun.startPosition.X, (int)Game1.startPosPlat[i].Y, Game1.platforms[i].boundingBox.Width, Game1.platforms[i].boundingBox.Height);
-        //    }
+        private void CollisionEnemies()
+        {
+            if (hurtTimer > 50)
+            {
+                if (game.currentLevel == game.level1)
+                {
+                    for (int i = 0; i < Level1.enemies.Count; i++)
+                    {
+                        if (boundingBox.X < Level1.enemies[i].bounds.X + Level1.enemies[i].bounds.Width &&
+                            boundingBox.Y + boundingBox.Height > Level1.enemies[i].bounds.Y + 10 &&
+                            boundingBox.X + boundingBox.Width > Level1.enemies[i].bounds.X &&
+                            boundingBox.Y < Level1.enemies[i].bounds.Y + Level1.enemies[i].bounds.Height)
+                        {
+                            health.lifes -= 1;
+                            if ((boundingBox.X + boundingBox.Width) - (Level1.enemies[i].bounds.X + Level1.enemies[i].bounds.Width) > 0)
+                            {
+                                //currentState = state.hurtRight;
+                                currentFacing = facing.left;
+                                bounds.X += instantBounceBack;
+                                speed = bounceBackSpeed;
+                                isHurt = true;
+                                hurtTimer = 0;
+                            }
+                            else
+                            {
+                                //currentState = state.hurtLeft;
+                                currentFacing = facing.right;
+                                bounds.X -= instantBounceBack;
+                                speed = -bounceBackSpeed;
+                                isHurt = true;
+                                hurtTimer = 0;
+                            }
+                        }
+                    }
+                }
+                else if (game.currentLevel == game.level2)
+                {
+                    for (int i = 0; i < Level2.enemies.Count; i++)
+                    {
+                        if (boundingBox.X < Level2.enemies[i].bounds.X + Level2.enemies[i].bounds.Width &&
+                            boundingBox.Y + boundingBox.Height > Level2.enemies[i].bounds.Y + 10 &&
+                            boundingBox.X + boundingBox.Width > Level2.enemies[i].bounds.X &&
+                            boundingBox.Y < Level2.enemies[i].bounds.Y + Level2.enemies[i].bounds.Height)
+                        {
+                            health.lifes -= 1;
+                            if ((boundingBox.X + boundingBox.Width) - (Level1.enemies[i].bounds.X + Level1.enemies[i].bounds.Width) > 0)
+                            {
+                                //currentState = state.hurtRight;
+                                //currentFacing = facing.left;
+                                //bounds.X += instantBounceBack;
+                                //speed = bounceBackSpeed;
+                                //isHurt = true;
+                                //hurt();
+                            }
+                            else
+                            {
+                                //currentState = state.hurtLeft;
+                                //currentFacing = facing.right;
+                                //bounds.X -= instantBounceBack;
+                                //speed = bounceBackSpeed;
+                                //isHurt = true;
+                                //hurt();
+                            }
+                        }
+                    }
+                }
+                else if (game.currentLevel == game.level3)
+                {
+                    for (int i = 0; i < Level3.enemies.Count; i++)
+                    {
+                        if (boundingBox.X < Level3.enemies[i].bounds.X + Level3.enemies[i].bounds.Width &&
+                            boundingBox.Y + boundingBox.Height > Level3.enemies[i].bounds.Y + 10 &&
+                            boundingBox.X + boundingBox.Width > Level3.enemies[i].bounds.X &&
+                            boundingBox.Y < Level3.enemies[i].bounds.Y + Level3.enemies[i].bounds.Height)
+                        {
+                            health.lifes -= 1;
+                            if ((boundingBox.X + boundingBox.Width) - (Level1.enemies[i].bounds.X + Level1.enemies[i].bounds.Width) > 0)
+                            {
+                                currentState = state.hurtRight;
+                                currentFacing = facing.left;
+                                bounds.X += instantBounceBack;
+                                speed = bounceBackSpeed;
+                            }
+                            else
+                            {
+                                currentState = state.hurtLeft;
+                                currentFacing = facing.right;
+                                bounds.X -= instantBounceBack;
+                                  speed = bounceBackSpeed;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
-        //    bounds.X = (int)startPos.X;
-        //    bounds.Y = (int)startPos.Y + 1;
-        //    currentState = state.standing;
-        //    currentFacing = facing.right;
-        //    jumpingSpeed = -10;
-        //    jumpCount = 0;
-        //    health.lifes = health.startLifes;
-        //}
+
 
         private void KeyInput(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
         {
@@ -163,14 +262,13 @@ namespace Prototype
                         {
                             if (currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space))
                             {
-                                //if (currentFacing == facing.left)
-                                //    Game1.AddProjectile(new Vector2(bounds.X, bounds.Y + sourceHeight / 2));
-                                //else
-                                //    Game1.AddProjectile(new Vector2(bounds.X + source.Width, bounds.Y + sourceHeight / 2));
+                                if (currentFacing == facing.left)
+                                    Game1.AddProjectile(new Vector2(bounds.X - Game1.projectileTexture.Width, bounds.Y + sourceHeight / 2 - 5));
+                                else
+                                    Game1.AddProjectile(new Vector2(bounds.X + source.Width, bounds.Y + sourceHeight / 2 - 5));
 
-                                //currentState = state.shooting;
-                                shootingTimer = 0;
-                                isShooting = true;
+                                shootingTimer = 0; //zorg dat hij weer een tijdje niet meer kan schieten
+                                isShooting = true; //Met boolian, zodat spatie niet ingedrukt hoeft te worden gehouden
                             }
                         }
                     }
@@ -243,34 +341,7 @@ namespace Prototype
                 }
             }
 
-
-
-            // Ladder beklimmen
-            if (onLadder)
-            {
-                if (currentKeyboardState.IsKeyDown(Keys.W))
-                    bounds.Y -= 1;
-                if (currentKeyboardState.IsKeyDown(Keys.S))
-                    bounds.Y += 1;
-                if (currentKeyboardState.IsKeyDown(Keys.A))
-                    bounds.X -= 1;
-                if (currentKeyboardState.IsKeyDown(Keys.D))
-                    bounds.X += 1;
-            }
-
-            if (isShooting == true)
-            {
-                shoot();
-            }
-            shootingTimer++;
         }
-
-
-
-
-
-
-
 
 
 
@@ -283,17 +354,50 @@ namespace Prototype
                 source = new Rectangle(frameCount / delay * 80, 4 * 80, sourceWidth, sourceHeight);
 
                 frameCount++;
-                shootingDurance++;
+                shootingDurance++; //Houdt bij hoe lang de schiet animatie al gaande is.
 
                 if (shootingDurance > 5)
                 {
                     shootingDurance = 0;
                     isShooting = false;
+                    source = new Rectangle(frameCount / delay * 80, 0, sourceWidth, sourceHeight);
                 }
             }
 
         }
 
+
+
+        private void hurt()
+        {
+            currentState = state.jumping;
+
+            if (frameCount / delay >= 5)
+                frameCount = 5 * delay; //blijf liggen            
+
+            source = new Rectangle(frameCount / delay * 80, 6 * 80, sourceWidth, sourceHeight); //valbeweging
+
+
+            if (speed < 0)
+            {
+                speed++;//Laat hem steeds minder snel naar links gaan.
+            }
+            else if (speed > 0)
+            {
+                speed--; //Laat hem steeds minder snel naar rechts gaan.
+            }
+
+
+            if (hurtDurance > 10)
+            {
+                hurtDurance = 0;
+                isHurt = false;
+                source = new Rectangle(frameCount / delay * 80, 0, sourceWidth, sourceHeight); //recht op staan
+                currentState = state.standing;
+            }
+
+            hurtDurance++; //Houdt bij hoe lang geleden het was dat je geraakt werd al gaande is.
+        }
 
 
 
@@ -425,10 +529,10 @@ namespace Prototype
 
                             if (isShooting == false)
 
-                            if (isShooting == false)
-                            {
-                                source = new Rectangle(frameCount / delay * 80, 160, sourceWidth, sourceHeight);
-                            }
+                                if (isShooting == false)
+                                {
+                                    source = new Rectangle(frameCount / delay * 80, 160, sourceWidth, sourceHeight);
+                                }
                         }
                         break;
 
@@ -509,7 +613,7 @@ namespace Prototype
                         break;
 
                     case state.picking:
-                        //Gun gun = game.GetIntersectingGun(feetBounds);
+                        Gun gun = GetIntersectingGun(feetBounds);
 
                         speed = 0;
                         frameCount = 6 * delay;
@@ -519,18 +623,31 @@ namespace Prototype
                             source = new Rectangle(frameCount / delay * 80, 6 * 80, sourceWidth, sourceHeight);
                         }
 
-                        //if (gun != null) //als character bij een gun staat
-                        //{
-                        //    carryingGun = true;
-                        //    gun.picked = true;
-                        //}
+                        if (gun != null) //als character bij een gun staat
+                        {
+                            carryingGun = true;
+                            gun.picked = true;
+                        }
 
                         break;
-
+                                            
                     case state.dead:
-                        //platform = game.GetIntersectingPlatform(feetBounds);
+                        platform = GetIntersectingPlatform(feetBounds);
+                        
+                        bounds.Y += jumpingSpeed;
+                        bounds.X += (int)speed;
 
-                        speed = 0;
+                        jumpingSpeed += 4;
+
+                        if (jumpingSpeed >= 18)
+                            jumpingSpeed = 18;
+
+                        if (platform != null) //Als character niet geen, dus wél een platform raakt.
+                        {
+                            bounds.Y = platform.boundingBoxTop.Y - bounds.Height + 1; //Blijf op platform staan
+                            jumpCount = 0;
+                            jumpingSpeed = -20;
+                        }
 
                         if (frameCount / delay >= 5)
                             frameCount = 5 * delay;
@@ -593,11 +710,30 @@ namespace Prototype
         }
 
 
+
+        public Gun GetIntersectingGun(Rectangle feetBounds)
+        {
+            Gun gun = game.currentLevel.GetGun();
+            if (gun.bounds.Intersects(feetBounds))
+                return gun;
+
+            return null;
+        }
+
+
+
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (playerTexture != null)
+            if (alive == true)
             {
-                if (alive == true)
+                if (carryingGun)
+                {
+                    if (currentFacing == facing.right)
+                        spriteBatch.Draw(playerTexture, bounds, source, Color.Yellow);
+                    else
+                        spriteBatch.Draw(playerTexture, bounds, source, Color.Yellow, 0f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+                }
+                else
                 {
                     if (currentFacing == facing.right)
                         spriteBatch.Draw(playerTexture, bounds, source, Color.White);
@@ -605,6 +741,7 @@ namespace Prototype
                         spriteBatch.Draw(playerTexture, bounds, source, Color.White, 0f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
                 }
             }
+
         }
 
 
