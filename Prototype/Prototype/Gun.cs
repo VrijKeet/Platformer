@@ -20,7 +20,7 @@ namespace Prototype
         public Rectangle bounds;
         public bool picked = false;
 
-        Rectangle source; //Bepaalt welk gedeelte van gun.png wordt getoond        
+        Rectangle source = new Rectangle(0, 0, 20, 20); //Bepaalt welk gedeelte van gun.png wordt getoond        
 
         public Gun()
         {

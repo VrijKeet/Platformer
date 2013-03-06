@@ -141,13 +141,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dead Soldier%27s Waltz.mp3">
-      <Name>Dead Soldier%27s Waltz</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="death.spritefont">
       <Name>death</Name>
       <Importer>FontDescriptionImporter</Importer>
@@ -277,20 +270,20 @@
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-    <Compile Include="090.wav">
-      <Name>090</Name>
+    <Compile Include="dragonSound.wav">
+      <Name>dragonSound</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="003.wav">
-      <Name>003</Name>
+    <Compile Include="runningSound1.wav">
+      <Name>runningSound1</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-    <Compile Include="004.wav">
-      <Name>004</Name>
+    <Compile Include="runningSound2.wav">
+      <Name>runningSound2</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
@@ -303,6 +296,20 @@
     </Compile>
     <Compile Include="spiderSound.wav">
       <Name>spiderSound</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Yahoo.wav">
+      <Name>Yahoo</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Dundundun.wav">
+      <Name>Dundundun</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>

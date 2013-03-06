@@ -51,11 +51,12 @@ namespace Prototype
             grassTexture = Game1.grassTexture;
             baseTexture = Game1.baseTexture;
             cloudTexture = Game1.cloudTexture;
+            enemyTexture2 = Game1.enemyTexture2;
             enemyTexture3 = Game1.enemyTexture3;
             gunTexture = Game1.gunTexture;
 
             gun = new Gun();
-            gun.Initialize(gunTexture, new Rectangle(-330, -250, 100, 100));
+            gun.Initialize(gunTexture, new Rectangle(-320, -170, 20, 20));
 
             platforms = new List<Platform>();
             platforms.Clear();
@@ -63,10 +64,10 @@ namespace Prototype
             // Lijst met posities van platformen
             startDimPlat = new List<Rectangle>();
 
-            startDimPlat.Add(new Rectangle(-300, 350, 2000, 350)); // Huge platform //0
+            startDimPlat.Add(new Rectangle(-300, 350, 1800, 350)); // Huge platform //0
             startDimPlat.Add(new Rectangle(600, 250, 100, 60)); //1
             startDimPlat.Add(new Rectangle(1200, 250, 100, 60)); //2
-            startDimPlat.Add(new Rectangle(1800, 340, 100, 60)); //3
+            startDimPlat.Add(new Rectangle(1650, 340, 100, 60)); //3
             startDimPlat.Add(new Rectangle(750, 150, 400, 100)); // Groot platform onder //4
             startDimPlat.Add(new Rectangle(800, 50, 90, 40)); //5
             startDimPlat.Add(new Rectangle(905, 50, 90, 40)); //6
@@ -76,11 +77,10 @@ namespace Prototype
             startDimPlat.Add(new Rectangle(180, -140, 100, 20)); //10
             startDimPlat.Add(new Rectangle(-50, -150, 100, 20)); //11
             startDimPlat.Add(new Rectangle(-330, -160, 100, 20)); // Wolk einde //12
-            startDimPlat.Add(new Rectangle(2100, 350, 500, 100)); //13
-            startDimPlat.Add(new Rectangle(2800, 450, 300, 100)); //14
-            startDimPlat.Add(new Rectangle(3300, 550, 300, 100)); //15
-            startDimPlat.Add(new Rectangle(3800, 550, 1000, 350)); //16
-            startDimPlat.Add(new Rectangle(4950, 550, 1000, 350)); //17
+            startDimPlat.Add(new Rectangle(1900, 340, 100, 100)); //13
+            startDimPlat.Add(new Rectangle(2150, 430, 120, 100)); //14
+            startDimPlat.Add(new Rectangle(2480, 500, 250, 100)); //15
+            startDimPlat.Add(new Rectangle(2980, 550, 1000, 350)); //16 //tweede huge platform
 
             // Platformen aanmaken
             for (int i = 0; i < startDimPlat.Count; i++)
@@ -98,12 +98,14 @@ namespace Prototype
             platforms[10].Initialize(cloudTexture);
             platforms[11].Initialize(cloudTexture);
             platforms[12].Initialize(cloudTexture);
+            platforms[16].Initialize(baseTexture);
+            platforms[16].Initialize(baseTexture);
 
             // Platformen posities geven
             for (int i = 0; i < platforms.Count; i++)
                 platforms[i].boundingBox = startDimPlat[i];
 
-            goalPos = new Vector2(5851, 453);
+            goalPos = new Vector2(3700, 430);
 
             // Muntjes
             startPosCoins = new List<Vector2>();
@@ -116,10 +118,10 @@ namespace Prototype
             startPosCoins.Add(new Vector2(1013, 112));
             startPosCoins.Add(new Vector2(1063, 112));
             startPosCoins.Add(new Vector2(1113, 112));
-            startPosCoins.Add(new Vector2(5038, 512));
-            startPosCoins.Add(new Vector2(5238, 512));
-            startPosCoins.Add(new Vector2(5438, 512));
-            startPosCoins.Add(new Vector2(5638, 512));
+            startPosCoins.Add(new Vector2(1950, 310));
+            startPosCoins.Add(new Vector2(2220, 400));
+            startPosCoins.Add(new Vector2(2510, 470));
+            startPosCoins.Add(new Vector2(3060, 510));
 
             coins = new List<coins>();
 
@@ -137,12 +139,37 @@ namespace Prototype
             Enemy enemy1 = new Enemy();
             Enemy enemy2 = new Enemy();
             Enemy enemy3 = new Enemy();
+            Enemy enemy4 = new Enemy();
+            Enemy enemy5 = new Enemy();
+            Enemy enemy6 = new Enemy();
+            Enemy enemy7 = new Enemy();
+            Enemy enemy8 = new Enemy();
+            Enemy enemy9 = new Enemy();
+            //Enemy enemy10 = new Enemy();
+
             enemies.Add(enemy1);
             enemies.Add(enemy2);
             enemies.Add(enemy3);
-            enemies[0].Initialize(enemyTexture3, new Rectangle(350, 350 - Game1.character1Texture.Height, 22, 33)); //Texture en (positie, grootte)
-            enemies[1].Initialize(enemyTexture3, new Rectangle(-150, 80, 93, 69));
-            enemies[2].Initialize(enemyTexture3, new Rectangle(380, 260, 93, 69));
+            enemies.Add(enemy4);
+            enemies.Add(enemy5);
+            enemies.Add(enemy6);
+            enemies.Add(enemy7);
+            enemies.Add(enemy8);
+            enemies.Add(enemy9);
+            //enemies.Add(enemy10);
+
+            enemies[0].Initialize(enemyTexture3, new Rectangle(800, -100, 46, 34)); //Texture en (positie, grootte)
+            enemies[1].Initialize(enemyTexture3, new Rectangle(820, -100, 46, 34));
+            enemies[2].Initialize(enemyTexture3, new Rectangle(840, -100, 46, 34));
+            enemies[3].Initialize(enemyTexture3, new Rectangle(-150, 260, 93, 69));
+            enemies[4].Initialize(enemyTexture3, new Rectangle(800, 280, 93, 69));
+            enemies[5].Initialize(enemyTexture3, new Rectangle(450, 280, 46, 34));
+            enemies[6].Initialize(enemyTexture3, new Rectangle(520, 280, 46, 34));
+            enemies[7].Initialize(enemyTexture3, new Rectangle(590, 280, 46, 34));
+            enemies[8].Initialize(enemyTexture3, new Rectangle(1000, 190, 93, 69));
+            //enemies[9].Initialize(enemyTexture2, new Rectangle(3100, 540, 96, 96));
+
+            Character.bounds = new Rectangle(300, 280, 80, 80);
         }
 
 

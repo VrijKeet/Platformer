@@ -26,9 +26,9 @@ namespace Prototype
         public Level1 level1;
         public Level2 level2;
         public Level3 level3;
-        LevelMenu levelMenu; 
+        LevelMenu levelMenu;
         public ILevel currentLevel;
-        
+
         public static List<Projectile> projectiles;
 
         public static Texture2D standardTexture;
@@ -55,7 +55,7 @@ namespace Prototype
             running,
             dead,
         }
-        public GameState gameState = GameState.mainmenu;            
+        public GameState gameState = GameState.mainmenu;
 
         //Sounds;
         public static SoundEffect laserSound;
@@ -63,7 +63,13 @@ namespace Prototype
         public static SoundEffect runSound1;
         public static SoundEffect runSound2;
         public static SoundEffect starSound;
+        public static SoundEffect coinSound;
         public static SoundEffect jumpSound;
+        public static SoundEffect runningSound1;
+        public static SoundEffect runningSound2;
+        public static SoundEffect dragonSound;
+        public static SoundEffect hurtSound;
+        public static SoundEffect deathSound;
 
         // Muziek
         public static Song rickSong;
@@ -121,18 +127,22 @@ namespace Prototype
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Services.AddService(typeof(SpriteBatch), spriteBatch); // Zodat je de spriteBatch kan gebruiken in GameComponents
 
+            //achtergrond textures
             backgroundTexture1 = Content.Load<Texture2D>("Background 2");
             backgroundTexture2 = Content.Load<Texture2D>("sky");
 
+            //vijand textures
             enemyTexture1 = Content.Load<Texture2D>("Slime");
             enemyTexture2 = Content.Load<Texture2D>("Dragon");
             enemyTexture3 = Content.Load<Texture2D>("spider");
 
+            //platform textures
             grassTexture = Content.Load<Texture2D>("grassTexture1");
             baseTexture = Content.Load<Texture2D>("Ondergrond");
             cloudTexture = Content.Load<Texture2D>("Cloud");
             standardTexture = Content.Load<Texture2D>("platform");
 
+            //Andere textures
             gunTexture = Content.Load<Texture2D>("star");
             projectileTexture = Content.Load<Texture2D>("laser");
             holeTexture = Content.Load<Texture2D>("hole");
@@ -141,7 +151,13 @@ namespace Prototype
             laserSound = Content.Load<SoundEffect>("laserSound");
             spiderSound = Content.Load<SoundEffect>("spiderSound");
             starSound = Content.Load<SoundEffect>("starSound");
+            coinSound = Content.Load<SoundEffect>("Yahoo");
             jumpSound = Content.Load<SoundEffect>("jumpSound");
+            runningSound1 = Content.Load<SoundEffect>("runningSound1");
+            runningSound2 = Content.Load<SoundEffect>("runningSound2");
+            dragonSound = Content.Load<SoundEffect>("dragonSound");
+            hurtSound = Content.Load<SoundEffect>("hurt");
+            deathSound = Content.Load<SoundEffect>("Dundundun");
 
             // Muziek
             rickSong = Content.Load<Song>("rickroll");
@@ -151,7 +167,7 @@ namespace Prototype
             soundtrackSong = Content.Load<Song>("LF2 Soundtrack");
 
             MediaPlayer.Stop();
-            //PlayMusic(soundtrackSong);
+            PlayMusic(soundtrackSong);
         }
 
 
@@ -187,7 +203,9 @@ namespace Prototype
                     UpdateProjectiles();
 
                 if (Character.deathTimer > 2500)
+                {
                     gameState = GameState.dead;
+                }
             }
             else if (gameState == GameState.dead)
                 deathScreen.Update(gameTime, currentKeyboardState, previousKeyboardState);
@@ -323,21 +341,31 @@ namespace Prototype
             {
                 if (enemies[i].bounds.Intersects(projectile.bounds))
                 {
-                    if (enemies[i].texture == enemyTexture3)
+                    if (enemies[i].texture == enemyTexture1) //Slime
+                        score.currentScore += 1;
+
+                    else if (enemies[i].texture == enemyTexture3) //Spin
+                    {
+                        score.currentScore += 5;
                         spiderSound.Play();
+                    }
+                    else if (enemies[i].texture == enemyTexture2) //Draak
+                    {
+                        score.currentScore += 20;
+                        dragonSound.Play();
+                    }
 
                     enemies.RemoveAt(i);
                     projectiles.Remove(projectile);
 
-                    score.currentScore += 1;                    
                 }
             }
         }
-        
+
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.ForestGreen);
-            spriteBatch.Begin();            
+            spriteBatch.Begin();
 
             //Kijken welke status om te bepalen welk 'scherm' te tonen
             if (gameState == GameState.mainmenu)

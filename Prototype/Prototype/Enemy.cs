@@ -17,13 +17,11 @@ namespace Prototype
     /// </summary>
     public class Enemy
     {
-        Game1 game; //Omdat hij moet kijken of character platform raakt, en die code in game1.cs wordt opgeslagen
-
         public Texture2D texture;
         Texture2D enemyTexture1;
         Texture2D enemyTexture2;
         Texture2D enemyTexture3;
-        
+
         public Rectangle bounds;
         public Rectangle source;
         public Rectangle feetBounds;
@@ -60,12 +58,32 @@ namespace Prototype
         {
             if (alive)
             {
+                //if (richting == -1) //naar links
+                //{
+                //    richting = 1;
+                //    currentFacing = facing.right;
+                //    distance--;
+                //}
+                //else if (richting == 1)
+                //{
+                //    richting = -1;
+                //    currentFacing = facing.left;
+                //    distance++;
+                //}
+
+                //if (distance >= 200)
+                //    richting = -1;
+                //else if (distance <= 200)
+                //    richting = 1;
+
+                //bounds.X += richting;
+
+
                 Platform platform = GetIntersectingPlatform(feetBounds); //Kijk in game1.cs of de character in contact is met een platform is de lijst
 
                 if (platform == null)//Als enemy geen platform raakt.
                 {
                     bounds.X += richting;
-                    bounds.Y++;
 
                     if (turningTimer == 0)
                     {
@@ -82,13 +100,16 @@ namespace Prototype
                             bounds.Y--;
                         }
                     }
+
+                    bounds.Y++;
                 }
                 else
                 {
+                    bounds.Y = platform.boundingBoxTop.Y - bounds.Height + 1;
                     bounds.X += richting;
                     if (turningTimer >= 1)
-                    turningTimer++;
-                    if (turningTimer >= 10)
+                        turningTimer++;
+                    if (turningTimer >= 30)
                         turningTimer = 0;
                 }
 
@@ -108,7 +129,7 @@ namespace Prototype
                         if (frameCount / delay >= 3)
                             frameCount = 0;
 
-                        source = new Rectangle(frameCount / delay * 96, 2*96, 96, 96);
+                        source = new Rectangle(frameCount / delay * 96, 2 * 96, 96, 96);
                     }
                     else if (texture == enemyTexture3) //Spider
                     {
@@ -126,8 +147,8 @@ namespace Prototype
             //    score.currentScore += 1;
             //    alive = false;
             //}
-        }
 
+        }
 
 
         public Platform GetIntersectingPlatform(Rectangle feetBounds) //Kijken of een platform in de lijst in contact komt met enemy

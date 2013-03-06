@@ -68,6 +68,7 @@ namespace Prototype
                 {
                     score.currentScore += 1;
                     taken[i] = true;
+                    Game1.coinSound.Play();
                 }
             }
 

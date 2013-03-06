@@ -57,14 +57,14 @@ namespace Prototype
             enemies.Clear();
             Enemy enemy1 = new Enemy();
             Enemy enemy2 = new Enemy();
-            Enemy enemy3 = new Enemy();
+            //Enemy enemy3 = new Enemy();
             enemies.Add(enemy1);
             enemies.Add(enemy2);
-            enemies.Add(enemy3);
+            //enemies.Add(enemy3);
 
             enemies[0].Initialize(enemyTexture1, new Rectangle(330, 260, 75, 55)); //Texture en (positie, grootte)
             enemies[1].Initialize(enemyTexture2, new Rectangle(-150, 80, 170, 140));
-            enemies[2].Initialize(enemyTexture3, new Rectangle(380, 260, 22, 33));
+            //enemies[2].Initialize(enemyTexture3, new Rectangle(380, 260, 22, 33));
 
             
 

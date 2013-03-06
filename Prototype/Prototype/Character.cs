@@ -103,8 +103,12 @@ namespace Prototype
 
             if (health.lifes <= 0)
             {
+                if (deathTimer == 0)                    
+                Game1.deathSound.Play();
+
                 deathTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
                 Character.currentState = Character.state.dead;
+                
             }
 
             if (isShooting == true)
@@ -119,7 +123,7 @@ namespace Prototype
             }
             hurtTimer++;
 
-            if (bounds.Y + bounds.Height > Level1.platforms[17].boundingBox.Y + Level1.platforms[17].boundingBox.Height)
+            if (bounds.Y + bounds.Height > Level1.platforms[0].boundingBox.Y + Level1.platforms[0].boundingBox.Height)
                 respawn(game);
         }
 
@@ -165,6 +169,7 @@ namespace Prototype
                             boundingBox.X + boundingBox.Width > Level1.enemies[i].bounds.X &&
                             boundingBox.Y < Level1.enemies[i].bounds.Y + Level1.enemies[i].bounds.Height)
                         {
+                            Game1.hurtSound.Play();
                             health.lifes -= 1;
                             if ((boundingBox.X + boundingBox.Width) - (Level1.enemies[i].bounds.X + Level1.enemies[i].bounds.Width) > 0)
                             {
@@ -277,6 +282,7 @@ namespace Prototype
                     if (currentKeyboardState.IsKeyDown(Keys.W)) //Laat character springen als W wordt ingedrukt
                     {
                         currentState = state.jumping;
+                        Game1.jumpSound.Play();
                     }
                     if (currentKeyboardState.IsKeyDown(Keys.S)) //Laat character iets oppakken als Spatie wordt ingedrukt
                     {
@@ -332,6 +338,7 @@ namespace Prototype
                     if (currentKeyboardState.IsKeyDown(Keys.W)) //Jump when W is pressed once
                     {
                         currentState = state.jumping;
+                        Game1.jumpSound.Play();
                     }
                     if (currentKeyboardState.IsKeyDown(Keys.S)) //Laat character iets oppakken als Spatie wordt ingedrukt
                     {
@@ -418,7 +425,6 @@ namespace Prototype
             {
                 speed--; //Laat hem steeds minder snel naar rechts gaan.
             }
-
 
             if (hurtDurance > 10)
             {
@@ -659,6 +665,7 @@ namespace Prototype
                         {
                             carryingGun = true;
                             gun.picked = true;
+                            Game1.starSound.Play();
                         }
 
                         break;

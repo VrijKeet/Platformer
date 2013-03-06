@@ -46,7 +46,7 @@ namespace Prototype
             {
                 selectCount++;
 
-                if (game.currentLevel == null) //zorg dat Resume wordt overgeslagen als nog geen level gekozen is
+                if (game.currentLevel == null | Character.currentState == Character.state.dead) //zorg dat Resume wordt overgeslagen als nog geen level gekozen is
                 {
                     if (selectCount >= 5)
                         selectCount = 2;
@@ -61,7 +61,7 @@ namespace Prototype
             {
                 selectCount--;
 
-                if (game.currentLevel == null) //zorg dat Resume wordt overgeslagen als nog geen level gekozen is
+                if (game.currentLevel == null | Character.currentState == Character.state.dead) //zorg dat Resume wordt overgeslagen als nog geen level gekozen is
                 {
                     if (selectCount <= 1)
                         selectCount = 4;
@@ -132,8 +132,8 @@ namespace Prototype
         {            
             Vector2 length1 = titelFont.MeasureString("Little Platformer") / 2;
             spriteBatch.DrawString(titelFont, "Little Platformer", new Vector2(Game1.graphics.GraphicsDevice.Viewport.Width / 2 - length1.X, 10), new Color(0, 0, 100));
-            
-            if (game.currentLevel != null)
+
+            if (game.currentLevel != null | Character.currentState == Character.state.dead)
             spriteBatch.DrawString(menuFont, "Resume", new Vector2(50, 140), StartColor);
             spriteBatch.DrawString(menuFont, "New game", new Vector2(50, 230), NewGameColor);
             spriteBatch.DrawString(menuFont, "Options", new Vector2(50, 290), OptionsColor);
