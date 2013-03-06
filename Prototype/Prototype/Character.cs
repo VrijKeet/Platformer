@@ -200,7 +200,7 @@ namespace Prototype
                             boundingBox.Y < Level2.enemies[i].bounds.Y + Level2.enemies[i].bounds.Height)
                         {
                             health.lifes -= 1;
-                            if ((boundingBox.X + boundingBox.Width) - (Level1.enemies[i].bounds.X + Level1.enemies[i].bounds.Width) > 0)
+                            if ((boundingBox.X + boundingBox.Width) - (Level2.enemies[i].bounds.X + Level2.enemies[i].bounds.Width) > 0)
                             {
                                 currentFacing = facing.left;
                                 bounds.X += instantBounceBack;
@@ -229,7 +229,7 @@ namespace Prototype
                             boundingBox.Y < Level3.enemies[i].bounds.Y + Level3.enemies[i].bounds.Height)
                         {
                             health.lifes -= 1;
-                            if ((boundingBox.X + boundingBox.Width) - (Level1.enemies[i].bounds.X + Level1.enemies[i].bounds.Width) > 0)
+                            if ((boundingBox.X + boundingBox.Width) - (Level3.enemies[i].bounds.X + Level3.enemies[i].bounds.Width) > 0)
                             {
                                 currentFacing = facing.left;
                                 bounds.X += instantBounceBack;

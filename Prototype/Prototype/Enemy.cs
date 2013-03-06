@@ -90,12 +90,15 @@ namespace Prototype
                         if (richting == -1) //naar links
                         {
                             richting = 1;
+                            bounds.X += 2;
                             currentFacing = facing.right;
                             bounds.Y--;
                         }
                         else if (richting == 1)
                         {
                             richting = -1;
+
+                            bounds.X -= 2;
                             currentFacing = facing.left;
                             bounds.Y--;
                         }
