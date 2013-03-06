@@ -310,9 +310,9 @@ namespace Prototype
             projectile.Initialize(projectileTexture, position);
 
             if (Character.currentFacing == Character.facing.right)
-                projectile.projectileMoveSpeed = 3;
+                projectile.projectileMoveSpeed = 6;
             else
-                projectile.projectileMoveSpeed = -3;
+                projectile.projectileMoveSpeed = -6;
 
             projectiles.Add(projectile);
 
@@ -341,23 +341,9 @@ namespace Prototype
             {
                 if (enemies[i].bounds.Intersects(projectile.bounds))
                 {
-                    if (enemies[i].texture == enemyTexture1) //Slime
-                        score.currentScore += 1;
-
-                    else if (enemies[i].texture == enemyTexture3) //Spin
-                    {
-                        score.currentScore += 5;
-                        spiderSound.Play();
-                    }
-                    else if (enemies[i].texture == enemyTexture2) //Draak
-                    {
-                        score.currentScore += 20;
-                        dragonSound.Play();
-                    }
-
-                    enemies.RemoveAt(i);
+                    
+                    enemies[i].health -= 1;
                     projectiles.Remove(projectile);
-
                 }
             }
         }

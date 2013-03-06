@@ -22,12 +22,14 @@ namespace Prototype
         Texture2D enemyTexture2;
         Texture2D enemyTexture3;
 
+        public int health;
         public Rectangle bounds;
         public Rectangle source;
         public Rectangle feetBounds;
         public int distance;
         int richting;
         public bool alive;
+        public bool justDied;
         double turningTimer = 10;
         enum facing
         {
@@ -36,6 +38,7 @@ namespace Prototype
         }
         facing currentFacing = facing.right;
 
+        
         int frameCount = 0;
         int delay = 10;
 
@@ -46,12 +49,13 @@ namespace Prototype
             enemyTexture3 = Game1.enemyTexture3;
         }
 
-        public void Initialize(Texture2D Texture, Rectangle Bounds)
+        public void Initialize(Texture2D Texture, Rectangle Bounds, int health)
         {
             texture = Texture;
             bounds = Bounds;
             richting = 1;
             alive = true;
+            this.health = health;
         }
 
         public void Update(GameTime gameTime)
@@ -145,12 +149,32 @@ namespace Prototype
                 frameCount++;
             }
 
-            //if (alive && Character.bounds.X < bounds.X + bounds.Width && Character.feetBounds.Y + Character.feetBounds.Height > bounds.Y && Character.feetBounds.X + Character.feetBounds.Width > bounds.X && Character.feetBounds.Y < (bounds.Y + bounds.Height) - 60)
-            //{
-            //    score.currentScore += 1;
-            //    alive = false;
-            //}
+            if (health <= 0)
+            {
+                alive = false;
+                bounds = new Rectangle(-1000, -1000, 0, 0);
+                giveScore();
+            }
 
+            
+        }
+
+        private void giveScore()
+        {            
+                if (texture == enemyTexture1) //Slime
+                    score.currentScore += 1;
+
+                else if (texture == enemyTexture3) //Spin
+                {
+                    score.currentScore += 5;
+                    Game1.spiderSound.Play();
+                }
+                else if (texture == enemyTexture2) //Draak
+                {
+                    score.currentScore += 30;
+                    Game1.dragonSound.Play();
+                }
+                health = 1;
         }
 
 

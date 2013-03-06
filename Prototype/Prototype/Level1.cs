@@ -158,16 +158,16 @@ namespace Prototype
             enemies.Add(enemy9);
             enemies.Add(enemy10);
 
-            enemies[0].Initialize(enemyTexture3, new Rectangle(800, -100, 46, 34)); //Texture en (positie, grootte)
-            enemies[1].Initialize(enemyTexture3, new Rectangle(850, -100, 46, 34));
-            enemies[2].Initialize(enemyTexture3, new Rectangle(900, -100, 46, 34));
-            enemies[3].Initialize(enemyTexture3, new Rectangle(-150, 260, 93, 69));
-            enemies[4].Initialize(enemyTexture3, new Rectangle(800, 280, 93, 69));
-            enemies[5].Initialize(enemyTexture3, new Rectangle(450, 280, 46, 34));
-            enemies[6].Initialize(enemyTexture3, new Rectangle(520, 280, 46, 34));
-            enemies[7].Initialize(enemyTexture3, new Rectangle(590, 280, 46, 34));
-            enemies[8].Initialize(enemyTexture3, new Rectangle(1000, 190, 93, 69));
-            enemies[9].Initialize(enemyTexture2, new Rectangle(3500, 300, 192, 192));
+            enemies[0].Initialize(enemyTexture3, new Rectangle(800, -100, 46, 34), 1); //Texture en (positie, grootte)
+            enemies[1].Initialize(enemyTexture3, new Rectangle(850, -100, 46, 34), 1);
+            enemies[2].Initialize(enemyTexture3, new Rectangle(900, -100, 46, 34), 1);
+            enemies[3].Initialize(enemyTexture3, new Rectangle(-150, 260, 93, 69), 2);
+            enemies[4].Initialize(enemyTexture3, new Rectangle(800, 280, 93, 69), 2);
+            enemies[5].Initialize(enemyTexture3, new Rectangle(450, 280, 46, 34), 1);
+            enemies[6].Initialize(enemyTexture3, new Rectangle(520, 280, 46, 34), 1);
+            enemies[7].Initialize(enemyTexture3, new Rectangle(590, 280, 46, 34), 1);
+            enemies[8].Initialize(enemyTexture3, new Rectangle(1000, 190, 93, 69), 2);
+            enemies[9].Initialize(enemyTexture2, new Rectangle(3500, 300, 192, 192), 10);
 
             Character.bounds = new Rectangle(300, 280, 80, 80);
         }

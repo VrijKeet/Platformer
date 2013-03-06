@@ -282,7 +282,7 @@ namespace Prototype
                     if (currentKeyboardState.IsKeyDown(Keys.W)) //Laat character springen als W wordt ingedrukt
                     {
                         currentState = state.jumping;
-                        Game1.jumpSound.Play();
+                        //Game1.jumpSound.Play();
                     }
                     if (currentKeyboardState.IsKeyDown(Keys.S)) //Laat character iets oppakken als Spatie wordt ingedrukt
                     {
@@ -338,7 +338,7 @@ namespace Prototype
                     if (currentKeyboardState.IsKeyDown(Keys.W)) //Jump when W is pressed once
                     {
                         currentState = state.jumping;
-                        Game1.jumpSound.Play();
+                        //Game1.jumpSound.Play();
                     }
                     if (currentKeyboardState.IsKeyDown(Keys.S)) //Laat character iets oppakken als Spatie wordt ingedrukt
                     {
