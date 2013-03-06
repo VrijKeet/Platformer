@@ -16,6 +16,7 @@ namespace Prototype
     class DeathScreen
     {
         Game1 game;
+
         SpriteFont menuFont;
         SpriteFont deathFont;
 
@@ -66,7 +67,7 @@ namespace Prototype
                         Character.deathTimer = 0;
                         Character.currentState = Character.state.standing;
                         game.gameState = Prototype.Game1.GameState.running; //Game spelen wanneer Spatie ingedrukt is geweest                         
-                        //Character.respawn();
+                        Character.respawn(game);
                     }
                     RestartColor = SelectedColor;
                     MainMenuColor = UnselectedColor;

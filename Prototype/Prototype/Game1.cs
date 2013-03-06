@@ -97,7 +97,7 @@ namespace Prototype
 
 
 
-            level1 = new Level1(this.Content, this);
+            level1 = new Level1(this.Content, this, level1);
             level2 = new Level2(this.Content, this);
             level3 = new Level3(this.Content, this);
             currentLevel = level1;
@@ -196,7 +196,7 @@ namespace Prototype
 
             if (currentKeyboardState.IsKeyDown(Keys.R))
             {
-                level1 = new Level1(this.Content, this);
+                level1 = new Level1(this.Content, this, level1);
             }
 
             // Status van toetsenbord van vorige doorloop opslaan

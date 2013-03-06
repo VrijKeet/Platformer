@@ -21,7 +21,7 @@ namespace Prototype
 
         Texture2D coinTexture;
         public Vector2 position;
-        public List<bool> taken;
+        public static List<bool> taken;
 
         public coins(Game1 game1)
             : base(game1)

@@ -26,8 +26,8 @@ namespace Prototype
         public Character character;        
         public Gun gun;
 
-        public List<Platform> platforms;
-        public List<Rectangle> startDimPlat;
+        public static List<Platform> platforms;
+        public static List<Rectangle> startDimPlat;
         public List<Projectile> projectiles = new List<Projectile>();
         public static List<Enemy> enemies;
         public static List<coins> coins;
@@ -36,7 +36,7 @@ namespace Prototype
         public static Vector2 goalPos;
 
 
-        public Level1(ContentManager content, Game1 game1)
+        public Level1(ContentManager content, Game1 game1, Level1 level1)
         {
             this.game = game1;
             

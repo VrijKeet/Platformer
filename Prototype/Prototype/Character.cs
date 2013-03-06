@@ -79,6 +79,7 @@ namespace Prototype
         public Character(Game1 game1) //Constructor
         {
             this.game = game1;
+
             playerTexture = Game1.character1Texture; //Laat de character met character1Texture beginnen
         }
 
@@ -115,8 +116,37 @@ namespace Prototype
             }
             hurtTimer++;
 
+            if (bounds.Y + bounds.Height > Level1.platforms[17].boundingBox.Y + Level1.platforms[17].boundingBox.Height)
+                respawn(game);
+        }
 
+        public static void respawn(Game1 game)
+        {
+            if (game.currentLevel == game.level1)
+            {
+                for (int i = 0; i < Level1.platforms.Count; i++) // Platformen op begin positie plaatsen
+                {
+                    Level1.platforms[i].boundingBox = new Rectangle((int)Level1.startDimPlat[i].X, (int)Level1.startDimPlat[i].Y, Level1.platforms[i].boundingBox.Width, Level1.platforms[i].boundingBox.Height);
+                    Level1.platforms[i].boundingBoxTop = new Rectangle(Level1.platforms[i].boundingBox.X, Level1.platforms[i].boundingBox.Y, Level1.platforms[i].boundingBox.Width, 5);
+                }
 
+                game.level1.Initialize();
+                health.lifes = health.startLifes;
+                score.currentScore = 0;
+
+                for (int i = 0; i < Level1.coins.Count; i++)
+                {
+                    coins.taken[i] = false;
+                }
+
+                game.level1.gun.picked = false;
+                carryingGun = false;
+
+                currentState = state.standing;
+                currentFacing = facing.right;
+                jumpingSpeed = -20;
+                jumpCount = 0;
+            }
         }
 
         private void CollisionEnemies()
