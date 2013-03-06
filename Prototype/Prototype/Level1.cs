@@ -55,7 +55,7 @@ namespace Prototype
             gunTexture = Game1.gunTexture;
 
             gun = new Gun();
-            gun.Initialize(gunTexture, new Rectangle(200, 200, 100, 100));
+            gun.Initialize(gunTexture, new Rectangle(-330, -250, 100, 100));
 
             platforms = new List<Platform>();
             platforms.Clear();
@@ -176,6 +176,8 @@ namespace Prototype
             }
 
             spriteBatch.Draw(Game1.holeTexture, goalPos, Color.White);
+
+            gun.Draw(gameTime, spriteBatch);
 
             character.Draw(gameTime, spriteBatch);
 
