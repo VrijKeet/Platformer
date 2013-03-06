@@ -17,7 +17,7 @@ namespace Prototype
     {
         public static GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        public static Game1 instance;
+        public static Game1 instance; //In andere classes makkelijker gebruik maken van game1
         public static ContentManager contentInstance;
 
         MainMenu mainMenu;
@@ -26,11 +26,10 @@ namespace Prototype
         public Level1 level1;
         public Level2 level2;
         public Level3 level3;
-        LevelMenu levelMenu;
-        //public static Gun gun;
+        LevelMenu levelMenu; 
+        public ILevel currentLevel;
+        
         public static List<Projectile> projectiles;
-
-
 
         public static Texture2D standardTexture;
         public static Texture2D gunTexture;
@@ -46,6 +45,7 @@ namespace Prototype
         public static Texture2D grassTexture;
         public static Texture2D baseTexture;
         public static Texture2D cloudTexture;
+        public static Texture2D holeTexture;
 
         public enum GameState //Game status
         {
@@ -55,13 +55,15 @@ namespace Prototype
             running,
             dead,
         }
-        public GameState gameState = GameState.mainmenu;
+        public GameState gameState = GameState.mainmenu;            
 
-        public ILevel currentLevel;
-
-
-        KeyboardState currentKeyboardState;
-        KeyboardState previousKeyboardState;
+        //Sounds;
+        public static SoundEffect laserSound;
+        public static SoundEffect spiderSound;
+        public static SoundEffect runSound1;
+        public static SoundEffect runSound2;
+        public static SoundEffect starSound;
+        public static SoundEffect jumpSound;
 
         // Muziek
         public static Song rickSong;
@@ -70,7 +72,8 @@ namespace Prototype
         public static Song slagsmalklubbenSong;
         public static Song soundtrackSong;
 
-        public static Texture2D holeTexture;
+        KeyboardState currentKeyboardState;
+        KeyboardState previousKeyboardState;
 
         public Game1()
         {
@@ -80,11 +83,8 @@ namespace Prototype
             contentInstance = this.Content;
         }
 
-
-        protected override void Initialize() //Contenmanager, zodat deze aan ieder leve gegeven kan worden, zodat deze het weer aan objecten kunnen geven en daar textures in geladen kunnen worden.
+        protected override void Initialize()
         {
-
-
             mainMenu = new MainMenu(this.Content, this);
             optionsMenu = new OptionsMenu(this.Content, this);
             levelMenu = new LevelMenu(this.Content, this);
@@ -95,19 +95,15 @@ namespace Prototype
             character2Texture = this.Content.Load<Texture2D>("character2");
             character3Texture = this.Content.Load<Texture2D>("character3");
 
-
-
             level1 = new Level1(this.Content, this, level1);
             level2 = new Level2(this.Content, this);
             level3 = new Level3(this.Content, this);
-            currentLevel = level1;
 
             level1.Initialize();
             level2.Initialize();
             level3.Initialize();
 
             projectiles = new List<Projectile>();
-
 
             //// Game Components opnemen
             Components.Add(new Scrollen(this, level1));
@@ -140,6 +136,12 @@ namespace Prototype
             gunTexture = Content.Load<Texture2D>("star");
             projectileTexture = Content.Load<Texture2D>("laser");
             holeTexture = Content.Load<Texture2D>("hole");
+
+            //Geluidseffecten
+            laserSound = Content.Load<SoundEffect>("laserSound");
+            spiderSound = Content.Load<SoundEffect>("spiderSound");
+            starSound = Content.Load<SoundEffect>("starSound");
+            jumpSound = Content.Load<SoundEffect>("jumpSound");
 
             // Muziek
             rickSong = Content.Load<Song>("rickroll");
@@ -184,14 +186,11 @@ namespace Prototype
                 if (projectiles != null)
                     UpdateProjectiles();
 
-
-
                 if (Character.deathTimer > 2500)
                     gameState = GameState.dead;
             }
             else if (gameState == GameState.dead)
                 deathScreen.Update(gameTime, currentKeyboardState, previousKeyboardState);
-
 
 
             if (currentKeyboardState.IsKeyDown(Keys.R))
@@ -201,8 +200,6 @@ namespace Prototype
 
             // Status van toetsenbord van vorige doorloop opslaan
             previousKeyboardState = currentKeyboardState;
-
-
 
             base.Update(gameTime);
         }
@@ -300,9 +297,9 @@ namespace Prototype
                 projectile.projectileMoveSpeed = -3;
 
             projectiles.Add(projectile);
+
+            laserSound.Play();
         }
-
-
 
         public static void UpdateProjectiles()
         {
@@ -310,8 +307,6 @@ namespace Prototype
             for (int i = 0; i < projectiles.Count; i++)
             {
                 projectiles[i].Update();
-
-
 
                 if (projectiles[i].Active == false)
                 {
@@ -321,46 +316,28 @@ namespace Prototype
             }
         }
 
-
         public static void CheckCollisionProjectile(Projectile projectile)
         {
             List<Enemy> enemies = instance.currentLevel.GetEnemies();
-            for (int i = 0; i < enemies.Count; i++) //Kijk voor iedere enemy
+            for (int i = 0; i < enemies.Count; i++)
             {
                 if (enemies[i].bounds.Intersects(projectile.bounds))
                 {
+                    if (enemies[i].texture == enemyTexture3)
+                        spiderSound.Play();
+
                     enemies.RemoveAt(i);
                     projectiles.Remove(projectile);
 
-                    score.currentScore += 1;
+                    score.currentScore += 1;                    
                 }
             }
         }
-
-
-
-
-
-
-
-
-        //public void ResetLevel(ContentManager content, Game1 game)
-        //{
-        //    level1 = new Level1(content, game);
-        //}
-
-
-
-
-
-
+        
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.ForestGreen);
-
-            spriteBatch.Begin();
-
-
+            spriteBatch.Begin();            
 
             //Kijken welke status om te bepalen welk 'scherm' te tonen
             if (gameState == GameState.mainmenu)

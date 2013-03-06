@@ -89,12 +89,15 @@ namespace Prototype
 
             feetBounds = new Rectangle(bounds.X + 30, bounds.Y + 70, 20, 10);
             boundingBox = new Rectangle(bounds.X + 30, bounds.Y, 20, bounds.Height);
-            CollisionEnemies();
 
-            if (!isHurt)
+            if (currentState != state.dead)
+                CollisionEnemies();
             {
-                Movement();
-                KeyInput(currentKeyboardState, previousKeyboardState);
+                if (!isHurt)
+                {
+                    Movement();
+                    KeyInput(currentKeyboardState, previousKeyboardState);
+                }
             }
 
 
@@ -165,7 +168,6 @@ namespace Prototype
                             health.lifes -= 1;
                             if ((boundingBox.X + boundingBox.Width) - (Level1.enemies[i].bounds.X + Level1.enemies[i].bounds.Width) > 0)
                             {
-                                //currentState = state.hurtRight;
                                 currentFacing = facing.left;
                                 bounds.X += instantBounceBack;
                                 speed = bounceBackSpeed;
@@ -174,7 +176,6 @@ namespace Prototype
                             }
                             else
                             {
-                                //currentState = state.hurtLeft;
                                 currentFacing = facing.right;
                                 bounds.X -= instantBounceBack;
                                 speed = -bounceBackSpeed;
@@ -196,21 +197,19 @@ namespace Prototype
                             health.lifes -= 1;
                             if ((boundingBox.X + boundingBox.Width) - (Level1.enemies[i].bounds.X + Level1.enemies[i].bounds.Width) > 0)
                             {
-                                //currentState = state.hurtRight;
-                                //currentFacing = facing.left;
-                                //bounds.X += instantBounceBack;
-                                //speed = bounceBackSpeed;
-                                //isHurt = true;
-                                //hurt();
+                                currentFacing = facing.left;
+                                bounds.X += instantBounceBack;
+                                speed = bounceBackSpeed;
+                                isHurt = true;
+                                hurtTimer = 0;
                             }
                             else
                             {
-                                //currentState = state.hurtLeft;
-                                //currentFacing = facing.right;
-                                //bounds.X -= instantBounceBack;
-                                //speed = bounceBackSpeed;
-                                //isHurt = true;
-                                //hurt();
+                                currentFacing = facing.right;
+                                bounds.X -= instantBounceBack;
+                                speed = -bounceBackSpeed;
+                                isHurt = true;
+                                hurtTimer = 0;
                             }
                         }
                     }
@@ -227,17 +226,19 @@ namespace Prototype
                             health.lifes -= 1;
                             if ((boundingBox.X + boundingBox.Width) - (Level1.enemies[i].bounds.X + Level1.enemies[i].bounds.Width) > 0)
                             {
-                                currentState = state.hurtRight;
                                 currentFacing = facing.left;
                                 bounds.X += instantBounceBack;
                                 speed = bounceBackSpeed;
+                                isHurt = true;
+                                hurtTimer = 0;
                             }
                             else
                             {
-                                currentState = state.hurtLeft;
                                 currentFacing = facing.right;
                                 bounds.X -= instantBounceBack;
-                                  speed = bounceBackSpeed;
+                                speed = -bounceBackSpeed;
+                                isHurt = true;
+                                hurtTimer = 0;
                             }
                         }
                     }
@@ -299,6 +300,7 @@ namespace Prototype
 
                                 shootingTimer = 0; //zorg dat hij weer een tijdje niet meer kan schieten
                                 isShooting = true; //Met boolian, zodat spatie niet ingedrukt hoeft te worden gehouden
+                                
                             }
                         }
                     }
@@ -677,11 +679,11 @@ namespace Prototype
                             bounds.Y = platform.boundingBoxTop.Y - bounds.Height + 1; //Blijf op platform staan
                             jumpCount = 0;
                             jumpingSpeed = -20;
+                            speed = 0;
                         }
 
                         if (frameCount / delay >= 5)
                             frameCount = 5 * delay;
-
                         source = new Rectangle(frameCount / delay * 80, 6 * 80, sourceWidth, sourceHeight);
                         break;
 

@@ -19,7 +19,7 @@ namespace Prototype
     {
         Game1 game; //Omdat hij moet kijken of character platform raakt, en die code in game1.cs wordt opgeslagen
 
-        Texture2D texture;
+        public Texture2D texture;
         Texture2D enemyTexture1;
         Texture2D enemyTexture2;
         Texture2D enemyTexture3;
@@ -30,7 +30,7 @@ namespace Prototype
         public int distance;
         int richting;
         public bool alive;
-        double turningTimer = 0;
+        double turningTimer = 10;
         enum facing
         {
             left,
@@ -71,16 +71,15 @@ namespace Prototype
                     {
                         if (richting == -1) //naar links
                         {
-
                             richting = 1;
                             currentFacing = facing.right;
-                            turningTimer++;
+                            bounds.Y--;
                         }
                         else if (richting == 1)
                         {
                             richting = -1;
                             currentFacing = facing.left;
-                            turningTimer++;
+                            bounds.Y--;
                         }
                     }
                 }
@@ -116,7 +115,7 @@ namespace Prototype
                         if (frameCount / delay >= 4)
                             frameCount = 0;
 
-                        source = new Rectangle(frameCount / delay * 93, 3, 89, 69);
+                        source = new Rectangle(frameCount / delay * 93, 3, 89, 65);
                     }
                 }
                 frameCount++;

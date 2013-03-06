@@ -26,7 +26,7 @@ namespace Prototype
         Color OptionsColor = new Color(100, 100, 100, 200);
         Color ExitColor = new Color(100, 100, 100, 200);
 
-        int selectCount = 1;
+        int selectCount = 2;
 
         public MainMenu(ContentManager content, Game1 game1)
         {
@@ -38,26 +38,41 @@ namespace Prototype
         public void Update(GameTime gameTime, KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
         {
             HandleOptions(currentKeyboardState, previousKeyboardState);
-        }
-
-        
-        
+        }        
 
         private void HandleOptions(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
         {
             if ((currentKeyboardState.IsKeyDown(Keys.Down) && !previousKeyboardState.IsKeyDown(Keys.Down)) | (currentKeyboardState.IsKeyDown(Keys.S) && !previousKeyboardState.IsKeyDown(Keys.S)))
             {
                 selectCount++;
-                if (selectCount >= 5)
-                    selectCount = 1;
+
+                if (game.currentLevel == null) //zorg dat Resume wordt overgeslagen als nog geen level gekozen is
+                {
+                    if (selectCount >= 5)
+                        selectCount = 2;
+                }
+                else
+                {
+                    if (selectCount >= 5)
+                        selectCount = 1;
+                }
             }
             else if ((currentKeyboardState.IsKeyDown(Keys.Up) && !previousKeyboardState.IsKeyDown(Keys.Up)) | (currentKeyboardState.IsKeyDown(Keys.W) && !previousKeyboardState.IsKeyDown(Keys.W)))
             {
                 selectCount--;
-                if (selectCount <= 0)
-                    selectCount = 4;
-            }   
 
+                if (game.currentLevel == null) //zorg dat Resume wordt overgeslagen als nog geen level gekozen is
+                {
+                    if (selectCount <= 1)
+                        selectCount = 4;
+                }
+                else
+                {
+                    if (selectCount <= 0)
+                    selectCount = 4;
+                }                
+            }
+            
             switch (selectCount)
             {
                 case 1: //Resume
@@ -118,6 +133,7 @@ namespace Prototype
             Vector2 length1 = titelFont.MeasureString("Little Platformer") / 2;
             spriteBatch.DrawString(titelFont, "Little Platformer", new Vector2(Game1.graphics.GraphicsDevice.Viewport.Width / 2 - length1.X, 10), new Color(0, 0, 100));
             
+            if (game.currentLevel != null)
             spriteBatch.DrawString(menuFont, "Resume", new Vector2(50, 140), StartColor);
             spriteBatch.DrawString(menuFont, "New game", new Vector2(50, 230), NewGameColor);
             spriteBatch.DrawString(menuFont, "Options", new Vector2(50, 290), OptionsColor);

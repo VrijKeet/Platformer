@@ -41,10 +41,13 @@ namespace Prototype
             int marge = 250;
 
             Game1 game = (Game1)base.Game;
-            platformList = game.currentLevel.GetPlatforms();
-            enemyList = game.currentLevel.GetEnemies();
-            projectileList = Game1.projectiles;
 
+            if (game.currentLevel != null)
+            {
+                platformList = game.currentLevel.GetPlatforms();
+                enemyList = game.currentLevel.GetEnemies();
+                projectileList = Game1.projectiles;
+            
 
             if (Character.bounds.X < marge) // Naar links
             {
@@ -188,4 +191,5 @@ namespace Prototype
             base.Update(gameTime);
         }
     }
+}
 }

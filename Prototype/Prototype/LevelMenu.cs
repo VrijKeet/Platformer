@@ -68,6 +68,7 @@ namespace Prototype
                         game.currentLevel = game.level1;
                         game.currentLevel.Initialize();
                         health.lifes = health.startLifes;
+                        Character.currentState = Character.state.standing;
                         Character.carryingGun = false;
                         game.gameState = Prototype.Game1.GameState.running;
                     }
@@ -83,6 +84,7 @@ namespace Prototype
                         game.currentLevel = game.level2;
                         game.currentLevel.Initialize();
                         health.lifes = health.startLifes;
+                        Character.currentState = Character.state.standing;
                         Character.carryingGun = false;
                         game.gameState = Prototype.Game1.GameState.running;
                     }
@@ -99,6 +101,7 @@ namespace Prototype
                         game.currentLevel.Initialize();
                         health.lifes = health.startLifes;
                         Character.carryingGun = false;
+                        Character.currentState = Character.state.standing;
                         game.gameState = Prototype.Game1.GameState.running;
                     }
                     Level1Color = UnselectedColor;
